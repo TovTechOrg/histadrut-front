@@ -17,83 +17,112 @@ const JobTable = ({ jobs, loading, error }) => {
     );
   }
 
-  const downloadCV = (candidateName) => {
-    // TODO: Implement actual CV download
-    console.log(`Downloading CV for ${candidateName}`);
+  const downloadCV = (cvLink, candidateName) => {
+    if (cvLink) {
+      // Create a temporary anchor element to trigger download
+      const link = document.createElement("a");
+      link.href = cvLink;
+      link.download = `${candidateName}_CV.pdf`; // Set a default filename
+      link.target = "_blank"; // Open in new tab as fallback
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      alert(`CV not available for ${candidateName}`);
+    }
   };
 
   return (
     <div className="job-table">
-      <div className="job-table__header">
-        <div className="job-table__cell job-table__cell--header">Job Title</div>
-        <div className="job-table__cell job-table__cell--header">Company</div>
-        <div className="job-table__cell job-table__cell--header">
-          Date Added
-        </div>
-        <div className="job-table__cell job-table__cell--header">
-          Matched Candidates
-        </div>
-        <div className="job-table__cell job-table__cell--header">CV</div>
-        <div className="job-table__cell job-table__cell--header">MMR</div>
-      </div>
-
-      {jobs.length === 0 ? (
-        <div className="job-table__empty">
-          No jobs match the current filters.
-        </div>
-      ) : (
-        jobs.map((job) => (
-          <div key={job.id} className="job-table__row">
-            <div className="job-table__cell job-table__cell--job-title">
-              <span className="job-table__link">{job.jobTitle}</span>
-            </div>
-            <div className="job-table__cell">{job.company}</div>
-            <div className="job-table__cell">{job.dateAdded}</div>
-            <div className="job-table__cell job-table__cell--candidates">
-              {job.matchedCandidates.map((candidate, index) => (
-                <div key={index} className="candidate-match">
-                  <span className="candidate-match__name">
-                    {candidate.name}
-                  </span>
-                  <span className="candidate-match__score">
-                    {candidate.score}
-                  </span>
-                </div>
-              ))}
-            </div>
-            <div className="job-table__cell job-table__cell--cv">
-              {job.matchedCandidates.map((candidate, index) => (
-                <div key={index} className="cv-action">
-                  {candidate.cv && (
-                    <button
-                      className="cv-download-btn"
-                      onClick={() => downloadCV(candidate.name)}
-                      title={`Download CV for ${candidate.name}`}
-                    >
-                      ⬇
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-            <div className="job-table__cell job-table__cell--mmr">
-              {job.matchedCandidates.map((candidate, index) => (
-                <div key={index} className="mmr-status">
-                  <span
-                    className={`mmr-badge ${
-                      candidate.mmr === "Yes"
-                        ? "mmr-badge--yes"
-                        : "mmr-badge--no"
-                    }`}
-                  >
-                    {candidate.mmr}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))
-      )}
+      <table className="job-table__table">
+        <thead className="job-table__header">
+          <tr>
+            <th className="job-table__cell job-table__cell--header">
+              Job Title
+            </th>
+            <th className="job-table__cell job-table__cell--header">Company</th>
+            <th className="job-table__cell job-table__cell--header">
+              Date Added
+            </th>
+            <th className="job-table__cell job-table__cell--header">
+              Matched Candidates
+            </th>
+            <th className="job-table__cell job-table__cell--header">CV</th>
+            <th className="job-table__cell job-table__cell--header">MMR</th>
+          </tr>
+        </thead>
+        <tbody>
+          {jobs.length === 0 ? (
+            <tr>
+              <td colSpan="6" className="job-table__empty">
+                No jobs match the current filters.
+              </td>
+            </tr>
+          ) : (
+            jobs.map((job) => (
+              <tr key={job.id} className="job-table__row">
+                <td className="job-table__cell job-table__cell--job-title">
+                  <span className="job-table__link">{job.jobTitle}</span>
+                </td>
+                <td className="job-table__cell">{job.company}</td>
+                <td className="job-table__cell">{job.dateAdded}</td>
+                <td className="job-table__cell job-table__cell--candidates">
+                  {job.matchedCandidates.map((candidate, index) => (
+                    <div key={index} className="candidate-match">
+                      <span className="candidate-match__name">
+                        {candidate.name}
+                      </span>
+                      <span className="candidate-match__score">
+                        {candidate.score}
+                      </span>
+                    </div>
+                  ))}
+                </td>
+                <td className="job-table__cell job-table__cell--cv">
+                  {job.matchedCandidates.map((candidate, index) => (
+                    <div key={index} className="cv-action">
+                      {candidate.cv && candidate.cvLink ? (
+                        <button
+                          className="cv-download-btn"
+                          onClick={() =>
+                            downloadCV(candidate.cvLink, candidate.name)
+                          }
+                          title={`Download CV for ${candidate.name}`}
+                          aria-label={`Download CV for ${candidate.name}`}
+                        >
+                          ⬇
+                        </button>
+                      ) : (
+                        <span
+                          className="cv-not-available"
+                          title="CV not available"
+                        >
+                          —
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </td>
+                <td className="job-table__cell job-table__cell--mmr">
+                  {job.matchedCandidates.map((candidate, index) => (
+                    <div key={index} className="mmr-status">
+                      <span
+                        className={`mmr-badge ${
+                          candidate.mmr === "Yes"
+                            ? "mmr-badge--yes"
+                            : "mmr-badge--no"
+                        }`}
+                      >
+                        {candidate.mmr}
+                      </span>
+                    </div>
+                  ))}
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };

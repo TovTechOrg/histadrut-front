@@ -18,7 +18,6 @@ const Overview = () => {
         setStatsData(data);
       } catch (err) {
         setError(err.message);
-        console.error("Error loading stats:", err);
       } finally {
         setLoading(false);
       }

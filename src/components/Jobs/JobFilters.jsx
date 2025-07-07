@@ -65,9 +65,6 @@ const JobFilters = ({ filters, onFiltersChange }) => {
               value={filters.addedSince}
               onChange={(e) => handleInputChange("addedSince", e.target.value)}
               aria-describedby="addedSince-help"
-              min="2020-01-01"
-              max="2030-12-31"
-              style={{ pointerEvents: "auto", cursor: "pointer" }}
             />
             <small id="addedSince-help" className="job-filters__help-text">
               Show jobs added on or after this date

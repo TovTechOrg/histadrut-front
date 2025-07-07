@@ -29,6 +29,11 @@
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.job-filters__form {
+  position: relative;
 }
 
 .job-filters__title {
@@ -77,41 +82,26 @@
   background-color: #f8f9fa;
 }
 
+/* Date input - minimal styling to preserve picker functionality */
 .job-filters__input--date {
-  color: #2c3e50;
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  pointer-events: auto;
+  /* Keep all default date input behavior */
+  appearance: auto;
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
 }
 
+/* Only style the calendar icon slightly */
 .job-filters__input--date::-webkit-calendar-picker-indicator {
+  opacity: 0.7;
   cursor: pointer;
+  filter: invert(0.5);
+  width: 16px;
+  height: 16px;
+}
+
+.job-filters__input--date::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
-  display: block;
-  background: transparent;
-  bottom: 0;
-  color: transparent;
-  height: auto;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: auto;
-}
-
-.job-filters__input--date::-webkit-inner-spin-button,
-.job-filters__input--date::-webkit-clear-button {
-  display: none;
-}
-
-.job-filters__input--date::-webkit-datetime-edit {
-  padding: 0;
-}
-
-.job-filters__input--date:focus::-webkit-datetime-edit {
-  outline: none;
+  filter: invert(0.3);
 }
 
 .job-filters__slider-container {
@@ -173,16 +163,16 @@
   overflow: hidden;
 }
 
+.job-table__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
 .job-table__header {
-  display: grid;
-  grid-template-columns: 2fr 1.5fr 1fr 1.5fr 80px 80px;
   background: #f8f9fa;
-  border-bottom: 2px solid #e9ecef;
 }
 
 .job-table__row {
-  display: grid;
-  grid-template-columns: 2fr 1.5fr 1fr 1.5fr 80px 80px;
   border-bottom: 1px solid #e9ecef;
   transition: background-color 0.2s ease;
 }
@@ -194,9 +184,9 @@
 .job-table__cell {
   padding: 1rem;
   font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  min-height: 60px;
+  vertical-align: top;
+  color: #2c3e50;
+  border-bottom: inherit;
 }
 
 .job-table__cell--header {
@@ -207,6 +197,7 @@
   letter-spacing: 0.5px;
   min-height: auto;
   padding: 1rem;
+  text-align: left;
 }
 
 .job-table__cell--job-title {
@@ -226,46 +217,56 @@
 }
 
 .job-table__cell--candidates {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
+  display: table-cell;
+  vertical-align: top;
+  padding: 1rem;
 }
 
 .candidate-match {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 0.5rem;
-  width: 100%;
+  margin-bottom: 1rem;
+  min-height: 40px;
+  justify-content: flex-start;
+}
+
+.candidate-match:last-child {
+  margin-bottom: 0;
 }
 
 .candidate-match__name {
-  color: #3498db;
   font-weight: 500;
-  cursor: pointer;
+  color: #2c3e50;
+  font-size: 0.85rem;
+  line-height: 1.2;
 }
 
 .candidate-match__score {
-  background: #e8f4fd;
-  color: #2980b9;
-  padding: 0.2rem 0.5rem;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  font-weight: 500;
+  color: #7f8c8d;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.2;
 }
 
-.job-table__cell--cv,
-.job-table__cell--mmr {
-  flex-direction: column;
-  gap: 0.5rem;
-  justify-content: center;
+.job-table__cell--cv {
+  display: table-cell;
+  vertical-align: top;
+  text-align: center;
+  padding: 1rem;
 }
 
-.cv-action,
-.mmr-status {
+.cv-action {
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 28px;
+  justify-content: center;
+  margin-bottom: 1rem;
+  min-height: 40px;
+}
+
+.cv-action:last-child {
+  margin-bottom: 0;
 }
 
 .cv-download-btn {
@@ -288,6 +289,33 @@
   background: #3498db;
   color: white;
   transform: translateY(-1px);
+}
+
+.cv-not-available {
+  color: #bdc3c7;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.job-table__cell--mmr {
+  display: table-cell;
+  vertical-align: top;
+  padding: 1rem;
+}
+
+.mmr-status {
+  margin-bottom: 1rem;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.mmr-status:last-child {
+  margin-bottom: 0;
 }
 
 .mmr-badge {
