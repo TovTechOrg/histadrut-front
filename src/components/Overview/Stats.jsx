@@ -37,16 +37,22 @@ const Stats = ({ data, loading, error }) => {
   ];
 
   return (
-    <div className="stats">
+    <section className="stats" aria-labelledby="stats-heading">
+      <h2 id="stats-heading" className="sr-only">
+        Dashboard Statistics
+      </h2>
       <div className="stats__grid">
         {statsCards.map((stat, index) => (
-          <div key={index} className={`stats__card stats__card--${stat.color}`}>
+          <article
+            key={index}
+            className={`stats__card stats__card--${stat.color}`}
+          >
             <h3 className="stats__card-title">{stat.title}</h3>
             <div className="stats__card-value">{stat.value}</div>
-          </div>
+          </article>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

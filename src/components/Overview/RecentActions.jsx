@@ -64,24 +64,34 @@ const RecentActions = () => {
   };
 
   return (
-    <div className="recent-actions">
-      <h2 className="recent-actions__title">Recent Administrative Actions</h2>
-      <div className="recent-actions__list">
+    <section
+      className="recent-actions"
+      aria-labelledby="recent-actions-heading"
+    >
+      <h2 id="recent-actions-heading" className="recent-actions__title">
+        Recent Administrative Actions
+      </h2>
+      <ol className="recent-actions__list">
         {recentActions.map((action) => (
-          <div key={action.id} className="recent-actions__item">
-            <div className="recent-actions__icon">
-              {getActionIcon(action.type)}
-            </div>
-            <div className="recent-actions__content">
-              <div className="recent-actions__text">{action.action}</div>
-              <div className="recent-actions__time">
-                {formatTimeAgo(action.timestamp)}
+          <li key={action.id}>
+            <article className="recent-actions__item">
+              <div className="recent-actions__icon" aria-hidden="true">
+                {getActionIcon(action.type)}
               </div>
-            </div>
-          </div>
+              <div className="recent-actions__content">
+                <div className="recent-actions__text">{action.action}</div>
+                <time
+                  className="recent-actions__time"
+                  dateTime={action.timestamp.toISOString()}
+                >
+                  {formatTimeAgo(action.timestamp)}
+                </time>
+              </div>
+            </article>
+          </li>
         ))}
-      </div>
-    </div>
+      </ol>
+    </section>
   );
 };
 

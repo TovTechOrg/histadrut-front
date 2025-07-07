@@ -28,13 +28,13 @@ const Overview = () => {
   }, []);
 
   return (
-    <div className="overview">
+    <section className="overview">
       <h1 className="overview__title">Dashboard Overview</h1>
 
       <Stats data={statsData} loading={loading} error={error} />
 
       <RecentActions />
-    </div>
+    </section>
   );
 };
 

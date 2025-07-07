@@ -4,9 +4,13 @@ import "./AdminPanel.css";
 
 const AdminPanel = () => {
   return (
-    <aside className="admin-panel">
+    <aside
+      className="admin-panel"
+      role="navigation"
+      aria-label="Admin navigation"
+    >
       <h2 className="admin-panel__title">Admin Panel</h2>
-      <nav className="admin-panel__nav">
+      <nav className="admin-panel__nav" aria-label="Main admin navigation">
         <ul className="admin-panel__list">
           <li className="admin-panel__item">
             <NavLink
