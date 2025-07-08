@@ -62,25 +62,26 @@ const JobTable = ({ jobs, loading, error }) => {
             jobs.map((job) => (
               <tr key={job.id} className="job-table__row">
                 <td className="job-table__cell job-table__cell--job-title">
-                  <span className="job-table__link">{job.jobTitle}</span>
+                  <span className="job-table__title">{job.jobTitle}</span>
                 </td>
                 <td className="job-table__cell">{job.company}</td>
                 <td className="job-table__cell">{job.dateAdded}</td>
                 <td className="job-table__cell job-table__cell--candidates">
                   {job.matchedCandidates.map((candidate, index) => (
-                    <div key={index} className="candidate-match">
+                    <div key={index}>
                       <span className="candidate-match__name">
                         {candidate.name}
                       </span>
                       <span className="candidate-match__score">
                         {candidate.score}
                       </span>
+                      {index < job.matchedCandidates.length - 1 && <br />}
                     </div>
                   ))}
                 </td>
                 <td className="job-table__cell job-table__cell--cv">
                   {job.matchedCandidates.map((candidate, index) => (
-                    <div key={index} className="cv-action">
+                    <div key={index}>
                       {candidate.cv && candidate.cvLink ? (
                         <button
                           className="cv-download-btn"
@@ -100,12 +101,13 @@ const JobTable = ({ jobs, loading, error }) => {
                           —
                         </span>
                       )}
+                      {index < job.matchedCandidates.length - 1 && <br />}
                     </div>
                   ))}
                 </td>
                 <td className="job-table__cell job-table__cell--mmr">
                   {job.matchedCandidates.map((candidate, index) => (
-                    <div key={index} className="mmr-status">
+                    <div key={index}>
                       <span
                         className={`mmr-badge ${
                           candidate.mmr === "Yes"
@@ -115,6 +117,7 @@ const JobTable = ({ jobs, loading, error }) => {
                       >
                         {candidate.mmr}
                       </span>
+                      {index < job.matchedCandidates.length - 1 && <br />}
                     </div>
                   ))}
                 </td>
