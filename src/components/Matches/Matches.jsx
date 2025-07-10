@@ -5,8 +5,17 @@ import { useJobsData } from "../../hooks/useJobsData";
 import "./Matches.css";
 
 const Matches = () => {
-  const { filteredJobs, loading, error, filters, updateFilters } =
-    useJobsData();
+  const {
+    filteredJobs,
+    loading,
+    error,
+    filters,
+    updateFilters,
+    currentPage,
+    totalPages,
+    goToNextPage,
+    goToPreviousPage,
+  } = useJobsData();
 
   return (
     <section className="matches-page">
@@ -20,6 +29,26 @@ const Matches = () => {
       <MatchesFilters filters={filters} onFiltersChange={updateFilters} />
 
       <MatchesTable jobs={filteredJobs} loading={loading} error={error} />
+
+      <div className="pagination-controls">
+        <button
+          onClick={goToPreviousPage}
+          disabled={currentPage === 1}
+          className="pagination-button"
+        >
+          ← Previous
+        </button>
+        <span className="pagination-info">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={goToNextPage}
+          disabled={currentPage === totalPages}
+          className="pagination-button"
+        >
+          Next →
+        </button>
+      </div>
     </section>
   );
 };

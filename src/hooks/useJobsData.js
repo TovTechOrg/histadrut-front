@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { fetchJobs, transformJobsData } from "../api/api";
 
 // Custom hook for managing jobs data and filtering
@@ -7,6 +8,8 @@ export const useJobsData = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastFetch, setLastFetch] = useState(null);
+  const [totalPages, setTotalPages] = useState(1);
+
   const [filters, setFilters] = useState({
     companyName: "",
     candidateName: "",
@@ -14,18 +17,27 @@ export const useJobsData = () => {
     minRelevanceScore: 7.0,
   });
 
-  // Load jobs data from API
-  const loadJobs = async () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const pageFromUrl = parseInt(searchParams.get("page") || "1", 10);
+  const [currentPage, setCurrentPage] = useState(pageFromUrl);
+
+  // Sync page from URL into local state
+  useEffect(() => {
+    const urlPage = parseInt(searchParams.get("page") || "1", 10);
+    setCurrentPage(urlPage);
+  }, [searchParams]);
+
+  const loadJobs = async (page) => {
     try {
       setLoading(true);
       setError(null);
 
-      // Fetch from API
-      const apiResponse = await fetchJobs();
-      const transformedData = transformJobsData(apiResponse);
+      const apiResponse = await fetchJobs(page);
+      const { jobs, pagination } = transformJobsData(apiResponse);
 
-      // Update state
-      setJobsData(transformedData);
+      setJobsData(jobs);
+      setTotalPages(pagination.totalPages);
       setLastFetch(new Date());
     } catch {
       setError("Failed to load jobs. Please try again later.");
@@ -35,14 +47,30 @@ export const useJobsData = () => {
   };
 
   useEffect(() => {
-    loadJobs();
-  }, []);
+    loadJobs(currentPage);
+  }, [currentPage]);
 
-  // Memoized filtered jobs to prevent unnecessary recalculations
+  const goToPage = (page) => {
+    const clamped = Math.max(1, Math.min(page, totalPages));
+    setSearchParams({ page: clamped.toString() }); // this triggers the URL update + effect
+  };
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) goToPage(currentPage + 1);
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) goToPage(currentPage - 1);
+  };
+
+  const updateFilters = (newFilters) => {
+    setFilters(newFilters);
+  };
+
+  // Filter logic
   const filteredJobs = useMemo(() => {
     let filtered = [...jobsData];
 
-    // Apply company name filter
     if (filters.companyName.trim()) {
       filtered = filtered.filter((job) =>
         job.company
@@ -51,7 +79,6 @@ export const useJobsData = () => {
       );
     }
 
-    // Apply candidate name filter
     if (filters.candidateName.trim()) {
       filtered = filtered.filter((job) =>
         job.matchedCandidates.some((candidate) =>
@@ -62,12 +89,10 @@ export const useJobsData = () => {
       );
     }
 
-    // Apply date filter
     if (filters.addedSince) {
       filtered = filtered.filter((job) => job.dateAdded >= filters.addedSince);
     }
 
-    // Apply minimum relevance score filter
     filtered = filtered
       .map((job) => ({
         ...job,
@@ -80,10 +105,6 @@ export const useJobsData = () => {
     return filtered;
   }, [jobsData, filters]);
 
-  const updateFilters = (newFilters) => {
-    setFilters(newFilters);
-  };
-
   return {
     jobsData,
     filteredJobs,
@@ -92,5 +113,9 @@ export const useJobsData = () => {
     filters,
     updateFilters,
     lastFetch,
+    currentPage,
+    totalPages,
+    goToNextPage,
+    goToPreviousPage,
   };
 };

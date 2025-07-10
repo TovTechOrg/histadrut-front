@@ -21,10 +21,11 @@ const apiRequest = async (endpoint, options = {}) => {
 };
 
 export const fetchStats = async () => apiRequest("/stats");
-export const fetchJobs = async () => apiRequest("/matches2");
+export const fetchJobs = async (page = 1) =>
+  apiRequest(`/matches2?page=${page}`);
 
 export const transformJobsData = (apiResponse) => {
-  return apiResponse.jobs.map((job, index) => ({
+  const jobs = apiResponse.jobs.map((job, index) => ({
     id: job._id || `job-${index}`,
     jobTitle: job.job_title || "Unknown Position",
     company: job.company_name || "Unknown Company",
@@ -48,6 +49,14 @@ export const transformJobsData = (apiResponse) => {
       },
     })),
   }));
+
+  return {
+    jobs,
+    pagination: {
+      currentPage: apiResponse.pagination?.current_page ?? 1,
+      totalPages: apiResponse.pagination?.total_pages ?? 1,
+    },
+  };
 };
 
 export const transformStatsData = (apiResponse) => ({
