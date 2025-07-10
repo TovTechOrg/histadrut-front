@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Stats from "./Stats";
 import RecentActions from "./RecentActions";
-import { fetchStats } from "../../api/api";
+import { fetchStats, transformStatsData } from "../../api/api";
 import "./Overview.css";
 
 const Overview = () => {
@@ -14,8 +14,8 @@ const Overview = () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await fetchStats();
-        setStatsData(data);
+        const apiData = await fetchStats();
+        setStatsData(transformStatsData(apiData));
       } catch (err) {
         setError(err.message);
       } finally {

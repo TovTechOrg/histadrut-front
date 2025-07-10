@@ -54,6 +54,10 @@
   border-left-color: #9b59b6;
 }
 
+.stats__card--orange {
+  border-left-color: #c6720c;
+}
+
 .stats__card-title {
   font-size: 0.9rem;
   color: #7f8c8d;
@@ -83,6 +87,10 @@
 
 .stats__card--purple .stats__card-value {
   color: #9b59b6;
+}
+
+.stats__card--orange .stats__card-value {
+  color: #c6720c;
 }
 
 .stats__additional {

@@ -17,22 +17,31 @@ const Stats = ({ data, loading, error }) => {
     );
   }
 
-  // Transform API data to match available data
   const statsCards = [
     {
       title: "Total Active Jobs",
-      value: data?.Number_of_jobs || 0,
+      value: data?.jobs || 0,
       color: "blue",
     },
     {
       title: "Total Candidates",
-      value: data?.Number_of_candidtes || 0,
+      value: data?.candidates || 0,
       color: "green",
     },
     {
       title: "Total Matches",
-      value: data?.Number_of_matches || 0,
+      value: data?.matches || 0,
       color: "purple",
+    },
+    {
+      title: "Jobs Added Last Day",
+      value: data?.jobsLastDay || 0,
+      color: "orange",
+    },
+    {
+      title: "Jobs Added Last Week",
+      value: data?.jobsLastWeek || 0,
+      color: "teal",
     },
   ];
 
