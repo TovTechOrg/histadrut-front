@@ -27,7 +27,7 @@ const AdminPanel = () => {
           </li>
           <li className="admin-panel__item">
             <NavLink
-              to="/jobs"
+              to="/matches"
               className={({ isActive }) =>
                 `admin-panel__link ${
                   isActive ? "admin-panel__link--active" : ""
@@ -35,7 +35,7 @@ const AdminPanel = () => {
               }
             >
               <span className="admin-panel__icon">💼</span>
-              Job Listings
+              Job Matches
             </NavLink>
           </li>
           <li className="admin-panel__item">

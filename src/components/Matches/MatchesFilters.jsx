@@ -12,40 +12,40 @@ const JobFilters = ({ filters, onFiltersChange }) => {
     handleInputChange("minRelevanceScore", parseFloat(e.target.value));
   };
   return (
-    <section className="job-filters" aria-labelledby="filters-heading">
-      <h2 id="filters-heading" className="job-filters__title">
+    <section className="match-filters" aria-labelledby="filters-heading">
+      <h2 id="filters-heading" className="match-filters__title">
         Filters
       </h2>
 
       <form
-        className="job-filters__form"
+        className="match-filters__form"
         role="search"
         aria-label="Filter jobs"
         onSubmit={(e) => e.preventDefault()}
       >
-        <div className="job-filters__grid">
-          <div className="job-filters__field">
-            <label className="job-filters__label" htmlFor="companyName">
+        <div className="match-filters__grid">
+          <div className="match-filters__field">
+            <label className="match-filters__label" htmlFor="companyName">
               Company Name
             </label>
             <input
               id="companyName"
               type="text"
-              className="job-filters__input"
+              className="match-filters__input"
               placeholder="e.g., Example Tech"
               value={filters.companyName}
               onChange={(e) => handleInputChange("companyName", e.target.value)}
             />
           </div>
 
-          <div className="job-filters__field">
-            <label className="job-filters__label" htmlFor="candidateName">
+          <div className="match-filters__field">
+            <label className="match-filters__label" htmlFor="candidateName">
               Candidate Name
             </label>
             <input
               id="candidateName"
               type="text"
-              className="job-filters__input"
+              className="match-filters__input"
               placeholder="e.g., Shy"
               value={filters.candidateName}
               onChange={(e) =>
@@ -54,38 +54,38 @@ const JobFilters = ({ filters, onFiltersChange }) => {
             />
           </div>
 
-          <div className="job-filters__field">
-            <label className="job-filters__label" htmlFor="addedSince">
+          <div className="match-filters__field">
+            <label className="match-filters__label" htmlFor="addedSince">
               Added Since
             </label>
             <input
               id="addedSince"
               type="date"
-              className="job-filters__input job-filters__input--date"
+              className="match-filters__input match-filters__input--date"
               value={filters.addedSince}
               onChange={(e) => handleInputChange("addedSince", e.target.value)}
               aria-describedby="addedSince-help"
             />
-            <small id="addedSince-help" className="job-filters__help-text">
+            <small id="addedSince-help" className="match-filters__help-text">
               Show jobs added on or after this date
             </small>
           </div>
 
-          <div className="job-filters__field">
-            <label className="job-filters__label">
+          <div className="match-filters__field">
+            <label className="match-filters__label">
               Min. Relevance Score ({filters.minRelevanceScore.toFixed(1)})
             </label>
-            <div className="job-filters__slider-container">
+            <div className="match-filters__slider-container">
               <input
                 type="range"
-                className="job-filters__slider"
+                className="match-filters__slider"
                 min="0"
                 max="10"
                 step="0.1"
                 value={filters.minRelevanceScore}
                 onChange={handleSliderChange}
               />
-              <div className="job-filters__slider-track">
+              <div className="match-filters__slider-track">
                 <span>0</span>
                 <span>10</span>
               </div>

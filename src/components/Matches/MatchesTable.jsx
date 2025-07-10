@@ -3,16 +3,16 @@ import React from "react";
 const JobTable = ({ jobs, loading, error }) => {
   if (loading) {
     return (
-      <div className="job-table">
-        <div className="job-table__loading">Loading jobs...</div>
+      <div className="match-table">
+        <div className="match-table__loading">Loading jobs...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="job-table">
-        <div className="job-table__error">Error loading jobs: {error}</div>
+      <div className="match-table">
+        <div className="match-table__error">Error loading jobs: {error}</div>
       </div>
     );
   }
@@ -33,42 +33,44 @@ const JobTable = ({ jobs, loading, error }) => {
   };
 
   return (
-    <div className="job-table">
-      <table className="job-table__table">
-        <thead className="job-table__header">
+    <div className="match-table">
+      <table className="match-table__table">
+        <thead className="match-table__header">
           <tr>
-            <th className="job-table__cell job-table__cell--header">
+            <th className="match-table__cell match-table__cell--header">
               Job Title
             </th>
-            <th className="job-table__cell job-table__cell--header">Company</th>
-            <th className="job-table__cell job-table__cell--header">
+            <th className="match-table__cell match-table__cell--header">
+              Company
+            </th>
+            <th className="match-table__cell match-table__cell--header">
               Date Added
             </th>
-            <th className="job-table__cell job-table__cell--header">
+            <th className="match-table__cell match-table__cell--header">
               Matched Candidates
             </th>
-            <th className="job-table__cell job-table__cell--header">CV</th>
-            <th className="job-table__cell job-table__cell--header">MMR</th>
+            <th className="match-table__cell match-table__cell--header">CV</th>
+            <th className="match-table__cell match-table__cell--header">MMR</th>
           </tr>
         </thead>
         <tbody>
           {jobs.length === 0 ? (
             <tr>
-              <td colSpan="6" className="job-table__empty">
+              <td colSpan="6" className="match-table__empty">
                 No jobs match the current filters.
               </td>
             </tr>
           ) : (
             jobs.map((job) => (
-              <tr key={job.id} className="job-table__row">
-                <td className="job-table__cell job-table__cell--job-title">
-                  <span className="job-table__title">{job.jobTitle}</span>
+              <tr key={job.id} className="match-table__row">
+                <td className="match-table__cell match-table__cell--match-title">
+                  <span className="match-table__title">{job.jobTitle}</span>
                 </td>
-                <td className="job-table__cell">{job.company}</td>
-                <td className="job-table__cell">{job.dateAdded}</td>
-                <td className="job-table__cell job-table__cell--candidates">
+                <td className="match-table__cell">{job.company}</td>
+                <td className="match-table__cell">{job.dateAdded}</td>
+                <td className="match-table__cell match-table__cell--candidates">
                   {job.matchedCandidates.map((candidate, index) => (
-                    <div key={index}>
+                    <div className="candidate-match__container" key={index}>
                       <span className="candidate-match__name">
                         {candidate.name}
                       </span>
@@ -79,7 +81,7 @@ const JobTable = ({ jobs, loading, error }) => {
                     </div>
                   ))}
                 </td>
-                <td className="job-table__cell job-table__cell--cv">
+                <td className="match-table__cell match-table__cell--cv">
                   {job.matchedCandidates.map((candidate, index) => (
                     <div key={index}>
                       {candidate.cv && candidate.cvLink ? (
@@ -105,9 +107,9 @@ const JobTable = ({ jobs, loading, error }) => {
                     </div>
                   ))}
                 </td>
-                <td className="job-table__cell job-table__cell--mmr">
+                <td className="match-table__cell match-table__cell--mmr">
                   {job.matchedCandidates.map((candidate, index) => (
-                    <div key={index}>
+                    <div className="mmr-badge__container" key={index}>
                       <span
                         className={`mmr-badge ${
                           candidate.mmr === "Yes"

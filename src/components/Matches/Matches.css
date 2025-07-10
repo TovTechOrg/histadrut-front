@@ -1,29 +1,29 @@
-/* Jobs Page Styles */
-.jobs-page {
+/* Matchess Page Styles */
+.matches-page {
   padding: 2rem;
   background-color: #f8f9fa;
   min-height: 100vh;
 }
 
-.jobs-header {
+.matches-header {
   margin-bottom: 2rem;
 }
 
-.jobs-title {
+.matches-title {
   font-size: 1.8rem;
   font-weight: 600;
   color: #2c3e50;
   margin: 0 0 0.5rem 0;
 }
 
-.jobs-subtitle {
+.matches-subtitle {
   color: #7f8c8d;
   margin: 0;
   font-size: 0.95rem;
 }
 
 /* Job Filters Styles */
-.job-filters {
+.match-filters {
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
@@ -32,36 +32,36 @@
   position: relative;
 }
 
-.job-filters__form {
+.match-filters__form {
   position: relative;
 }
 
-.job-filters__title {
+.match-filters__title {
   font-size: 1.1rem;
   font-weight: 600;
   color: #2c3e50;
   margin: 0 0 1.5rem 0;
 }
 
-.job-filters__grid {
+.match-filters__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
 }
 
-.job-filters__field {
+.match-filters__field {
   display: flex;
   flex-direction: column;
 }
 
-.job-filters__label {
+.match-filters__label {
   font-size: 0.85rem;
   font-weight: 500;
   color: #5a6c7d;
   margin-bottom: 0.5rem;
 }
 
-.job-filters__input {
+.match-filters__input {
   padding: 0.75rem;
   border: 1px solid #e1e8ed;
   border-radius: 4px;
@@ -71,19 +71,19 @@
   transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
-.job-filters__input:focus {
+.match-filters__input:focus {
   outline: none;
   border-color: #3498db;
   background-color: #ffffff;
   box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.1);
 }
 
-.job-filters__input:hover {
+.match-filters__input:hover {
   background-color: #f8f9fa;
 }
 
 /* Date input - minimal styling to preserve picker functionality */
-.job-filters__input--date {
+.match-filters__input--date {
   /* Keep all default date input behavior */
   appearance: auto;
   -webkit-appearance: auto;
@@ -91,7 +91,7 @@
 }
 
 /* Only style the calendar icon slightly */
-.job-filters__input--date::-webkit-calendar-picker-indicator {
+.match-filters__input--date::-webkit-calendar-picker-indicator {
   opacity: 0.7;
   cursor: pointer;
   filter: invert(0.5);
@@ -99,16 +99,16 @@
   height: 16px;
 }
 
-.job-filters__input--date::-webkit-calendar-picker-indicator:hover {
+.match-filters__input--date::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
   filter: invert(0.3);
 }
 
-.job-filters__slider-container {
+.match-filters__slider-container {
   position: relative;
 }
 
-.job-filters__slider {
+.match-filters__slider {
   width: 100%;
   height: 6px;
   border-radius: 3px;
@@ -118,7 +118,7 @@
   appearance: none;
 }
 
-.job-filters__slider::-webkit-slider-thumb {
+.match-filters__slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 20px;
@@ -130,7 +130,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.job-filters__slider::-moz-range-thumb {
+.match-filters__slider::-moz-range-thumb {
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -140,7 +140,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.job-filters__slider-track {
+.match-filters__slider-track {
   display: flex;
   justify-content: space-between;
   margin-top: 0.5rem;
@@ -148,7 +148,7 @@
   color: #95a5a6;
 }
 
-.job-filters__help-text {
+.match-filters__help-text {
   font-size: 0.75rem;
   color: #7f8c8d;
   margin-top: 0.25rem;
@@ -156,32 +156,32 @@
 }
 
 /* Job Table Styles */
-.job-table {
+.match-table {
   background: white;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
-.job-table__table {
+.match-table__table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.job-table__header {
+.match-table__header {
   background: #f8f9fa;
 }
 
-.job-table__row {
+.match-table__row {
   border-bottom: 1px solid #e9ecef;
   transition: background-color 0.2s ease;
 }
 
-.job-table__row:hover {
+.match-table__row:hover {
   background-color: #f8f9fa;
 }
 
-.job-table__cell {
+.match-table__cell {
   padding: 1rem;
   font-size: 0.9rem;
   vertical-align: top;
@@ -189,7 +189,7 @@
   border-bottom: inherit;
 }
 
-.job-table__cell--header {
+.match-table__cell--header {
   font-weight: 600;
   color: #2c3e50;
   text-transform: uppercase;
@@ -200,30 +200,35 @@
   text-align: left;
 }
 
-.job-table__cell--job-title {
+.match-table__cell--match-title {
   color: #2c3e50;
 }
 
-.job-table__link {
+.match-table__link {
   color: #3498db;
   cursor: pointer;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-.job-table__link:hover {
+.match-table__link:hover {
   color: #2980b9;
   text-decoration: underline;
 }
 
-.job-table__title {
+.match-table__title {
   color: #3498db;
   text-decoration: none;
 }
 
-.job-table__cell--candidates {
+.match-table__cell--candidates {
   display: table-cell;
   vertical-align: top;
+}
+
+.candidate-match__container,
+.mmr-badge__container {
+  margin-bottom: 1.5rem;
 }
 
 .candidate-match__name {
@@ -241,7 +246,7 @@
   line-height: 1.4;
 }
 
-.job-table__cell--cv {
+.match-table__cell--cv {
   display: table-cell;
   vertical-align: top;
   text-align: center;
@@ -279,7 +284,7 @@
   height: 28px;
 }
 
-.job-table__cell--mmr {
+.match-table__cell--mmr {
   display: table-cell;
   vertical-align: top;
 }
@@ -303,56 +308,56 @@
   color: #721c24;
 }
 
-.job-table__loading,
-.job-table__error,
-.job-table__empty {
+.match-table__loading,
+.match-table__error,
+.match-table__empty {
   padding: 3rem;
   text-align: center;
   color: #7f8c8d;
   font-size: 1.1rem;
 }
 
-.job-table__error {
+.match-table__error {
   color: #e74c3c;
 }
 
 /* Responsive Design */
 @media (max-width: 1200px) {
-  .job-table__header,
-  .job-table__row {
+  .match-table__header,
+  .match-table__row {
     grid-template-columns: 2fr 1.5fr 1fr 1.5fr 60px 60px;
   }
 
-  .job-filters__grid {
+  .match-filters__grid {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 }
 
 @media (max-width: 768px) {
-  .jobs-page {
+  .matches-page {
     padding: 1rem;
   }
 
-  .job-filters__grid {
+  .match-filters__grid {
     grid-template-columns: 1fr;
   }
 
-  .job-table__header,
-  .job-table__row {
+  .match-table__header,
+  .match-table__row {
     grid-template-columns: 1fr;
     gap: 0.5rem;
   }
 
-  .job-table__cell {
+  .match-table__cell {
     padding: 0.75rem;
     border-bottom: 1px solid #f1f1f1;
   }
 
-  .job-table__cell--header {
+  .match-table__cell--header {
     display: none;
   }
 
-  .job-table__cell::before {
+  .match-table__cell::before {
     content: attr(data-label);
     font-weight: 600;
     color: #2c3e50;
