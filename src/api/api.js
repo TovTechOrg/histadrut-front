@@ -23,6 +23,7 @@ const apiRequest = async (endpoint, options = {}) => {
 export const fetchStats = async () => apiRequest("/stats");
 export const fetchJobs = async (page = 1) =>
   apiRequest(`/matches2?page=${page}`);
+export const fetchCompanies = async () => apiRequest("/companies");
 
 export const transformJobsData = (apiResponse) => {
   const jobs = apiResponse.jobs.map((job, index) => ({
@@ -66,6 +67,17 @@ export const transformStatsData = (apiResponse) => ({
   jobsLastWeek: apiResponse.Number_of_jobs_last_week ?? 0,
   matches: apiResponse.Number_of_matches ?? 0,
 });
+
+export const transformCompaniesData = (apiResponse) => {
+  return Object.entries(apiResponse).map(([companyName, jobsCount], index) => ({
+    id: index + 1, // Use index + 1 as ID since we don't have actual IDs
+    name: companyName,
+    jobsCount: jobsCount || 0,
+    _metadata: {
+      originalData: { [companyName]: jobsCount },
+    },
+  }));
+};
 
 const getAbsoluteUrl = (url) => {
   if (url && (url.startsWith("http://") || url.startsWith("https://")))
