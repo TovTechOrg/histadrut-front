@@ -1,4 +1,5 @@
 import React from "react";
+import downloadIcon from "../../assets/icons/download.svg";
 
 const MatchesTable = ({ jobs, loading, error }) => {
   if (loading) {
@@ -93,7 +94,11 @@ const MatchesTable = ({ jobs, loading, error }) => {
                           title={`Download CV for ${candidate.name}`}
                           aria-label={`Download CV for ${candidate.name}`}
                         >
-                          ⬇
+                          <img
+                            src={downloadIcon}
+                            alt="Download, created by Gemini"
+                            className="cv-download-icon"
+                          />
                         </button>
                       ) : (
                         <span

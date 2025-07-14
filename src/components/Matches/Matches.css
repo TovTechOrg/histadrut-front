@@ -274,6 +274,17 @@
   transform: translateY(-1px);
 }
 
+.cv-download-icon {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) saturate(100%) invert(31%) sepia(72%) saturate(1179%)
+    hue-rotate(192deg) brightness(97%) contrast(85%);
+}
+
+.cv-download-btn:hover .cv-download-icon {
+  filter: brightness(0) saturate(100%) invert(100%);
+}
+
 .cv-not-available {
   color: #bdc3c7;
   font-size: 1.2rem;
