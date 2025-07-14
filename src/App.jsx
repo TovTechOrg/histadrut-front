@@ -4,6 +4,7 @@ import AdminPanel from "./components/AdminPanel/AdminPanel";
 import Overview from "./components/Overview/Overview";
 import Matches from "./components/Matches/Matches";
 import Companies from "./components/Companies/Companies";
+import JobsListings from "./components/JobsListings/JobsListings";
 import Reporting from "./components/Reporting/Reporting";
 import "./components/shared/Page.css";
 
@@ -18,6 +19,7 @@ function App() {
             <Route path="/dashboard" element={<Overview />} />
             <Route path="/matches" element={<Matches />} />
             <Route path="/companies" element={<Companies />} />
+            <Route path="/jobs-listings" element={<JobsListings />} />
             <Route path="/reporting" element={<Reporting />} />
           </Routes>
         </main>

@@ -56,9 +56,20 @@
 
 .admin-panel__icon {
   margin-right: 0.75rem;
-  font-size: 1.2rem;
   width: 20px;
+  height: 20px;
   display: inline-block;
+  flex-shrink: 0;
+  filter: brightness(0) saturate(100%) invert(86%) sepia(6%) saturate(417%)
+    hue-rotate(194deg) brightness(92%) contrast(87%);
+}
+
+.admin-panel__link:hover .admin-panel__icon {
+  filter: brightness(0) saturate(100%) invert(100%);
+}
+
+.admin-panel__link--active .admin-panel__icon {
+  filter: brightness(0) saturate(100%) invert(100%);
 }
 
 /* Responsive design */

@@ -71,9 +71,7 @@ const Companies = () => {
         <table className="companies-table__table">
           <thead className="companies-table__header">
             <tr>
-              <th className="companies-table__cell companies-table__cell--header">
-                ID
-              </th>
+              <th className="companies-table__cell companies-table__cell--header"></th>
               <th className="companies-table__cell companies-table__cell--header">
                 Company Name
               </th>

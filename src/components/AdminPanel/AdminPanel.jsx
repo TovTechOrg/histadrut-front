@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import dashboardIcon from "../../assets/icons/dashboard.svg";
 import "./AdminPanel.css";
 
 const AdminPanel = () => {
@@ -21,8 +22,25 @@ const AdminPanel = () => {
                 }`
               }
             >
-              <span className="admin-panel__icon">📊</span>
+              <img
+                src={dashboardIcon}
+                alt="Dashboard, created by Gemini"
+                className="admin-panel__icon"
+              />
               Dashboard
+            </NavLink>
+          </li>
+          <li className="admin-panel__item">
+            <NavLink
+              to="/jobs-listings"
+              className={({ isActive }) =>
+                `admin-panel__link ${
+                  isActive ? "admin-panel__link--active" : ""
+                }`
+              }
+            >
+              <span className="admin-panel__icon">📋</span>
+              Jobs Listings
             </NavLink>
           </li>
           <li className="admin-panel__item">
@@ -51,6 +69,7 @@ const AdminPanel = () => {
               Companies
             </NavLink>
           </li>
+
           <li className="admin-panel__item">
             <NavLink
               to="/reporting"

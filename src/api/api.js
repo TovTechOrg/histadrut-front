@@ -89,7 +89,7 @@ const getAbsoluteUrl = (url) => {
 const getCandidateName = (candidateId, matchIndex) => {
   if (candidateId && candidateId.length > 0) {
     if (/^[A-Za-z\s]+$/.test(candidateId)) return candidateId;
-    return `Candidate ${candidateId.slice(-4)}`;
+    return `${candidateId.slice(-4)}`;
   }
-  return `Candidate ${matchIndex + 1}`;
+  return `${matchIndex + 1}`;
 };
