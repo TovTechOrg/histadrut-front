@@ -1,5 +1,9 @@
 import React from "react";
 import { useCompaniesData } from "../../hooks/useCompaniesData";
+import addIcon from "../../assets/icons/add.svg";
+import viewJobsIcon from "../../assets/icons/viewJobs.svg";
+import editIcon from "../../assets/icons/edit.svg";
+import deleteIcon from "../../assets/icons/delete.svg";
 import "./Companies.css";
 
 const Companies = () => {
@@ -27,7 +31,11 @@ const Companies = () => {
         <div className="companies-header">
           <h1 className="companies-title">Company Management</h1>
           <button className="companies-add-btn" onClick={handleAddCompany}>
-            <span className="companies-add-btn__icon">⊕</span>
+            <img
+              src={addIcon}
+              alt="Add, created by Gemini"
+              className="companies-add-btn__icon"
+            />
             Add New Company
           </button>
         </div>
@@ -44,7 +52,11 @@ const Companies = () => {
         <div className="companies-header">
           <h1 className="companies-title">Company Management</h1>
           <button className="companies-add-btn" onClick={handleAddCompany}>
-            <span className="companies-add-btn__icon">⊕</span>
+            <img
+              src={addIcon}
+              alt="Add, created by Gemini"
+              className="companies-add-btn__icon"
+            />
             Add New Company
           </button>
         </div>
@@ -62,7 +74,11 @@ const Companies = () => {
       <div className="companies-header">
         <h1 className="companies-title">Company Management</h1>
         <button className="companies-add-btn" onClick={handleAddCompany}>
-          <span className="companies-add-btn__icon">⊕</span>
+          <img
+            src={addIcon}
+            alt="Add, created by Gemini"
+            className="companies-add-btn__icon"
+          />
           Add New Company
         </button>
       </div>
@@ -110,7 +126,11 @@ const Companies = () => {
                         title={`View ${company.name} jobs`}
                         aria-label={`View ${company.name} jobs`}
                       >
-                        ☰
+                        <img
+                          src={viewJobsIcon}
+                          alt="View Jobs, created by Gemini"
+                          className="companies-table__action-icon"
+                        />
                       </button>
                       <button
                         className="companies-table__action-btn companies-table__action-btn--edit"
@@ -118,7 +138,11 @@ const Companies = () => {
                         title={`Edit ${company.name}`}
                         aria-label={`Edit ${company.name}`}
                       >
-                        ✎
+                        <img
+                          src={editIcon}
+                          alt="Edit, created by Gemini"
+                          className="companies-table__action-icon"
+                        />
                       </button>
                       <button
                         className="companies-table__action-btn companies-table__action-btn--delete"
@@ -126,7 +150,11 @@ const Companies = () => {
                         title={`Delete ${company.name}`}
                         aria-label={`Delete ${company.name}`}
                       >
-                        🗑
+                        <img
+                          src={deleteIcon}
+                          alt="Delete, created by Gemini"
+                          className="companies-table__action-icon"
+                        />
                       </button>
                     </div>
                   </td>

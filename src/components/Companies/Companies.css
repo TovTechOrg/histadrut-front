@@ -39,7 +39,9 @@
 }
 
 .companies-add-btn__icon {
-  font-size: 1rem;
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) saturate(100%) invert(100%);
 }
 
 /* Companies Table */
@@ -152,6 +154,26 @@
 
 .companies-table__action-btn--delete:hover {
   background: #fdeaea;
+}
+
+.companies-table__action-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.companies-table__action-btn--view .companies-table__action-icon {
+  filter: brightness(0) saturate(100%) invert(31%) sepia(73%) saturate(1179%)
+    hue-rotate(192deg) brightness(97%) contrast(85%);
+}
+
+.companies-table__action-btn--edit .companies-table__action-icon {
+  filter: brightness(0) saturate(100%) invert(60%) sepia(96%) saturate(1169%)
+    hue-rotate(11deg) brightness(91%) contrast(91%);
+}
+
+.companies-table__action-btn--delete .companies-table__action-icon {
+  filter: brightness(0) saturate(100%) invert(26%) sepia(89%) saturate(1583%)
+    hue-rotate(348deg) brightness(99%) contrast(85%);
 }
 
 .companies-table__loading,

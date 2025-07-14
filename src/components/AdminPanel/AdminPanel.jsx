@@ -1,6 +1,10 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import dashboardIcon from "../../assets/icons/dashboard.svg";
+import listingsIcon from "../../assets/icons/listings.svg";
+import matchesIcon from "../../assets/icons/matches.svg";
+import companiesIcon from "../../assets/icons/companies.svg";
+import reportingIcon from "../../assets/icons/reporting.svg";
 import "./AdminPanel.css";
 
 const AdminPanel = () => {
@@ -39,7 +43,11 @@ const AdminPanel = () => {
                 }`
               }
             >
-              <span className="admin-panel__icon">📋</span>
+              <img
+                src={listingsIcon}
+                alt="Jobs Listings, created by Gemini"
+                className="admin-panel__icon"
+              />
               Jobs Listings
             </NavLink>
           </li>
@@ -52,7 +60,11 @@ const AdminPanel = () => {
                 }`
               }
             >
-              <span className="admin-panel__icon">💼</span>
+              <img
+                src={matchesIcon}
+                alt="Job Matches, created by Gemini"
+                className="admin-panel__icon"
+              />
               Job Matches
             </NavLink>
           </li>
@@ -65,7 +77,11 @@ const AdminPanel = () => {
                 }`
               }
             >
-              <span className="admin-panel__icon">🏢</span>
+              <img
+                src={companiesIcon}
+                alt="Companies, created by Gemini"
+                className="admin-panel__icon"
+              />
               Companies
             </NavLink>
           </li>
@@ -79,7 +95,11 @@ const AdminPanel = () => {
                 }`
               }
             >
-              <span className="admin-panel__icon">📈</span>
+              <img
+                src={reportingIcon}
+                alt="Reporting, created by Gemini"
+                className="admin-panel__icon"
+              />
               Reporting
             </NavLink>
           </li>
