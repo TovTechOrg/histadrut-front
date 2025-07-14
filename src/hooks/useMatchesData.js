@@ -2,8 +2,8 @@ import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { fetchJobs, transformJobsData } from "../api/api";
 
-// Custom hook for managing jobs data and filtering
-export const useJobsData = () => {
+// Custom hook for managing matches data and filtering
+export const useMatchesData = () => {
   const [jobsData, setJobsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

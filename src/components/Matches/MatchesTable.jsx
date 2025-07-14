@@ -1,6 +1,6 @@
 import React from "react";
 
-const JobTable = ({ jobs, loading, error }) => {
+const MatchesTable = ({ jobs, loading, error }) => {
   if (loading) {
     return (
       <div className="match-table">
@@ -132,4 +132,4 @@ const JobTable = ({ jobs, loading, error }) => {
   );
 };
 
-export default JobTable;
+export default MatchesTable;

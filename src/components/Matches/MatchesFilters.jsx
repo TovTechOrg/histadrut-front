@@ -1,6 +1,6 @@
 import React from "react";
 
-const JobFilters = ({ filters, onFiltersChange }) => {
+const MatchesFilters = ({ filters, onFiltersChange }) => {
   const handleInputChange = (field, value) => {
     onFiltersChange({
       ...filters,
@@ -97,4 +97,4 @@ const JobFilters = ({ filters, onFiltersChange }) => {
   );
 };
 
-export default JobFilters;
+export default MatchesFilters;

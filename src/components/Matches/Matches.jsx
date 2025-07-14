@@ -1,7 +1,7 @@
 import React from "react";
 import MatchesFilters from "./MatchesFilters";
 import MatchesTable from "./MatchesTable";
-import { useJobsData } from "../../hooks/useJobsData";
+import { useMatchesData } from "../../hooks/useMatchesData";
 import "./Matches.css";
 
 const Matches = () => {
@@ -15,7 +15,7 @@ const Matches = () => {
     totalPages,
     goToNextPage,
     goToPreviousPage,
-  } = useJobsData();
+  } = useMatchesData();
 
   return (
     <section className="matches-page">
