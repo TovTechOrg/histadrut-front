@@ -33,8 +33,12 @@ export const transformJobsData = (apiResponse) => {
     dateAdded: job.discovered
       ? new Date(job.discovered).toISOString().split("T")[0]
       : new Date().toISOString().split("T")[0],
+    jobDescription: job.job_description || "No description available",
     matchedCandidates: (job.matches || []).map((match, matchIndex) => ({
-      name: getCandidateName(match.ID_candiate, matchIndex),
+      name: getCandidateName(
+        match.candidate_name || match.name || match.ID_candiate,
+        matchIndex
+      ),
       score: match.score || 0,
       cv: Boolean(match.cv_link),
       cvLink: match.cv_link ? getAbsoluteUrl(match.cv_link) : null,
@@ -88,8 +92,24 @@ const getAbsoluteUrl = (url) => {
 
 const getCandidateName = (candidateId, matchIndex) => {
   if (candidateId && candidateId.length > 0) {
-    if (/^[A-Za-z\s]+$/.test(candidateId)) return candidateId;
-    return `${candidateId.slice(-4)}`;
+    // If candidateId looks like a name (contains letters and spaces), use it
+    if (/^[A-Za-z\s]+$/.test(candidateId)) {
+      return candidateId;
+    }
+    // If candidateId looks like an email, extract the name part
+    if (candidateId.includes("@")) {
+      const namePart = candidateId.split("@")[0];
+      return namePart
+        .replace(/[._]/g, " ")
+        .replace(/\b\w/g, (l) => l.toUpperCase());
+    }
+    // If candidateId has a meaningful prefix or pattern, use a better format
+    if (candidateId.length > 8) {
+      return `Candidate ${candidateId.slice(-6)}`;
+    }
+    // For shorter IDs, use last 4 characters
+    return `Candidate ${candidateId.slice(-4)}`;
   }
-  return `${matchIndex + 1}`;
+  // Fallback to match index
+  return `Candidate ${matchIndex + 1}`;
 };
