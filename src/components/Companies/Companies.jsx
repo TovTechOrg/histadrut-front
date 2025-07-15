@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useCompaniesData } from "../../hooks/useCompaniesData";
 import addIcon from "../../assets/icons/add.svg";
 import viewJobsIcon from "../../assets/icons/viewJobs.svg";
@@ -8,13 +9,15 @@ import "./Companies.css";
 
 const Companies = () => {
   const { companiesData, loading, error } = useCompaniesData();
+  const navigate = useNavigate();
 
   const handleAddCompany = () => {
     alert("Add new company");
   };
 
   const handleViewCompany = (companyName) => {
-    alert(`Displaying ${companyName} jobs`);
+    // Navigate to job listings page with company filter
+    navigate(`/jobs-listings?company=${encodeURIComponent(companyName)}`);
   };
 
   const handleEditCompany = (companyName) => {

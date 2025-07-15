@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import downloadIcon from "../../assets/icons/download.svg";
+import JobModal from "./JobModal";
+import CandidateModal from "./CandidateModal";
 
 const MatchesTable = ({ jobs, loading, error }) => {
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [selectedCandidate, setSelectedCandidate] = useState(null);
+
   if (loading) {
     return (
       <div className="match-table">
@@ -31,6 +36,22 @@ const MatchesTable = ({ jobs, loading, error }) => {
     } else {
       alert(`CV not available for ${candidateName}`);
     }
+  };
+
+  const handleJobClick = (job) => {
+    setSelectedJob(job);
+  };
+
+  const handleCandidateClick = (candidate) => {
+    setSelectedCandidate(candidate);
+  };
+
+  const handleCloseJobModal = () => {
+    setSelectedJob(null);
+  };
+
+  const handleCloseCandidateModal = () => {
+    setSelectedCandidate(null);
   };
 
   return (
@@ -65,14 +86,24 @@ const MatchesTable = ({ jobs, loading, error }) => {
             jobs.map((job) => (
               <tr key={job.id} className="match-table__row">
                 <td className="match-table__cell match-table__cell--match-title">
-                  <span className="match-table__title">{job.jobTitle}</span>
+                  <span
+                    className="match-table__title match-table__title--clickable"
+                    onClick={() => handleJobClick(job)}
+                    title="Click to view job description"
+                  >
+                    {job.jobTitle}
+                  </span>
                 </td>
                 <td className="match-table__cell">{job.company}</td>
                 <td className="match-table__cell">{job.dateAdded}</td>
                 <td className="match-table__cell match-table__cell--candidates">
                   {job.matchedCandidates.map((candidate, index) => (
                     <div className="candidate-match__container" key={index}>
-                      <span className="candidate-match__name">
+                      <span
+                        className="candidate-match__name candidate-match__name--clickable"
+                        onClick={() => handleCandidateClick(candidate)}
+                        title="Click to view candidate details"
+                      >
                         {candidate.name}
                       </span>
                       <span className="candidate-match__score">
@@ -88,9 +119,10 @@ const MatchesTable = ({ jobs, loading, error }) => {
                       {candidate.cv && candidate.cvLink ? (
                         <button
                           className="cv-download-btn"
-                          onClick={() =>
-                            downloadCV(candidate.cvLink, candidate.name)
-                          }
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            downloadCV(candidate.cvLink, candidate.name);
+                          }}
                           title={`Download CV for ${candidate.name}`}
                           aria-label={`Download CV for ${candidate.name}`}
                         >
@@ -133,6 +165,17 @@ const MatchesTable = ({ jobs, loading, error }) => {
           )}
         </tbody>
       </table>
+
+      {selectedJob && (
+        <JobModal job={selectedJob} onClose={handleCloseJobModal} />
+      )}
+
+      {selectedCandidate && (
+        <CandidateModal
+          candidate={selectedCandidate}
+          onClose={handleCloseCandidateModal}
+        />
+      )}
     </div>
   );
 };

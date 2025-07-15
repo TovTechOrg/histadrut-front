@@ -1,0 +1,76 @@
+/* Candidate Modal Specific Styles */
+.candidate-modal__info {
+  padding: 1rem 1.5rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e1e8ed;
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.candidate-modal__score,
+.candidate-modal__mmr {
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.candidate-modal__score strong,
+.candidate-modal__mmr strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.candidate-modal__score {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.candidate-modal__mmr {
+  color: #e74c3c;
+}
+
+.candidate-modal__overview {
+  padding: 1.5rem;
+}
+
+.candidate-modal__overview h3 {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.candidate-modal__overview-content {
+  color: #495057;
+  line-height: 1.6;
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  /* Support for both LTR and RTL text */
+  unicode-bidi: isolate;
+}
+
+/* RTL text styling */
+.candidate-modal__overview-content[dir="rtl"] {
+  font-family: "Arial", "Helvetica", sans-serif;
+}
+
+/* LTR text styling */
+.candidate-modal__overview-content[dir="ltr"] {
+  font-family: "Arial", "Helvetica", sans-serif;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .candidate-modal__info {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .candidate-modal__overview {
+    padding: 1rem;
+  }
+}

@@ -221,6 +221,16 @@
   text-decoration: none;
 }
 
+.match-table__title--clickable {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.match-table__title--clickable:hover {
+  color: #2980b9;
+  text-decoration: underline;
+}
+
 .match-table__cell--candidates {
   display: table-cell;
   vertical-align: top;
@@ -237,6 +247,16 @@
   font-size: 0.85rem;
   line-height: 1.4;
   margin-right: 0.5rem;
+}
+
+.candidate-match__name--clickable {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.candidate-match__name--clickable:hover {
+  color: #2980b9;
+  text-decoration: underline;
 }
 
 .candidate-match__score {
