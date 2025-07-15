@@ -9,7 +9,7 @@ import "./JobsListings.css";
 import addIcon from "../../assets/icons/add.svg";
 
 const JobsListings = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -157,6 +157,20 @@ const JobsListings = () => {
     }
   };
 
+  // Handle company filter change and update URL
+  const handleCompanyChange = (company) => {
+    setSelectedCompany(company);
+
+    // Update URL parameters
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (company === "All Companies") {
+      newSearchParams.delete("company");
+    } else {
+      newSearchParams.set("company", company);
+    }
+    setSearchParams(newSearchParams);
+  };
+
   // Get unique companies for filter dropdown
   const companies = [
     "All Companies",
@@ -183,6 +197,21 @@ const JobsListings = () => {
     setSelectedJob(null);
   };
 
+  // Handle URL parameter changes
+  useEffect(() => {
+    const companyFromUrl = searchParams.get("company");
+    if (companyFromUrl) {
+      // Check if the company exists in the jobs data
+      const companyExists = jobs.some((job) => job.company === companyFromUrl);
+      if (companyExists && selectedCompany !== companyFromUrl) {
+        setSelectedCompany(companyFromUrl);
+      }
+    } else if (selectedCompany !== "All Companies") {
+      // If no company parameter in URL, reset to "All Companies"
+      setSelectedCompany("All Companies");
+    }
+  }, [searchParams, jobs, selectedCompany]);
+
   return (
     <section className="jobs-listings">
       <div className="jobs-listings__header">
@@ -200,7 +229,7 @@ const JobsListings = () => {
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         selectedCompany={selectedCompany}
-        onCompanyChange={setSelectedCompany}
+        onCompanyChange={handleCompanyChange}
         selectedStatus={selectedStatus}
         onStatusChange={setSelectedStatus}
         companies={companies}
