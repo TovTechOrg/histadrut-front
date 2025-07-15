@@ -79,14 +79,23 @@ export const useMatchesData = () => {
       );
     }
 
+    // Apply candidate name filter - filter both jobs AND candidates within jobs
     if (filters.candidateName.trim()) {
-      filtered = filtered.filter((job) =>
-        job.matchedCandidates.some((candidate) =>
-          candidate.name
-            .toLowerCase()
-            .includes(filters.candidateName.toLowerCase().trim())
-        )
-      );
+      const candidateNameFilter = filters.candidateName.toLowerCase().trim();
+
+      filtered = filtered
+        .map((job) => ({
+          ...job,
+          matchedCandidates: job.matchedCandidates.filter((candidate) => {
+            // Safety check for candidate.name
+            if (!candidate || !candidate.name) {
+              return false;
+            }
+
+            return candidate.name.toLowerCase().includes(candidateNameFilter);
+          }),
+        }))
+        .filter((job) => job.matchedCandidates.length > 0);
     }
 
     if (filters.addedSince) {

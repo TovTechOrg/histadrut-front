@@ -93,7 +93,7 @@ const JobListingsTable = ({
             </tr>
           </thead>
           <tbody>
-            {jobs.length === 0 ? (
+            {!jobs || jobs.length === 0 ? (
               <tr>
                 <td colSpan="6" className="job-table__empty">
                   No jobs found matching your criteria.

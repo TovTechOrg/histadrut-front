@@ -132,6 +132,38 @@
 .job-table__table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed; /* This ensures fixed column widths */
+}
+
+/* Fixed column widths based on the image proportions */
+.job-table__table th:nth-child(1), /* ID column */
+.job-table__table td:nth-child(1) {
+  width: 5%;
+}
+
+.job-table__table th:nth-child(2), /* Title column */
+.job-table__table td:nth-child(2) {
+  width: 35%; /* Increased from 30% */
+}
+
+.job-table__table th:nth-child(3), /* Company column */
+.job-table__table td:nth-child(3) {
+  width: 20%;
+}
+
+.job-table__table th:nth-child(4), /* Posted column */
+.job-table__table td:nth-child(4) {
+  width: 15%;
+}
+
+.job-table__table th:nth-child(5), /* Status column */
+.job-table__table td:nth-child(5) {
+  width: 15%;
+}
+
+.job-table__table th:nth-child(6), /* Actions column */
+.job-table__table td:nth-child(6) {
+  width: 10%; /* Decreased from 15% */
 }
 
 .job-table__header {
@@ -153,6 +185,9 @@
   vertical-align: top;
   color: #2c3e50;
   border-bottom: inherit;
+  word-wrap: break-word; /* Handle long text */
+  overflow-wrap: break-word; /* Handle long text */
+  text-overflow: ellipsis; /* Add ellipsis for very long text */
 }
 
 .job-table__cell--header {
@@ -167,6 +202,10 @@
 .job-table__cell--title {
   color: #2c3e50;
   font-weight: 500;
+  max-width: 0; /* This works with table-layout: fixed to enable ellipsis */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .job-table__cell--actions {
@@ -418,6 +457,37 @@
   .job-filters__grid {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1rem;
+  }
+
+  /* Adjust column widths for medium screens */
+  .job-table__table th:nth-child(1), /* ID column */
+  .job-table__table td:nth-child(1) {
+    width: 8%;
+  }
+
+  .job-table__table th:nth-child(2), /* Title column */
+  .job-table__table td:nth-child(2) {
+    width: 35%; /* Increased from 32% */
+  }
+
+  .job-table__table th:nth-child(3), /* Company column */
+  .job-table__table td:nth-child(3) {
+    width: 22%;
+  }
+
+  .job-table__table th:nth-child(4), /* Posted column */
+  .job-table__table td:nth-child(4) {
+    width: 15%;
+  }
+
+  .job-table__table th:nth-child(5), /* Status column */
+  .job-table__table td:nth-child(5) {
+    width: 12%;
+  }
+
+  .job-table__table th:nth-child(6), /* Actions column */
+  .job-table__table td:nth-child(6) {
+    width: 8%; /* Decreased from 10% */
   }
 }
 
