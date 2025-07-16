@@ -1,14 +1,21 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 
 // Custom hook for managing job listings data and filtering
 export const useJobsData = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchParams] = useSearchParams();
+
+  // Get company filter from URL parameter
+  const companyFromUrl = searchParams.get("company");
 
   // Filter state
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCompany, setSelectedCompany] = useState("All Companies");
+  const [selectedCompany, setSelectedCompany] = useState(
+    companyFromUrl || "All Companies"
+  );
   const [selectedStatus, setSelectedStatus] = useState("All Statuses");
 
   // Sorting state
@@ -63,6 +70,13 @@ export const useJobsData = () => {
 
     fetchJobs();
   }, []);
+
+  // Update selected company when URL parameter changes
+  useEffect(() => {
+    if (companyFromUrl) {
+      setSelectedCompany(companyFromUrl);
+    }
+  }, [companyFromUrl]);
 
   // Ensure selectedCompany is valid when jobs change (helps with Strict Mode)
   useEffect(() => {
