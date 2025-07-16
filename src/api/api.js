@@ -2,11 +2,7 @@ const API_BASE_URL = "https://cv.pythia-match.com";
 
 const handleApiError = (response, endpoint) => {
   if (!response.ok) {
-    throw new Error(
-      `Failed to fetch ${endpoint.replace("/", "")}: ${response.status} ${
-        response.statusText
-      }`
-    );
+    throw new Error(`Failed to fetch ${endpoint}: ${response.status}`);
   }
   return response;
 };
@@ -35,14 +31,11 @@ export const transformJobsData = (apiResponse) => {
       : new Date().toISOString().split("T")[0],
     jobDescription: job.job_description || "No description available",
     matchedCandidates: (job.matches || []).map((match, matchIndex) => ({
-      name: getCandidateName(
-        match.candidate_name || match.name || match.ID_candiate,
-        matchIndex
-      ),
+      name: match.name || `Candidate ${matchIndex + 1}`,
       score: match.score || 0,
-      cv: Boolean(match.cv_link),
+      cv: !!match.cv_link,
       cvLink: match.cv_link ? getAbsoluteUrl(match.cv_link) : null,
-      mmr: match.mandatory_req ? "Yes" : "No",
+      mmr: match.mandatory_req ? "YES" : "NO",
       _metadata: {
         matchId: match._id,
         candidateId: match.ID_candiate,
@@ -50,7 +43,7 @@ export const transformJobsData = (apiResponse) => {
         createdAt: match.created_at,
         overview: match.overall_overview,
         strengths: match.strengths || [],
-        weaknesses: match.weeknesses || [],
+        weaknesses: match.weeknesses || match.weaknesses || [],
       },
     })),
   }));
@@ -74,42 +67,14 @@ export const transformStatsData = (apiResponse) => ({
 
 export const transformCompaniesData = (apiResponse) => {
   return Object.entries(apiResponse).map(([companyName, jobsCount], index) => ({
-    id: index + 1, // Use index + 1 as ID since we don't have actual IDs
+    id: index + 1,
     name: companyName,
     jobsCount: jobsCount || 0,
-    _metadata: {
-      originalData: { [companyName]: jobsCount },
-    },
   }));
 };
 
 const getAbsoluteUrl = (url) => {
-  if (url && (url.startsWith("http://") || url.startsWith("https://")))
-    return url;
-  const cleanPath = url.startsWith("/") ? url : `/${url}`;
-  return `${API_BASE_URL}${cleanPath}`;
-};
-
-const getCandidateName = (candidateId, matchIndex) => {
-  if (candidateId && candidateId.length > 0) {
-    // If candidateId looks like a name (contains letters and spaces), use it
-    if (/^[A-Za-z\s]+$/.test(candidateId)) {
-      return candidateId;
-    }
-    // If candidateId looks like an email, extract the name part
-    if (candidateId.includes("@")) {
-      const namePart = candidateId.split("@")[0];
-      return namePart
-        .replace(/[._]/g, " ")
-        .replace(/\b\w/g, (l) => l.toUpperCase());
-    }
-    // If candidateId has a meaningful prefix or pattern, use a better format
-    if (candidateId.length > 8) {
-      return `Candidate ${candidateId.slice(-6)}`;
-    }
-    // For shorter IDs, use last 4 characters
-    return `Candidate ${candidateId.slice(-4)}`;
-  }
-  // Fallback to match index
-  return `Candidate ${matchIndex + 1}`;
+  if (!url) return null;
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  return `${API_BASE_URL}${url.startsWith("/") ? url : `/${url}`}`;
 };

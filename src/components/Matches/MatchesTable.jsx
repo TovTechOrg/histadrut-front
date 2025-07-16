@@ -10,7 +10,7 @@ const MatchesTable = ({ jobs, loading, error }) => {
   if (loading) {
     return (
       <div className="match-table">
-        <div className="match-table__loading">Loading jobs...</div>
+        <div className="match-table__loading">Loading matches...</div>
       </div>
     );
   }
@@ -18,7 +18,7 @@ const MatchesTable = ({ jobs, loading, error }) => {
   if (error) {
     return (
       <div className="match-table">
-        <div className="match-table__error">Error loading jobs: {error}</div>
+        <div className="match-table__error">Error loading matches: {error}</div>
       </div>
     );
   }
