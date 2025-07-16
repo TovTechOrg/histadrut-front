@@ -98,7 +98,11 @@ const MatchesTable = ({ jobs, loading, error }) => {
                 <td className="match-table__cell">{job.dateAdded}</td>
                 <td className="match-table__cell match-table__cell--candidates">
                   {job.matchedCandidates.map((candidate, index) => (
-                    <div className="candidate-match__container" key={index}>
+                    <div
+                      className="candidate-match__container"
+                      key={index}
+                      dir="ltr"
+                    >
                       <span
                         className="candidate-match__name candidate-match__name--clickable"
                         onClick={() => handleCandidateClick(candidate)}
