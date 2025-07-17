@@ -19,6 +19,7 @@ const apiRequest = async (endpoint, options = {}) => {
 export const fetchStats = async () => apiRequest("/stats");
 export const fetchJobs = async (page = 1) =>
   apiRequest(`/matches2?page=${page}`);
+export const fetchJobListings = async () => apiRequest("/jobs");
 export const fetchCompanies = async () => apiRequest("/companies");
 
 export const transformJobsData = (apiResponse) => {
@@ -70,6 +71,43 @@ export const transformJobsData = (apiResponse) => {
       totalPages: apiResponse.pagination?.total_pages ?? 1,
     },
   };
+};
+
+// Age category thresholds (in days)
+const AGE_THRESHOLDS = {
+  NEW: 1,
+  FRESH: 5,
+  STALE: 14,
+};
+
+// Helper function to calculate age category based on days
+const getAgeCategory = (daysOld) => {
+  if (daysOld <= AGE_THRESHOLDS.NEW) return "New";
+  if (daysOld <= AGE_THRESHOLDS.FRESH) return "Fresh";
+  if (daysOld <= AGE_THRESHOLDS.STALE) return "Stale";
+  return "Old";
+};
+
+export const transformJobListingsData = (apiResponse) => {
+  return apiResponse.map((job, index) => {
+    const daysAgo = job.days_old || 0; // Use days_old from API instead of calculating
+    const ageCategory = getAgeCategory(daysAgo);
+
+    // Debug logging
+    console.log(
+      `Job ${index}: days_old: ${job.days_old}, Age category: ${ageCategory}`
+    );
+
+    return {
+      id: job.job_id || `job-${index}`,
+      title: job.job_title || "Unknown Position",
+      company: job.company_name || "Unknown Company",
+      posted: job.posted || new Date().toISOString(),
+      age: `${daysAgo} days ago`, // Display with "ago" suffix
+      ageCategory: ageCategory, // Keep category for badge styling
+      ageDisplay: `${daysAgo} days ago`,
+    };
+  });
 };
 
 export const transformStatsData = (apiResponse) => ({

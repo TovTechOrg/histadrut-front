@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
+import { fetchJobListings, transformJobListingsData } from "../api/api";
 
 // Custom hook for managing job listings data and filtering
 export const useJobsData = () => {
@@ -16,49 +17,21 @@ export const useJobsData = () => {
   const [selectedCompany, setSelectedCompany] = useState(
     companyFromUrl || "All Companies"
   );
-  const [selectedStatus, setSelectedStatus] = useState("All Statuses");
+  const [selectedStatus, setSelectedStatus] = useState("All Ages"); // Changed from "All Statuses"
 
   // Sorting state
   const [sortField, setSortField] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
 
-  // DUMMY DATA FUNCTIONS: These generate dummy posted dates and statuses
-  const getDummyPostedDate = (index) => {
-    const dates = [
-      "14/07/2025",
-      "24/05/2025",
-      "24/06/2025",
-      "06/06/2025",
-      "10/07/2025",
-    ];
-    return dates[index % dates.length];
-  };
-
-  const getDummyStatus = (index) => {
-    const statuses = ["Expired", "Draft", "Live", "Pending Approval"];
-    return statuses[index % statuses.length];
-  };
-
   // Fetch jobs from API
   useEffect(() => {
-    const fetchJobs = async () => {
+    const loadJobs = async () => {
       try {
         setLoading(true);
-        const response = await fetch("https://cv.pythia-match.com/jobs");
-        if (!response.ok) {
-          throw new Error("Failed to fetch jobs");
-        }
-        const data = await response.json();
+        setError(null);
 
-        // Transform API data to match our table structure
-        const transformedJobs = data.map((job, index) => ({
-          id: job.job_id,
-          title: job.job_title,
-          company: job.company_name,
-          // DUMMY DATA: Posted date and status are dummy values as requested
-          posted: getDummyPostedDate(index),
-          status: getDummyStatus(index),
-        }));
+        const apiResponse = await fetchJobListings();
+        const transformedJobs = transformJobListingsData(apiResponse);
 
         setJobs(transformedJobs);
       } catch (err) {
@@ -68,7 +41,7 @@ export const useJobsData = () => {
       }
     };
 
-    fetchJobs();
+    loadJobs();
   }, []);
 
   // Update selected company when URL parameter changes
@@ -107,13 +80,7 @@ export const useJobsData = () => {
     return result;
   }, [jobs]);
 
-  const statuses = [
-    "All Statuses",
-    "Live",
-    "Draft",
-    "Expired",
-    "Pending Approval",
-  ];
+  const statuses = ["All Ages", "New", "Fresh", "Stale", "Old"];
 
   // Filter and sort jobs
   const filteredJobs = useMemo(() => {
@@ -145,9 +112,9 @@ export const useJobsData = () => {
     }
 
     // Apply status filter
-    if (selectedStatus && selectedStatus !== "All Statuses") {
+    if (selectedStatus && selectedStatus !== "All Ages") {
       filtered = filtered.filter(
-        (job) => job.status && job.status === selectedStatus
+        (job) => job.ageCategory && job.ageCategory === selectedStatus
       );
     }
 

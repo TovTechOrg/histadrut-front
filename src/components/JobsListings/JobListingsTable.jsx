@@ -28,16 +28,16 @@ const JobListingsTable = ({
     );
   }
 
-  const getStatusClass = (status) => {
-    switch (status) {
-      case "Live":
-        return "status-live";
-      case "Draft":
-        return "status-draft";
-      case "Expired":
-        return "status-expired";
-      case "Pending Approval":
-        return "status-pending";
+  const getAgeClass = (age) => {
+    switch (age) {
+      case "New":
+        return "age-new";
+      case "Fresh":
+        return "age-fresh";
+      case "Stale":
+        return "age-stale";
+      case "Old":
+        return "age-old";
       default:
         return "";
     }
@@ -86,7 +86,7 @@ const JobListingsTable = ({
               <SortableHeader field="title">Title</SortableHeader>
               <SortableHeader field="company">Company</SortableHeader>
               <SortableHeader field="posted">Posted</SortableHeader>
-              <SortableHeader field="status">Status</SortableHeader>
+              <SortableHeader field="age">Age</SortableHeader>
               <SortableHeader field="actions" sortable={false}>
                 Actions
               </SortableHeader>
@@ -110,9 +110,9 @@ const JobListingsTable = ({
                   <td className="job-table__cell">{job.posted}</td>
                   <td className="job-table__cell">
                     <span
-                      className={`status-badge ${getStatusClass(job.status)}`}
+                      className={`age-badge ${getAgeClass(job.ageCategory)}`}
                     >
-                      {job.status}
+                      {job.age}
                     </span>
                   </td>
                   <td className="job-table__cell job-table__cell--actions">
