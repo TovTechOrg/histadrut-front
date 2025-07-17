@@ -319,6 +319,62 @@
   height: 28px;
 }
 
+/* Job Link Column Styles */
+.match-table__cell--link {
+  display: table-cell;
+  vertical-align: top;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.job-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #e8f4fd;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  color: #2980b9;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.job-link-btn:hover {
+  background: #2980b9;
+  color: white;
+  text-decoration: none;
+}
+
+.job-link-icon {
+  width: 14px;
+  height: 14px;
+  filter: brightness(0) saturate(100%) invert(31%) sepia(72%) saturate(1179%)
+    hue-rotate(192deg) brightness(97%) contrast(85%);
+}
+
+.job-link-btn:hover .job-link-icon {
+  filter: brightness(0) saturate(100%) invert(100%);
+}
+
+.job-link-text {
+  font-size: 0.8rem;
+}
+
+.job-link-unavailable {
+  color: #bdc3c7;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
 .match-table__cell--mmr {
   display: table-cell;
   vertical-align: top;

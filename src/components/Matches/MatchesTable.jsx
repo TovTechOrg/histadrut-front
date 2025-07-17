@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import downloadIcon from "../../assets/icons/download.svg";
+import linkIcon from "../../assets/icons/link.svg";
 import JobModal from "./JobModal";
 import CandidateModal from "./CandidateModal";
 
 const MatchesTable = ({ jobs, loading, error }) => {
   const [selectedJob, setSelectedJob] = useState(null);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
+
+  // Debug: log jobs to see if link field is present
+  console.log("Jobs in MatchesTable:", jobs);
+  jobs.forEach((job, index) => {
+    console.log(`Job ${index} link:`, job.link);
+  });
 
   if (loading) {
     return (
@@ -69,6 +76,9 @@ const MatchesTable = ({ jobs, loading, error }) => {
               Date Added
             </th>
             <th className="match-table__cell match-table__cell--header">
+              Link to Job
+            </th>
+            <th className="match-table__cell match-table__cell--header">
               Matched Candidates
             </th>
             <th className="match-table__cell match-table__cell--header">CV</th>
@@ -78,7 +88,7 @@ const MatchesTable = ({ jobs, loading, error }) => {
         <tbody>
           {jobs.length === 0 ? (
             <tr>
-              <td colSpan="6" className="match-table__empty">
+              <td colSpan="7" className="match-table__empty">
                 No jobs match the current filters.
               </td>
             </tr>
@@ -96,6 +106,32 @@ const MatchesTable = ({ jobs, loading, error }) => {
                 </td>
                 <td className="match-table__cell">{job.company}</td>
                 <td className="match-table__cell">{job.dateAdded}</td>
+                <td className="match-table__cell match-table__cell--link">
+                  {job.link ? (
+                    <a
+                      href={job.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="job-link-btn"
+                      title="View job posting"
+                      aria-label="View job posting"
+                    >
+                      <img
+                        src={linkIcon}
+                        alt="Link, external link"
+                        className="job-link-icon"
+                      />
+                      <span className="job-link-text">Link to Job</span>
+                    </a>
+                  ) : (
+                    <span
+                      className="job-link-unavailable"
+                      title="Job link not available"
+                    >
+                      —
+                    </span>
+                  )}
+                </td>
                 <td className="match-table__cell match-table__cell--candidates">
                   {job.matchedCandidates.map((candidate, index) => (
                     <div
