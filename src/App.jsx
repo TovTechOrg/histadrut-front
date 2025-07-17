@@ -1,5 +1,10 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import NavPanel from "./components/NavPanel/NavPanel";
 import Overview from "./components/Overview/Overview";
@@ -32,13 +37,28 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            {/* User protected routes */}
             <Route
-              path="/matches"
+              path="/user/matches"
               element={
                 <ProtectedRoute>
-                  <Matches />
+                  <NavPanel />
+                  <main className="main-content">
+                    <Matches />
+                  </main>
                 </ProtectedRoute>
               }
+            />
+
+            {/* Redirect old routes */}
+            <Route
+              path="/matches"
+              element={<Navigate to="/user/matches" replace />}
+            />
+            <Route
+              path="/jobs"
+              element={<Navigate to="/jobs-listings" replace />}
             />
 
             {/* Admin protected routes */}
@@ -65,31 +85,9 @@ function App() {
               }
             />
             <Route
-              path="/admin/matches"
-              element={
-                <ProtectedRoute requireAdmin>
-                  <NavPanel />
-                  <main className="main-content">
-                    <Matches />
-                  </main>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/companies"
-              element={
-                <ProtectedRoute requireAdmin>
-                  <NavPanel />
-                  <main className="main-content">
-                    <Companies />
-                  </main>
-                </ProtectedRoute>
-              }
-            />
-            <Route
               path="/jobs-listings"
               element={
-                <ProtectedRoute requireAdmin>
+                <ProtectedRoute>
                   <NavPanel />
                   <main className="main-content">
                     <JobsListings />
@@ -98,12 +96,34 @@ function App() {
               }
             />
             <Route
+              path="/companies"
+              element={
+                <ProtectedRoute>
+                  <NavPanel />
+                  <main className="main-content">
+                    <Companies />
+                  </main>
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/reporting"
+              element={
+                <ProtectedRoute>
+                  <NavPanel />
+                  <main className="main-content">
+                    <Reporting />
+                  </main>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/matches"
               element={
                 <ProtectedRoute requireAdmin>
                   <NavPanel />
                   <main className="main-content">
-                    <Reporting />
+                    <Matches />
                   </main>
                 </ProtectedRoute>
               }

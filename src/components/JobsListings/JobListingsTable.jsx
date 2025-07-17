@@ -11,6 +11,7 @@ const JobListingsTable = ({
   sortField,
   sortDirection,
   onSort,
+  showActions = true,
 }) => {
   if (loading) {
     return (
@@ -87,15 +88,20 @@ const JobListingsTable = ({
               <SortableHeader field="company">Company</SortableHeader>
               <SortableHeader field="posted">Posted</SortableHeader>
               <SortableHeader field="age">Age</SortableHeader>
-              <SortableHeader field="actions" sortable={false}>
-                Actions
-              </SortableHeader>
+              {showActions && (
+                <SortableHeader field="actions" sortable={false}>
+                  Actions
+                </SortableHeader>
+              )}
             </tr>
           </thead>
           <tbody>
             {!jobs || jobs.length === 0 ? (
               <tr>
-                <td colSpan="6" className="job-table__empty">
+                <td
+                  colSpan={showActions ? "6" : "5"}
+                  className="job-table__empty"
+                >
                   No jobs found matching your criteria.
                 </td>
               </tr>
@@ -115,31 +121,33 @@ const JobListingsTable = ({
                       {job.age}
                     </span>
                   </td>
-                  <td className="job-table__cell job-table__cell--actions">
-                    <div className="action-buttons">
-                      <button
-                        className="action-btn view-btn"
-                        onClick={() => onAction("view", job)}
-                        title="View Job"
-                      >
-                        <img src={viewIcon} alt="View" />
-                      </button>
-                      <button
-                        className="action-btn edit-btn"
-                        onClick={() => onAction("edit", job)}
-                        title="Edit Job"
-                      >
-                        <img src={editIcon} alt="Edit" />
-                      </button>
-                      <button
-                        className="action-btn delete-btn"
-                        onClick={() => onAction("delete", job)}
-                        title="Delete Job"
-                      >
-                        <img src={deleteIcon} alt="Delete" />
-                      </button>
-                    </div>
-                  </td>
+                  {showActions && (
+                    <td className="job-table__cell job-table__cell--actions">
+                      <div className="action-buttons">
+                        <button
+                          className="action-btn view-btn"
+                          onClick={() => onAction("view", job)}
+                          title="View Job"
+                        >
+                          <img src={viewIcon} alt="View" />
+                        </button>
+                        <button
+                          className="action-btn edit-btn"
+                          onClick={() => onAction("edit", job)}
+                          title="Edit Job"
+                        >
+                          <img src={editIcon} alt="Edit" />
+                        </button>
+                        <button
+                          className="action-btn delete-btn"
+                          onClick={() => onAction("delete", job)}
+                          title="Delete Job"
+                        >
+                          <img src={deleteIcon} alt="Delete" />
+                        </button>
+                      </div>
+                    </td>
+                  )}
                 </tr>
               ))
             )}

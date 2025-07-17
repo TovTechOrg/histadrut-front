@@ -20,7 +20,7 @@ const Matches = () => {
   return (
     <section className="matches-page">
       <div className="matches-header">
-        <h1 className="matches-title">Admin Job Match Dashboard</h1>
+        <h1 className="matches-title">Job Match Dashboard</h1>
         <p className="matches-subtitle">
           Aggregated view of manually sourced jobs and matched candidates.
         </p>

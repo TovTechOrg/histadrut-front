@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useCompaniesData } from "../../hooks/useCompaniesData";
+import { useAuth } from "../../contexts/AuthContext";
 import addIcon from "../../assets/icons/add.svg";
 import viewJobsIcon from "../../assets/icons/viewJobs.svg";
 import editIcon from "../../assets/icons/edit.svg";
@@ -8,8 +9,11 @@ import deleteIcon from "../../assets/icons/delete.svg";
 import "./Companies.css";
 
 const Companies = () => {
+  const { user } = useAuth();
   const { companiesData, loading, error } = useCompaniesData();
   const navigate = useNavigate();
+
+  const isAdmin = user?.role === "admin";
 
   const handleAddCompany = () => {
     alert("Add new company");
@@ -33,14 +37,16 @@ const Companies = () => {
       <section className="companies-page">
         <div className="companies-header">
           <h1 className="companies-title">Company Management</h1>
-          <button className="companies-add-btn" onClick={handleAddCompany}>
-            <img
-              src={addIcon}
-              alt="Add, created by Gemini"
-              className="companies-add-btn__icon"
-            />
-            Add New Company
-          </button>
+          {isAdmin && (
+            <button className="companies-add-btn" onClick={handleAddCompany}>
+              <img
+                src={addIcon}
+                alt="Add, created by Gemini"
+                className="companies-add-btn__icon"
+              />
+              Add New Company
+            </button>
+          )}
         </div>
         <div className="companies-table">
           <div className="companies-table__loading">Loading companies...</div>
@@ -54,14 +60,16 @@ const Companies = () => {
       <section className="companies-page">
         <div className="companies-header">
           <h1 className="companies-title">Company Management</h1>
-          <button className="companies-add-btn" onClick={handleAddCompany}>
-            <img
-              src={addIcon}
-              alt="Add, created by Gemini"
-              className="companies-add-btn__icon"
-            />
-            Add New Company
-          </button>
+          {isAdmin && (
+            <button className="companies-add-btn" onClick={handleAddCompany}>
+              <img
+                src={addIcon}
+                alt="Add, created by Gemini"
+                className="companies-add-btn__icon"
+              />
+              Add New Company
+            </button>
+          )}
         </div>
         <div className="companies-table">
           <div className="companies-table__error">
@@ -76,14 +84,16 @@ const Companies = () => {
     <section className="companies-page">
       <div className="companies-header">
         <h1 className="companies-title">Company Management</h1>
-        <button className="companies-add-btn" onClick={handleAddCompany}>
-          <img
-            src={addIcon}
-            alt="Add, created by Gemini"
-            className="companies-add-btn__icon"
-          />
-          Add New Company
-        </button>
+        {isAdmin && (
+          <button className="companies-add-btn" onClick={handleAddCompany}>
+            <img
+              src={addIcon}
+              alt="Add, created by Gemini"
+              className="companies-add-btn__icon"
+            />
+            Add New Company
+          </button>
+        )}
       </div>
 
       <div className="companies-table">
@@ -135,30 +145,34 @@ const Companies = () => {
                           className="companies-table__action-icon"
                         />
                       </button>
-                      <button
-                        className="companies-table__action-btn companies-table__action-btn--edit"
-                        onClick={() => handleEditCompany(company.name)}
-                        title={`Edit ${company.name}`}
-                        aria-label={`Edit ${company.name}`}
-                      >
-                        <img
-                          src={editIcon}
-                          alt="Edit, created by Gemini"
-                          className="companies-table__action-icon"
-                        />
-                      </button>
-                      <button
-                        className="companies-table__action-btn companies-table__action-btn--delete"
-                        onClick={() => handleDeleteCompany(company.name)}
-                        title={`Delete ${company.name}`}
-                        aria-label={`Delete ${company.name}`}
-                      >
-                        <img
-                          src={deleteIcon}
-                          alt="Delete, created by Gemini"
-                          className="companies-table__action-icon"
-                        />
-                      </button>
+                      {isAdmin && (
+                        <>
+                          <button
+                            className="companies-table__action-btn companies-table__action-btn--edit"
+                            onClick={() => handleEditCompany(company.name)}
+                            title={`Edit ${company.name}`}
+                            aria-label={`Edit ${company.name}`}
+                          >
+                            <img
+                              src={editIcon}
+                              alt="Edit, created by Gemini"
+                              className="companies-table__action-icon"
+                            />
+                          </button>
+                          <button
+                            className="companies-table__action-btn companies-table__action-btn--delete"
+                            onClick={() => handleDeleteCompany(company.name)}
+                            title={`Delete ${company.name}`}
+                            aria-label={`Delete ${company.name}`}
+                          >
+                            <img
+                              src={deleteIcon}
+                              alt="Delete, created by Gemini"
+                              className="companies-table__action-icon"
+                            />
+                          </button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>

@@ -11,9 +11,15 @@ const NavPanel = () => {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
 
+  const isAdmin = user?.role === "admin";
+
   const handleLogout = () => {
     logout();
-    navigate("/admin-login");
+    if (isAdmin) {
+      navigate("/admin-login");
+    } else {
+      navigate("/login");
+    }
   };
 
   return (
@@ -41,7 +47,7 @@ const NavPanel = () => {
           </li>
           <li className="nav-panel__item">
             <NavLink
-              to="/admin/matches"
+              to={isAdmin ? "/admin/matches" : "/user/matches"}
               className={({ isActive }) =>
                 `nav-panel__link ${isActive ? "nav-panel__link--active" : ""}`
               }
@@ -69,7 +75,6 @@ const NavPanel = () => {
               Companies
             </NavLink>
           </li>
-
           <li className="nav-panel__item">
             <NavLink
               to="/reporting"

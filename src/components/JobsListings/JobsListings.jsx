@@ -3,11 +3,13 @@ import Modal from "../shared/Modal";
 import JobListingsFilters from "./JobListingsFilters";
 import JobListingsTable from "./JobListingsTable";
 import { useJobsData } from "../../hooks/useJobsData";
+import { useAuth } from "../../contexts/AuthContext";
 import "./JobsListings.css";
 
 import addIcon from "../../assets/icons/add.svg";
 
 const JobsListings = () => {
+  const { user } = useAuth();
   const {
     filteredJobs,
     loading,
@@ -24,6 +26,8 @@ const JobsListings = () => {
     handleStatusChange,
     handleSort,
   } = useJobsData();
+
+  const isAdmin = user?.role === "admin";
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalAction, setModalAction] = useState("");
@@ -45,13 +49,15 @@ const JobsListings = () => {
     <section className="jobs-listings">
       <div className="jobs-listings__header">
         <h1 className="jobs-listings__title">Job Listings Management</h1>
-        <button
-          className="jobs-listings__add-btn"
-          onClick={() => handleAction("add")}
-        >
-          <img src={addIcon} alt="Add" className="btn-icon" />
-          Add New Job
-        </button>
+        {isAdmin && (
+          <button
+            className="jobs-listings__add-btn"
+            onClick={() => handleAction("add")}
+          >
+            <img src={addIcon} alt="Add" className="btn-icon" />
+            Add New Job
+          </button>
+        )}
       </div>
 
       <JobListingsFilters
@@ -74,6 +80,7 @@ const JobsListings = () => {
         sortField={sortField}
         sortDirection={sortDirection}
         onSort={handleSort}
+        showActions={isAdmin}
       />
 
       {/* Action Modal */}

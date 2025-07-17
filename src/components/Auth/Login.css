@@ -167,6 +167,33 @@
   text-decoration: underline;
 }
 
+.demo-section {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.demo-login-button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.demo-login-button:hover {
+  background: #219a52;
+}
+
+.demo-login-button:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+}
+
 /* Responsive Design */
 @media (max-width: 480px) {
   .login-page {

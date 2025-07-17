@@ -60,7 +60,12 @@ const Login = () => {
         const result = await login(formData.email, formData.password);
         if (result.success) {
           if (result.user.hasCV) {
-            navigate("/matches");
+            // Navigate based on user role
+            if (result.user.role === "admin") {
+              navigate("/admin/matches");
+            } else {
+              navigate("/user/matches");
+            }
           } else {
             navigate("/cv-upload");
           }
@@ -68,7 +73,7 @@ const Login = () => {
           setError(result.error);
         }
       }
-    } catch (err) {
+    } catch {
       setError("An error occurred. Please try again.");
     } finally {
       setLoading(false);
@@ -97,6 +102,37 @@ const Login = () => {
     setIsClaimProfile(true);
     setIsSignUp(false);
     resetForm();
+  };
+
+  const handleDemoUserLogin = async () => {
+    setLoading(true);
+    setError("");
+
+    // Clear form data to prevent interference
+    setFormData({ email: "", password: "", name: "" });
+
+    try {
+      const result = await login("user@example.com", "password123");
+
+      if (result.success) {
+        if (result.user.hasCV) {
+          // Navigate based on user role
+          if (result.user.role === "admin") {
+            navigate("/admin/matches");
+          } else {
+            navigate("/user/matches");
+          }
+        } else {
+          navigate("/cv-upload");
+        }
+      } else {
+        setError(result.error);
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -186,6 +222,18 @@ const Login = () => {
           </button>
         </form>
 
+        {!isClaimProfile && !isSignUp && (
+          <div className="demo-section">
+            <button
+              onClick={handleDemoUserLogin}
+              className="demo-login-button"
+              disabled={loading}
+            >
+              {loading ? "Please wait..." : "Quick Demo User Login"}
+            </button>
+          </div>
+        )}
+
         <div className="login-footer">
           {!isClaimProfile && !isSignUp && (
             <>
@@ -229,6 +277,20 @@ const Login = () => {
           <p>
             <strong>Admin:</strong> <Link to="/admin-login">Admin Login</Link>
           </p>
+          <button
+            onClick={() => {
+              setFormData({
+                email: "user@example.com",
+                password: "password123",
+                name: "",
+              });
+              setError("");
+            }}
+            className="text-button"
+            type="button"
+          >
+            Fill Demo User Credentials
+          </button>
         </div>
       </div>
     </div>
