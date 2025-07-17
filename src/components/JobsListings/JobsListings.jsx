@@ -5,7 +5,6 @@ import JobListingsTable from "./JobListingsTable";
 import { useJobsData } from "../../hooks/useJobsData";
 import "./JobsListings.css";
 
-// Icons
 import addIcon from "../../assets/icons/add.svg";
 
 const JobsListings = () => {
@@ -26,12 +25,10 @@ const JobsListings = () => {
     handleSort,
   } = useJobsData();
 
-  // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalAction, setModalAction] = useState("");
   const [selectedJob, setSelectedJob] = useState(null);
 
-  // Modal handlers
   const handleAction = useCallback((action, job = null) => {
     setModalAction(action);
     setSelectedJob(job);

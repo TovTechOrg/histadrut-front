@@ -52,7 +52,7 @@ export const useMatchesData = () => {
 
   const goToPage = (page) => {
     const clamped = Math.max(1, Math.min(page, totalPages));
-    setSearchParams({ page: clamped.toString() }); // this triggers the URL update + effect
+    setSearchParams({ page: clamped.toString() });
   };
 
   const goToNextPage = () => {

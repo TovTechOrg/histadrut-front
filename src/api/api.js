@@ -19,34 +19,50 @@ const apiRequest = async (endpoint, options = {}) => {
 export const fetchStats = async () => apiRequest("/stats");
 export const fetchJobs = async (page = 1) =>
   apiRequest(`/matches2?page=${page}`);
+export const fetchJobListings = async () => apiRequest("/jobs");
 export const fetchCompanies = async () => apiRequest("/companies");
 
 export const transformJobsData = (apiResponse) => {
-  const jobs = apiResponse.jobs.map((job, index) => ({
-    id: job._id || `job-${index}`,
-    jobTitle: job.job_title || "Unknown Position",
-    company: job.company_name || "Unknown Company",
-    dateAdded: job.discovered
-      ? new Date(job.discovered).toISOString().split("T")[0]
-      : new Date().toISOString().split("T")[0],
-    jobDescription: job.job_description || "No description available",
-    matchedCandidates: (job.matches || []).map((match, matchIndex) => ({
-      name: match.name || `Candidate ${matchIndex + 1}`,
-      score: match.score || 0,
-      cv: !!match.cv_link,
-      cvLink: match.cv_link ? getAbsoluteUrl(match.cv_link) : null,
-      mmr: match.mandatory_req ? "YES" : "NO",
-      _metadata: {
-        matchId: match._id,
-        candidateId: match.ID_candiate,
-        coverLetter: match.cover_letter,
-        createdAt: match.created_at,
-        overview: match.overall_overview,
-        strengths: match.strengths || [],
-        weaknesses: match.weeknesses || match.weaknesses || [],
-      },
-    })),
-  }));
+  const jobs = apiResponse.jobs.map((job, index) => {
+    // Debug: log the job object to see what fields are available
+    console.log(`Job ${index}:`, job);
+    console.log(`Job ${index} link:`, job.link);
+    console.log(`Job ${index} matches:`, job.matches);
+
+    // Check if link is in the first match (assuming all matches have the same job link)
+    const jobLink =
+      job.link ||
+      (job.matches && job.matches[0] && job.matches[0].link) ||
+      null;
+    console.log(`Job ${index} final link:`, jobLink);
+
+    return {
+      id: job._id || `job-${index}`,
+      jobTitle: job.job_title || "Unknown Position",
+      company: job.company_name || "Unknown Company",
+      dateAdded: job.discovered
+        ? new Date(job.discovered).toISOString().split("T")[0]
+        : new Date().toISOString().split("T")[0],
+      jobDescription: job.job_description || "No description available",
+      link: jobLink,
+      matchedCandidates: (job.matches || []).map((match, matchIndex) => ({
+        name: match.name || `Candidate ${matchIndex + 1}`,
+        score: match.score || 0,
+        cv: !!match.cv_link,
+        cvLink: match.cv_link ? getAbsoluteUrl(match.cv_link) : null,
+        mmr: match.mandatory_req ? "YES" : "NO",
+        _metadata: {
+          matchId: match._id,
+          candidateId: match.ID_candiate,
+          coverLetter: match.cover_letter,
+          createdAt: match.created_at,
+          overview: match.overall_overview,
+          strengths: match.strengths || [],
+          weaknesses: match.weeknesses || match.weaknesses || [],
+        },
+      })),
+    };
+  });
 
   return {
     jobs,
@@ -55,6 +71,43 @@ export const transformJobsData = (apiResponse) => {
       totalPages: apiResponse.pagination?.total_pages ?? 1,
     },
   };
+};
+
+// Age category thresholds (in days)
+const AGE_THRESHOLDS = {
+  NEW: 1,
+  FRESH: 5,
+  STALE: 14,
+};
+
+// Helper function to calculate age category based on days
+const getAgeCategory = (daysOld) => {
+  if (daysOld <= AGE_THRESHOLDS.NEW) return "New";
+  if (daysOld <= AGE_THRESHOLDS.FRESH) return "Fresh";
+  if (daysOld <= AGE_THRESHOLDS.STALE) return "Stale";
+  return "Old";
+};
+
+export const transformJobListingsData = (apiResponse) => {
+  return apiResponse.map((job, index) => {
+    const daysAgo = job.days_old || 0;
+    const ageCategory = getAgeCategory(daysAgo);
+
+    // Debug logging
+    console.log(
+      `Job ${index}: days_old: ${job.days_old}, Age category: ${ageCategory}`
+    );
+
+    return {
+      id: job.job_id || `job-${index}`,
+      title: job.job_title || "Unknown Position",
+      company: job.company_name || "Unknown Company",
+      posted: job.posted || new Date().toISOString(),
+      age: `${daysAgo} days`,
+      ageCategory: ageCategory,
+      ageDisplay: `${daysAgo} days`,
+    };
+  });
 };
 
 export const transformStatsData = (apiResponse) => ({
