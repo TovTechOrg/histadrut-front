@@ -62,7 +62,7 @@ const Login = () => {
           if (result.user.hasCV) {
             // Navigate based on user role
             if (result.user.role === "admin") {
-              navigate("/admin/matches");
+              navigate("/overview");
             } else {
               navigate("/user/matches");
             }
@@ -118,7 +118,7 @@ const Login = () => {
         if (result.user.hasCV) {
           // Navigate based on user role
           if (result.user.role === "admin") {
-            navigate("/admin/matches");
+            navigate("/overview");
           } else {
             navigate("/user/matches");
           }
@@ -128,7 +128,7 @@ const Login = () => {
       } else {
         setError(result.error);
       }
-    } catch (error) {
+    } catch {
       setError("An error occurred. Please try again.");
     } finally {
       setLoading(false);

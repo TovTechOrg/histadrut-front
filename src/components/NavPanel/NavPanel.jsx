@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import dashboardIcon from "../../assets/icons/dashboard.svg";
 import listingsIcon from "../../assets/icons/listings.svg";
 import matchesIcon from "../../assets/icons/matches.svg";
 import companiesIcon from "../../assets/icons/companies.svg";
@@ -30,6 +31,23 @@ const NavPanel = () => {
       </div>
       <nav className="nav-panel__nav" aria-label="Main navigation">
         <ul className="nav-panel__list">
+          {isAdmin && (
+            <li className="nav-panel__item">
+              <NavLink
+                to="/overview"
+                className={({ isActive }) =>
+                  `nav-panel__link ${isActive ? "nav-panel__link--active" : ""}`
+                }
+              >
+                <img
+                  src={dashboardIcon}
+                  alt="Overview Dashboard, created by Gemini"
+                  className="nav-panel__icon"
+                />
+                Overview
+              </NavLink>
+            </li>
+          )}
           <li className="nav-panel__item">
             <NavLink
               to="/jobs-listings"
