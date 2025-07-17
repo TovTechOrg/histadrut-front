@@ -17,7 +17,7 @@ export const useJobsData = () => {
   const [selectedCompany, setSelectedCompany] = useState(
     companyFromUrl || "All Companies"
   );
-  const [selectedStatus, setSelectedStatus] = useState("All Ages"); // Changed from "All Statuses"
+  const [selectedStatus, setSelectedStatus] = useState("All Ages");
 
   // Sorting state
   const [sortField, setSortField] = useState(null);
@@ -73,8 +73,8 @@ export const useJobsData = () => {
 
     const uniqueCompanies = jobs
       .map((job) => job.company)
-      .filter((company) => company && company.trim()) // Filter out null/undefined/empty companies
-      .filter((company, index, arr) => arr.indexOf(company) === index); // Remove duplicates manually
+      .filter((company) => company && company.trim())
+      .filter((company, index, arr) => arr.indexOf(company) === index);
 
     const result = ["All Companies", ...uniqueCompanies];
     return result;
@@ -84,12 +84,10 @@ export const useJobsData = () => {
 
   // Filter and sort jobs
   const filteredJobs = useMemo(() => {
-    // Early return if jobs is not properly initialized
     if (!Array.isArray(jobs) || jobs.length === 0) {
       return [];
     }
 
-    // Start with a fresh copy of jobs
     let filtered = jobs.slice();
 
     // Apply search filter
@@ -124,18 +122,14 @@ export const useJobsData = () => {
         let aValue = a[sortField];
         let bValue = b[sortField];
 
-        // Handle date sorting
         if (sortField === "posted") {
-          // Convert European format (DD/MM/YYYY) back to Date for sorting
           const parseEuropeanDate = (dateStr) => {
             const [day, month, year] = dateStr.split("/");
             return new Date(year, month - 1, day);
           };
           aValue = parseEuropeanDate(aValue);
           bValue = parseEuropeanDate(bValue);
-        }
-        // Handle string sorting
-        else if (typeof aValue === "string") {
+        } else if (typeof aValue === "string") {
           aValue = aValue.toLowerCase();
           bValue = bValue.toLowerCase();
         }

@@ -18,9 +18,8 @@ const isHebrewChar = (char) => {
 const isEnglishChar = (char) => {
   const code = char.charCodeAt(0);
   return (
-    (code >= 0x0041 && code <= 0x005a) || // A-Z
-    (code >= 0x0061 && code <= 0x007a)
-  ); // a-z
+    (code >= 0x0041 && code <= 0x005a) || (code >= 0x0061 && code <= 0x007a)
+  );
 };
 
 /**
@@ -30,7 +29,7 @@ const isEnglishChar = (char) => {
  */
 export const detectLanguage = (text) => {
   if (!text || typeof text !== "string") {
-    return "english"; // Default to English
+    return "english";
   }
 
   let hebrewCount = 0;

@@ -45,7 +45,7 @@ const JobListingsTable = ({
 
   const getSortIcon = (field) => {
     if (sortField !== field) {
-      return "↕"; // Both arrows when not sorted
+      return "↕";
     }
     return sortDirection === "asc" ? "↑" : "↓";
   };

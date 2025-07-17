@@ -35,8 +35,8 @@ const MatchesTable = ({ jobs, loading, error }) => {
       // Create a temporary anchor element to trigger download
       const link = document.createElement("a");
       link.href = cvLink;
-      link.download = `${candidateName}_CV.pdf`; // Set a default filename
-      link.target = "_blank"; // Open in new tab as fallback
+      link.download = `${candidateName}_CV.pdf`;
+      link.target = "_blank";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -189,7 +189,7 @@ const MatchesTable = ({ jobs, loading, error }) => {
                     <div className="mmr-badge__container" key={index}>
                       <span
                         className={`mmr-badge ${
-                          candidate.mmr === "Yes"
+                          candidate.mmr === "YES"
                             ? "mmr-badge--yes"
                             : "mmr-badge--no"
                         }`}

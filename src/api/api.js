@@ -44,7 +44,7 @@ export const transformJobsData = (apiResponse) => {
         ? new Date(job.discovered).toISOString().split("T")[0]
         : new Date().toISOString().split("T")[0],
       jobDescription: job.job_description || "No description available",
-      link: jobLink, // Use the extracted job link
+      link: jobLink,
       matchedCandidates: (job.matches || []).map((match, matchIndex) => ({
         name: match.name || `Candidate ${matchIndex + 1}`,
         score: match.score || 0,
@@ -90,7 +90,7 @@ const getAgeCategory = (daysOld) => {
 
 export const transformJobListingsData = (apiResponse) => {
   return apiResponse.map((job, index) => {
-    const daysAgo = job.days_old || 0; // Use days_old from API instead of calculating
+    const daysAgo = job.days_old || 0;
     const ageCategory = getAgeCategory(daysAgo);
 
     // Debug logging
@@ -103,9 +103,9 @@ export const transformJobListingsData = (apiResponse) => {
       title: job.job_title || "Unknown Position",
       company: job.company_name || "Unknown Company",
       posted: job.posted || new Date().toISOString(),
-      age: `${daysAgo} days ago`, // Display with "ago" suffix
-      ageCategory: ageCategory, // Keep category for badge styling
-      ageDisplay: `${daysAgo} days ago`,
+      age: `${daysAgo} days`,
+      ageCategory: ageCategory,
+      ageDisplay: `${daysAgo} days`,
     };
   });
 };

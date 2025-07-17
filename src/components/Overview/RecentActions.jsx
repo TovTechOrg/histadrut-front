@@ -6,31 +6,31 @@ const RecentActions = () => {
     {
       id: 1,
       action: "Admin User logged in.",
-      timestamp: new Date(Date.now() - 1000 * 60 * 15), // 15 minutes ago
+      timestamp: new Date(Date.now() - 1000 * 60 * 15),
       type: "login",
     },
     {
       id: 2,
       action: "System initialized.",
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2),
       type: "system",
     },
     {
       id: 3,
       action: "New job posting approved.",
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 4), // 4 hours ago
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 4),
       type: "approval",
     },
     {
       id: 4,
       action: "User registration completed.",
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 6), // 6 hours ago
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 6),
       type: "registration",
     },
     {
       id: 5,
       action: "Database backup completed.",
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 12), // 12 hours ago
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 12),
       type: "system",
     },
   ];
