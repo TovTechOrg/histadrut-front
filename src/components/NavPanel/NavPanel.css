@@ -1,0 +1,126 @@
+.nav-panel {
+  background-color: #2c3e50;
+  color: white;
+  width: 250px;
+  height: 100vh;
+  padding: 1rem;
+  box-sizing: border-box;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-panel__header {
+  border-bottom: 1px solid #34495e;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+.nav-panel__title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: #ecf0f1;
+}
+
+.nav-panel__user {
+  font-size: 0.9rem;
+  color: #bdc3c7;
+  margin: 0;
+}
+
+.nav-panel__nav {
+  flex-grow: 1;
+}
+
+.nav-panel__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-panel__item {
+  margin-bottom: 0.5rem;
+}
+
+.nav-panel__link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: #ecf0f1;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-panel__link:hover {
+  background-color: #34495e;
+}
+
+.nav-panel__link--active {
+  background-color: #3498db;
+  color: white;
+}
+
+.nav-panel__icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.75rem;
+  filter: brightness(0) invert(1);
+}
+
+.nav-panel__footer {
+  border-top: 1px solid #34495e;
+  padding-top: 1rem;
+  margin-top: auto;
+}
+
+.nav-panel__logout {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.nav-panel__logout:hover {
+  background-color: #c0392b;
+}
+
+/* Main content adjustment for navigation panel */
+.main-content {
+  margin-left: 250px;
+  padding: 2rem;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .nav-panel {
+    width: 200px;
+  }
+
+  .main-content {
+    margin-left: 200px;
+  }
+}
+
+@media (max-width: 576px) {
+  .nav-panel {
+    width: 100%;
+    height: auto;
+    position: static;
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+}
