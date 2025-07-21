@@ -1,3 +1,4 @@
+import Profile from "./components/Profile";
 import "./App.css";
 import {
   BrowserRouter as Router,
@@ -39,6 +40,17 @@ function App() {
             />
 
             {/* User protected routes */}
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <NavPanel />
+                  <main className="main-content">
+                    <Profile />
+                  </main>
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/user/matches"
               element={

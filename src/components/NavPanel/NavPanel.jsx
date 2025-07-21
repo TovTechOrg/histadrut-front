@@ -111,11 +111,37 @@ const NavPanel = () => {
         </ul>
       </nav>
 
-      <div className="nav-panel__footer">
-        <button onClick={handleLogout} className="nav-panel__logout">
-          Logout
-        </button>
-      </div>
+      {!isAdmin && (
+        <div className="nav-panel__footer">
+          <NavLink
+            to="/profile"
+            className={({ isActive }) =>
+              `nav-panel__link nav-panel__profile-link ${
+                isActive ? "nav-panel__link--active" : ""
+              }`
+            }
+            style={{ display: "flex", alignItems: "center", marginBottom: 12 }}
+          >
+            <img
+              src={dashboardIcon}
+              alt="Profile"
+              className="nav-panel__icon"
+              style={{ marginRight: 8 }}
+            />
+            Profile
+          </NavLink>
+          <button onClick={handleLogout} className="nav-panel__logout">
+            Logout
+          </button>
+        </div>
+      )}
+      {isAdmin && (
+        <div className="nav-panel__footer">
+          <button onClick={handleLogout} className="nav-panel__logout">
+            Logout
+          </button>
+        </div>
+      )}
     </aside>
   );
 };

@@ -1,3 +1,17 @@
+// Upload CV as form data
+export const uploadCV = async (file) => {
+  const formData = new FormData();
+  formData.append("cv", file);
+  const response = await fetch(`${API_BASE_URL}/upload`, {
+    method: "POST",
+    body: formData,
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(data.error || "Upload failed. Please try again.");
+  }
+  return await response.json().catch(() => ({}));
+};
 const API_BASE_URL = "https://cv.pythia-match.com";
 
 const handleApiError = (response, endpoint) => {
