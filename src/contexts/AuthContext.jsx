@@ -1,6 +1,33 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { loginUser, registerUser } from "../api/api";
 
+// Helper to fetch user info from backend session (cookie)
+const fetchUserFromSession = async () => {
+  try {
+    const res = await fetch("https://cv.pythia-match.com/me", {
+      credentials: "include",
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data && data.email && data.role) {
+      return { email: data.email, role: data.role };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+};
+
+// Helper to call backend logout
+const backendLogout = async () => {
+  try {
+    await fetch("https://cv.pythia-match.com/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+  } catch {}
+};
+
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -17,25 +44,38 @@ export const AuthProvider = ({ children }) => {
 
   // Check for existing login token on mount
   useEffect(() => {
-    const token = localStorage.getItem("loginToken");
     const userData = localStorage.getItem("userData");
-
-    if (token && userData) {
+    if (userData) {
       try {
         setUser(JSON.parse(userData));
+        setLoading(false);
+        return;
       } catch (error) {
-        console.error("Error parsing user data:", error);
-        localStorage.removeItem("loginToken");
         localStorage.removeItem("userData");
       }
     }
-    setLoading(false);
+    // If no user in localStorage, try to fetch from backend session (cookie)
+    fetchUserFromSession().then((userFromSession) => {
+      if (userFromSession) {
+        setUser(userFromSession);
+        localStorage.setItem("userData", JSON.stringify(userFromSession));
+      }
+      setLoading(false);
+    });
   }, []);
 
   const login = async (email, password) => {
     try {
       const result = await loginUser(email, password);
       // result: { status, data }
+      if (result.status === 200 && result.data?.user_authenticated) {
+        const userObj = {
+          email: result.data.email,
+          role: result.data.role || "user",
+        };
+        setUser(userObj);
+        localStorage.setItem("userData", JSON.stringify(userObj));
+      }
       return result;
     } catch (err) {
       return {
@@ -81,8 +121,8 @@ export const AuthProvider = ({ children }) => {
     return { success: true, message: "CV uploaded successfully" };
   };
 
-  const logout = () => {
-    localStorage.removeItem("loginToken");
+  const logout = async () => {
+    await backendLogout();
     localStorage.removeItem("userData");
     setUser(null);
   };

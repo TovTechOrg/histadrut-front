@@ -5,6 +5,7 @@ export const uploadCV = async (file) => {
   const response = await fetch(`${API_BASE_URL}/upload`, {
     method: "POST",
     body: formData,
+    credentials: "include",
   });
   if (!response.ok) {
     const data = await response.json().catch(() => ({}));
@@ -56,6 +57,7 @@ const handleApiError = (response, endpoint) => {
 const apiRequest = async (endpoint, options = {}) => {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     headers: { "Content-Type": "application/json", ...options.headers },
+    credentials: "include",
     ...options,
   });
   handleApiError(response, endpoint);
