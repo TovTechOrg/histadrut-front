@@ -1,5 +1,6 @@
 import Profile from "./components/Profile";
 import "./App.css";
+import SignUp from "./components/Auth/SignUp";
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,7 +15,7 @@ import Companies from "./components/Companies/Companies";
 import JobsListings from "./components/JobsListings/JobsListings";
 import Reporting from "./components/Reporting/Reporting";
 import Login from "./components/Auth/Login";
-import AdminLogin from "./components/Auth/AdminLogin";
+// ...existing code...
 import CVUpload from "./components/Auth/CVUpload";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import "./components/shared/Page.css";
@@ -27,8 +28,8 @@ function App() {
           <Routes>
             {/* Public routes */}
             <Route path="/login" element={<Login />} />
-            <Route path="/admin-login" element={<AdminLogin />} />
-
+            <Route path="/signup" element={<SignUp />} />
+            // ...existing code...
             {/* Protected routes */}
             <Route
               path="/cv-upload"
@@ -38,7 +39,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-
             {/* User protected routes */}
             <Route
               path="/profile"
@@ -62,7 +62,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-
             {/* Redirect old routes */}
             <Route
               path="/matches"
@@ -72,7 +71,6 @@ function App() {
               path="/jobs"
               element={<Navigate to="/jobs-listings" replace />}
             />
-
             {/* Admin protected routes */}
             <Route
               path="/"

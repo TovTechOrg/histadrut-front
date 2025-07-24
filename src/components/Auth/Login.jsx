@@ -4,18 +4,18 @@ import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
 
 const Login = () => {
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [isClaimProfile, setIsClaimProfile] = useState(false);
+  const remembered = localStorage.getItem("rememberMe") === "true";
+  const [rememberMe, setRememberMe] = useState(remembered);
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    name: "",
+    email: remembered ? localStorage.getItem("rememberedEmail") || "" : "",
+    password: remembered
+      ? localStorage.getItem("rememberedPassword") || ""
+      : "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const { login, signUp, claimProfile } = useAuth();
+  const { login } = useAuth();
+  const { setUser } = useAuth();
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -26,107 +26,45 @@ const Login = () => {
     setError("");
   };
 
+  const handleRememberMeChange = (e) => {
+    setRememberMe(e.target.checked);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
     try {
-      if (isClaimProfile) {
-        const result = await claimProfile(formData.email);
-        if (result.success) {
-          setMessage(
-            "Verification email sent! Check your email to set a password."
-          );
+      const result = await login(formData.email, formData.password);
+      console.log("Login result:", result);
+      console.log("Login result.data:", result.data);
+      console.log("Login result.data.user:", result.data?.user);
+      if (result.status === 200 && result.data?.user_authenticated) {
+        // Save credentials only if rememberMe is checked
+        if (rememberMe) {
+          localStorage.setItem("rememberMe", "true");
+          localStorage.setItem("rememberedEmail", formData.email);
+          localStorage.setItem("rememberedPassword", formData.password);
         } else {
-          setError(result.error);
+          localStorage.setItem("rememberMe", "false");
+          localStorage.removeItem("rememberedEmail");
+          localStorage.removeItem("rememberedPassword");
         }
-      } else if (isSignUp) {
-        if (!formData.name.trim()) {
-          setError("Name is required");
-          return;
-        }
-        const result = await signUp(
-          formData.email,
-          formData.password,
-          formData.name
-        );
-        if (result.success) {
-          navigate("/cv-upload");
+        // Set user in context using role from response
+        setUser({
+          email: result.data.email,
+          role: result.data.role || "user",
+          hasCV: result.data.hasCV || false,
+        });
+        // Redirect based on role
+        if ((result.data.role || "user") === "admin") {
+          navigate("/overview");
         } else {
-          setError(result.error);
+          navigate("/user/matches");
         }
+        console.log("Navigate called");
       } else {
-        const result = await login(formData.email, formData.password);
-        if (result.success) {
-          if (result.user.hasCV) {
-            // Navigate based on user role
-            if (result.user.role === "admin") {
-              navigate("/overview");
-            } else {
-              navigate("/user/matches");
-            }
-          } else {
-            navigate("/cv-upload");
-          }
-        } else {
-          setError(result.error);
-        }
-      }
-    } catch {
-      setError("An error occurred. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const resetForm = () => {
-    setFormData({ email: "", password: "", name: "" });
-    setError("");
-    setMessage("");
-  };
-
-  const switchToSignUp = () => {
-    setIsSignUp(true);
-    setIsClaimProfile(false);
-    resetForm();
-  };
-
-  const switchToLogin = () => {
-    setIsSignUp(false);
-    setIsClaimProfile(false);
-    resetForm();
-  };
-
-  const switchToClaimProfile = () => {
-    setIsClaimProfile(true);
-    setIsSignUp(false);
-    resetForm();
-  };
-
-  const handleDemoUserLogin = async () => {
-    setLoading(true);
-    setError("");
-
-    // Clear form data to prevent interference
-    setFormData({ email: "", password: "", name: "" });
-
-    try {
-      const result = await login("user@example.com", "password123");
-
-      if (result.success) {
-        if (result.user.hasCV) {
-          // Navigate based on user role
-          if (result.user.role === "admin") {
-            navigate("/overview");
-          } else {
-            navigate("/user/matches");
-          }
-        } else {
-          navigate("/cv-upload");
-        }
-      } else {
-        setError(result.error);
+        setError(result.data?.error || result.data?.message || "Login failed");
       }
     } catch {
       setError("An error occurred. Please try again.");
@@ -139,26 +77,11 @@ const Login = () => {
     <div className="login-page">
       <div className="login-container">
         <div className="login-header">
-          <h1 className="login-title">
-            {isClaimProfile
-              ? "Claim Your Profile"
-              : isSignUp
-              ? "Sign Up"
-              : "Sign In"}
-          </h1>
-          <p className="login-subtitle">
-            {isClaimProfile
-              ? "Enter your email to claim your existing CV and results"
-              : isSignUp
-              ? "Create your account to get started"
-              : "Access your job matches and CV"}
-          </p>
+          <h1 className="login-title">Sign In</h1>
+          <p className="login-subtitle">Access your job matches and CV</p>
         </div>
-
         <form onSubmit={handleSubmit} className="login-form">
           {error && <div className="error-message">{error}</div>}
-          {message && <div className="success-message">{message}</div>}
-
           <div className="form-group">
             <label htmlFor="email" className="form-label">
               Email
@@ -169,128 +92,78 @@ const Login = () => {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              className="form-input"
+              className="form-input light-input"
               required
               placeholder="Enter your email"
+              autoComplete="username"
+              style={{ background: "#fff", color: "#222" }}
             />
           </div>
-
-          {!isClaimProfile && (
-            <div className="form-group">
-              <label htmlFor="password" className="form-label">
-                Password
-              </label>
+          <div className="form-group">
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              className="form-input light-input"
+              required
+              placeholder="Enter your password"
+              autoComplete="new-password"
+              style={{ background: "#fff", color: "#222" }}
+            />
+          </div>
+          <div className="form-group remember-me-group">
+            <label
+              className="remember-me-label"
+              style={{ color: "#222", fontWeight: 500 }}
+            >
               <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                className="form-input"
-                required
-                placeholder="Enter your password"
+                type="checkbox"
+                checked={rememberMe}
+                onChange={handleRememberMeChange}
+                style={{ accentColor: "#2196f3", background: "#fff" }}
               />
-            </div>
-          )}
-
-          {isSignUp && (
-            <div className="form-group">
-              <label htmlFor="name" className="form-label">
-                Full Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                className="form-input"
-                required
-                placeholder="Enter your full name"
-              />
-            </div>
-          )}
-
+              <span style={{ marginLeft: 8 }}>Remember me</span>
+            </label>
+          </div>
           <button type="submit" className="login-button" disabled={loading}>
-            {loading
-              ? "Please wait..."
-              : isClaimProfile
-              ? "Send Verification Email"
-              : isSignUp
-              ? "Sign Up"
-              : "Sign In"}
+            {loading ? "Please wait..." : "Sign In"}
           </button>
         </form>
-
-        {!isClaimProfile && !isSignUp && (
-          <div className="demo-section">
-            <button
-              onClick={handleDemoUserLogin}
-              className="demo-login-button"
-              disabled={loading}
-            >
-              {loading ? "Please wait..." : "Quick Demo User Login"}
-            </button>
-          </div>
-        )}
-
+        <button
+          style={{
+            marginTop: 16,
+            width: "100%",
+            background: "#f5f5f5",
+            color: "#222",
+            border: "1px solid #2196f3",
+            borderRadius: 4,
+            padding: 10,
+            cursor: "pointer",
+            fontWeight: 600,
+          }}
+          onClick={() => {
+            setUser({
+              email: formData.email || "admin@dev.local",
+              role: "admin",
+              hasCV: true,
+            });
+            navigate("/overview");
+          }}
+        >
+          Log in as admin (dev preview)
+        </button>
         <div className="login-footer">
-          {!isClaimProfile && !isSignUp && (
-            <>
-              <p className="login-link">
-                Don't have an account?{" "}
-                <button onClick={switchToSignUp} className="text-button">
-                  Sign Up
-                </button>
-              </p>
-              <p className="login-link">
-                <button onClick={switchToClaimProfile} className="text-button">
-                  Already uploaded a CV? Claim your results
-                </button>
-              </p>
-            </>
-          )}
-
-          {isSignUp && (
-            <p className="login-link">
-              Already have an account?{" "}
-              <button onClick={switchToLogin} className="text-button">
-                Sign In
-              </button>
-            </p>
-          )}
-
-          {isClaimProfile && (
-            <p className="login-link">
-              <button onClick={switchToLogin} className="text-button">
-                Back to Sign In
-              </button>
-            </p>
-          )}
-        </div>
-
-        <div className="demo-credentials">
-          <h3>Demo Credentials:</h3>
-          <p>
-            <strong>User:</strong> user@example.com / password123
+          <p className="login-link">
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-button">
+              Sign Up
+            </Link>
           </p>
-          <p>
-            <strong>Admin:</strong> <Link to="/admin-login">Admin Login</Link>
-          </p>
-          <button
-            onClick={() => {
-              setFormData({
-                email: "user@example.com",
-                password: "password123",
-                name: "",
-              });
-              setError("");
-            }}
-            className="text-button"
-            type="button"
-          >
-            Fill Demo User Credentials
-          </button>
         </div>
       </div>
     </div>

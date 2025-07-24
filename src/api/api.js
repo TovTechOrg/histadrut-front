@@ -12,7 +12,39 @@ export const uploadCV = async (file) => {
   }
   return await response.json().catch(() => ({}));
 };
+
 const API_BASE_URL = "https://cv.pythia-match.com";
+
+// Real login API call
+export const loginUser = async (email, password) => {
+  const formData = new FormData();
+  formData.append("email", email);
+  formData.append("password", password);
+  const response = await fetch(`${API_BASE_URL}/login`, {
+    method: "POST",
+    body: formData,
+  });
+  const data = await response.json().catch(() => ({}));
+  return { status: response.status, data };
+};
+
+// Real register API call
+export const registerUser = async (email, password, name) => {
+  const formData = new FormData();
+  formData.append("email", email);
+  formData.append("password", password);
+  formData.append("name", name);
+  // Debug: log FormData contents
+  for (let pair of formData.entries()) {
+    console.log("registerUser field:", pair[0], pair[1]);
+  }
+  const response = await fetch(`${API_BASE_URL}/register`, {
+    method: "POST",
+    body: formData,
+  });
+  const data = await response.json().catch(() => ({}));
+  return { status: response.status, data };
+};
 
 const handleApiError = (response, endpoint) => {
   if (!response.ok) {

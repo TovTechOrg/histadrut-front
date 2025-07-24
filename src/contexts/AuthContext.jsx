@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { loginUser, registerUser } from "../api/api";
 
 const AuthContext = createContext();
 
@@ -9,36 +10,6 @@ export const useAuth = () => {
   }
   return context;
 };
-
-// Mock users data
-const MOCK_USERS = [
-  {
-    id: 1,
-    email: "user@example.com",
-    password: "password123",
-    name: "John Doe",
-    role: "user",
-    hasCV: true,
-    cvUploadedAt: "2025-01-15T10:30:00Z",
-  },
-  {
-    id: 2,
-    email: "admin@example.com",
-    password: "admin123",
-    name: "Admin User",
-    role: "admin",
-  },
-];
-
-// Mock CV data for existing users
-const MOCK_CV_DATA = [
-  {
-    email: "existing@example.com",
-    name: "Jane Smith",
-    cvUploaded: true,
-    uploadedAt: "2025-01-10T14:20:00Z",
-  },
-];
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -62,75 +33,36 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    // Mock login logic
-    const mockUser = MOCK_USERS.find(
-      (u) => u.email === email && u.password === password
-    );
-
-    if (mockUser) {
-      const token = `mock-token-${Date.now()}`;
-      const userData = {
-        id: mockUser.id,
-        email: mockUser.email,
-        name: mockUser.name,
-        role: mockUser.role,
-        hasCV: mockUser.hasCV || false,
-        cvUploadedAt: mockUser.cvUploadedAt || null,
+    try {
+      const result = await loginUser(email, password);
+      // result: { status, data }
+      return result;
+    } catch (err) {
+      return {
+        status: undefined,
+        data: { message: err.message || "Login failed" },
       };
-
-      localStorage.setItem("loginToken", token);
-      localStorage.setItem("userData", JSON.stringify(userData));
-      setUser(userData);
-      return { success: true, user: userData };
     }
-
-    return { success: false, error: "Invalid email or password" };
   };
 
   const signUp = async (email, password, name) => {
-    // Check if user already exists
-    const existingUser = MOCK_USERS.find((u) => u.email === email);
-    if (existingUser) {
-      return { success: false, error: "User already exists" };
+    try {
+      const result = await registerUser(email, password, name || "");
+      // result: { status, data }
+      return result;
+    } catch (err) {
+      return {
+        status: undefined,
+        data: { message: err.message || "Registration failed" },
+      };
     }
-
-    // Mock signup logic
-    const newUser = {
-      id: Date.now(),
-      email,
-      name,
-      role: "user",
-      hasCV: false,
-      cvUploadedAt: null,
-    };
-
-    const token = `mock-token-${Date.now()}`;
-    const userData = {
-      id: newUser.id,
-      email: newUser.email,
-      name: newUser.name,
-      role: newUser.role,
-      hasCV: newUser.hasCV,
-      cvUploadedAt: newUser.cvUploadedAt,
-    };
-
-    localStorage.setItem("loginToken", token);
-    localStorage.setItem("userData", JSON.stringify(userData));
-    setUser(userData);
-    return { success: true, user: userData };
   };
 
-  const claimProfile = async (email) => {
-    // Check if CV exists for this email
-    const existingCV = MOCK_CV_DATA.find((cv) => cv.email === email);
-
-    if (existingCV) {
-      // In real app, this would send a verification email
-      return { success: true, message: "Verification email sent" };
-    }
-
-    return { success: false, error: "No CV found for this email address" };
-  };
+  // Remove claimProfile for now (not used in real API)
+  const claimProfile = async () => ({
+    success: false,
+    error: "Not implemented",
+  });
 
   const uploadCV = async (cvFile) => {
     // Mock CV upload
@@ -165,6 +97,7 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     user,
+    setUser,
     login,
     signUp,
     claimProfile,
