@@ -23,6 +23,7 @@ export const loginUser = async (email, password) => {
   formData.append("password", password);
   const response = await fetch(`${API_BASE_URL}/login`, {
     method: "POST",
+    credentials: "include",
     body: formData,
   });
   const data = await response.json().catch(() => ({}));
