@@ -13,6 +13,7 @@ import NavPanel from "./components/NavPanel/NavPanel";
 import Overview from "./components/Overview/Overview";
 import Matches from "./components/Matches/Matches";
 import Companies from "./components/Companies/Companies";
+import AdminUsers from "./components/Auth/AdminUsers";
 import JobsListings from "./components/JobsListings/JobsListings";
 import Reporting from "./components/Reporting/Reporting";
 import Login from "./components/Auth/Login";
@@ -136,6 +137,17 @@ function App() {
                   <NavPanel />
                   <main className="main-content">
                     <Matches />
+                  </main>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <ProtectedRoute requireAdmin>
+                  <NavPanel />
+                  <main className="main-content">
+                    <AdminUsers />
                   </main>
                 </ProtectedRoute>
               }

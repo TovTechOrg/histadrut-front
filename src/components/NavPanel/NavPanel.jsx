@@ -2,10 +2,13 @@ import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import dashboardIcon from "../../assets/icons/dashboard.svg";
+import profileIcon from "../../assets/icons/profile.svg";
 import listingsIcon from "../../assets/icons/listings.svg";
 import matchesIcon from "../../assets/icons/matches.svg";
 import companiesIcon from "../../assets/icons/companies.svg";
+import usersIcon from "../../assets/icons/users.svg";
 import reportingIcon from "../../assets/icons/reporting.svg";
+// import usersIcon from "../../assets/icons/users.svg";
 import "./NavPanel.css";
 
 const NavPanel = () => {
@@ -32,21 +35,38 @@ const NavPanel = () => {
       <nav className="nav-panel__nav" aria-label="Main navigation">
         <ul className="nav-panel__list">
           {isAdmin && (
-            <li className="nav-panel__item">
-              <NavLink
-                to="/overview"
-                className={({ isActive }) =>
-                  `nav-panel__link ${isActive ? "nav-panel__link--active" : ""}`
-                }
-              >
-                <img
-                  src={dashboardIcon}
-                  alt="Overview Dashboard, created by Gemini"
-                  className="nav-panel__icon"
-                />
-                Overview
-              </NavLink>
-            </li>
+            <>
+              <li className="nav-panel__item">
+                <NavLink
+                  to="/overview"
+                  className={({ isActive }) =>
+                    `nav-panel__link ${isActive ? "nav-panel__link--active" : ""}`
+                  }
+                >
+                  <img
+                    src={dashboardIcon}
+                    alt="Overview Dashboard, created by Gemini"
+                    className="nav-panel__icon"
+                  />
+                  Overview
+                </NavLink>
+              </li>
+              <li className="nav-panel__item">
+                <NavLink
+                  to="/admin/users"
+                  className={({ isActive }) =>
+                    `nav-panel__link ${isActive ? "nav-panel__link--active" : ""}`
+                  }
+                >
+                  <img
+                    src={usersIcon}
+                    alt="Users"
+                    className="nav-panel__icon"
+                  />
+                  Users
+                </NavLink>
+              </li>
+            </>
           )}
           <li className="nav-panel__item">
             <NavLink
@@ -72,7 +92,7 @@ const NavPanel = () => {
             >
               <img
                 src={matchesIcon}
-                alt="Job Matches, created by Gemini"
+                alt="Job Matches"
                 className="nav-panel__icon"
               />
               Job Matches
@@ -122,7 +142,7 @@ const NavPanel = () => {
           style={{ display: "flex", alignItems: "center", marginBottom: 12 }}
         >
           <img
-            src={dashboardIcon}
+            src={profileIcon}
             alt="Profile"
             className="nav-panel__icon"
             style={{ marginRight: 8 }}
