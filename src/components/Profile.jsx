@@ -1,13 +1,34 @@
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// TODO: Replace with real user data from context or props
-const mockUser = {
-  name: "John Doe",
-  email: "john.doe@example.com",
-};
+import { fetchUserFromSession } from "../api/api";
+
 
 const Profile = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchUserFromSession()
+      .then((userData) => {
+        setUser(userData);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError("Failed to load user info");
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <div style={{ textAlign: "center", marginTop: 40 }}>Loading profile...</div>;
+  }
+  if (error || !user) {
+    return <div style={{ textAlign: "center", marginTop: 40, color: "#c00" }}>Unable to load profile.</div>;
+  }
+
   return (
     <div
       style={{
@@ -31,9 +52,13 @@ const Profile = () => {
       </h2>
       <div style={{ marginBottom: 18 }}>
         <div style={{ fontWeight: 500, color: "#444" }}>Name:</div>
-        <div style={{ color: "#222", marginBottom: 8 }}>{mockUser.name}</div>
+        <div style={{ color: "#222", marginBottom: 8 }}>{user.name || "-"}</div>
         <div style={{ fontWeight: 500, color: "#444" }}>Email:</div>
-        <div style={{ color: "#222" }}>{mockUser.email}</div>
+        <div style={{ color: "#222", marginBottom: 8 }}>{user.email || "-"}</div>
+        <div style={{ fontWeight: 500, color: "#444" }}>Role:</div>
+        <div style={{ color: "#222", marginBottom: 8 }}>{user.role || "-"}</div>
+        <div style={{ fontWeight: 500, color: "#444" }}>CV Status:</div>
+        <div style={{ color: "#222" }}>{user.cv_status || "-"}</div>
       </div>
       <button
         style={{
@@ -49,7 +74,7 @@ const Profile = () => {
         }}
         onClick={() => navigate("/cv-upload", { state: { fromProfile: true } })}
       >
-        Re-upload CV
+        {user.cv_status === "Missing" ? "Upload CV" : "Re-upload CV"}
       </button>
     </div>
   );

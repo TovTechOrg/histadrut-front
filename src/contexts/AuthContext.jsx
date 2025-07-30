@@ -1,32 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { loginUser, registerUser } from "../api/api";
+import { loginUser, registerUser, fetchUserFromSession, backendLogout } from "../api/api";
 
-// Helper to fetch user info from backend session (cookie)
-const fetchUserFromSession = async () => {
-  try {
-    const res = await fetch("https://cv.pythia-match.com/me", {
-      credentials: "include",
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (data && data.email && data.role) {
-      return { email: data.email, role: data.role };
-    }
-    return null;
-  } catch {
-    return null;
-  }
-};
-
-// Helper to call backend logout
-const backendLogout = async () => {
-  try {
-    await fetch("https://cv.pythia-match.com/logout", {
-      method: "POST",
-      credentials: "include",
-    });
-  } catch {}
-};
 
 const AuthContext = createContext();
 
@@ -57,8 +31,13 @@ export const AuthProvider = ({ children }) => {
     // If no user in localStorage, try to fetch from backend session (cookie)
     fetchUserFromSession().then((userFromSession) => {
       if (userFromSession) {
-        setUser(userFromSession);
-        localStorage.setItem("userData", JSON.stringify(userFromSession));
+        // Omit role if not admin
+        const userToStore =
+          userFromSession.role === "admin"
+            ? userFromSession
+            : { ...userFromSession, role: undefined };
+        setUser(userToStore);
+        localStorage.setItem("userData", JSON.stringify(userToStore));
       }
       setLoading(false);
     });
@@ -69,10 +48,14 @@ export const AuthProvider = ({ children }) => {
       const result = await loginUser(email, password);
       // result: { status, data }
       if (result.status === 200 && result.data?.user_authenticated) {
-        const userObj = {
+        let userObj = {
           email: result.data.email,
           role: result.data.role || "user",
         };
+        // Omit role if not admin
+        if (userObj.role !== "admin") {
+          userObj = { ...userObj, role: undefined };
+        }
         setUser(userObj);
         localStorage.setItem("userData", JSON.stringify(userObj));
       }
@@ -88,7 +71,23 @@ export const AuthProvider = ({ children }) => {
   const signUp = async (email, password, name) => {
     try {
       const result = await registerUser(email, password, name || "");
-      // result: { status, data }
+      // If registration is successful, try to log in immediately
+      if (result.status === 200 || result.status === 201) {
+        // Attempt login with the same credentials
+        const loginResult = await loginUser(email, password);
+        if (loginResult.status === 200 && loginResult.data?.user_authenticated) {
+          let userObj = {
+            email: loginResult.data.email,
+            role: loginResult.data.role || "user",
+          };
+          // Omit role if not admin
+          if (userObj.role !== "admin") {
+            userObj = { ...userObj, role: undefined };
+          }
+          setUser(userObj);
+          localStorage.setItem("userData", JSON.stringify(userObj));
+        }
+      }
       return result;
     } catch (err) {
       return {

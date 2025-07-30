@@ -303,7 +303,7 @@ const CVUpload = () => {
               marginTop: 8,
             }}
           >
-            {location.state?.fromProfile && (
+            {location.state?.fromProfile ? (
               <button
                 type="button"
                 onClick={() => navigate(-1)}
@@ -320,6 +320,24 @@ const CVUpload = () => {
                 }}
               >
                 ← Back
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => navigate("/matches")}
+                style={{
+                  background: "none",
+                  border: "1.5px solid #3498db",
+                  color: "#3498db",
+                  borderRadius: 6,
+                  padding: "0.7rem 1.5rem",
+                  fontWeight: 500,
+                  cursor: "pointer",
+                  fontSize: "1.05rem",
+                  minWidth: 100,
+                }}
+              >
+                Upload Later
               </button>
             )}
             <button

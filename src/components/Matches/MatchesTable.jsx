@@ -4,7 +4,7 @@ import linkIcon from "../../assets/icons/link.svg";
 import JobModal from "./JobModal";
 import CandidateModal from "./CandidateModal";
 
-const MatchesTable = ({ jobs, loading, error }) => {
+const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
   const [selectedJob, setSelectedJob] = useState(null);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
 
@@ -22,7 +22,9 @@ const MatchesTable = ({ jobs, loading, error }) => {
     );
   }
 
-  if (error) {
+
+  // If there is an error, but allJobs is empty and loading is false, show no matches message instead of error
+  if (error && !(Array.isArray(allJobs) && allJobs.length === 0 && !loading)) {
     return (
       <div className="match-table">
         <div className="match-table__error">Error loading matches: {error}</div>
@@ -89,7 +91,9 @@ const MatchesTable = ({ jobs, loading, error }) => {
           {jobs.length === 0 ? (
             <tr>
               <td colSpan="7" className="match-table__empty">
-                No jobs match the current filters.
+                {Array.isArray(allJobs) && allJobs.length === 0
+                  ? "There are no current matches."
+                  : "No jobs match the current filters."}
               </td>
             </tr>
           ) : (

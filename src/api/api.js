@@ -1,3 +1,37 @@
+// Fetch user info from backend session (cookie)
+export const fetchUserFromSession = async () => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/me`, {
+      credentials: "include",
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    // Expecting: { message, status_code, user: { ... } }
+    if (data && data.user && data.user.email && data.user.role) {
+      // Optionally include other fields like name, id, cv_status
+      return {
+        email: data.user.email,
+        role: data.user.role,
+        name: data.user.name,
+        id: data.user.id,
+        cv_status: data.user.cv_status,
+      };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+};
+
+// Backend logout
+export const backendLogout = async () => {
+  try {
+    await fetch(`${API_BASE_URL}/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+  } catch {}
+};
 // Upload CV as form data
 export const uploadCV = async (file) => {
   const formData = new FormData();

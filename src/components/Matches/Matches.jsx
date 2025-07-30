@@ -6,6 +6,7 @@ import "./Matches.css";
 
 const Matches = () => {
   const {
+    jobsData,
     filteredJobs,
     loading,
     error,
@@ -28,7 +29,7 @@ const Matches = () => {
 
       <MatchesFilters filters={filters} onFiltersChange={updateFilters} />
 
-      <MatchesTable jobs={filteredJobs} loading={loading} error={error} />
+      <MatchesTable jobs={filteredJobs} allJobs={jobsData} loading={loading} error={error} />
 
       <div className="pagination-controls">
         <button
