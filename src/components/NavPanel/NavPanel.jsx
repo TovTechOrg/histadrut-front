@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { backendLogout } from "../../api/api";
 import dashboardIcon from "../../assets/icons/dashboard.svg";
 import profileIcon from "../../assets/icons/profile.svg";
 import listingsIcon from "../../assets/icons/listings.svg";
@@ -17,13 +18,12 @@ const NavPanel = () => {
 
   const isAdmin = user?.role === "admin";
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await backendLogout();
+    } catch {}
     logout();
-    if (isAdmin) {
-      navigate("/admin-login");
-    } else {
-      navigate("/login");
-    }
+    navigate("/login");
   };
 
   return (
