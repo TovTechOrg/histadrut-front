@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ResetPasswordModal from "./ResetPasswordModal";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
@@ -16,6 +17,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const { setUser } = useAuth();
+  const [showResetModal, setShowResetModal] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -64,7 +66,11 @@ const Login = () => {
         }
         console.log("Navigate called");
       } else {
-        setError(result.data?.error || result.data?.message || "Login failed");
+        let msg = result.data?.error || result.data?.message || "Login failed";
+        if (msg === "User authentication failed" || msg.toLowerCase().includes("authentication failed")) {
+          msg = "User or password not found. Please check your credentials.";
+        }
+        setError(msg);
       }
     } catch {
       setError("An error occurred. Please try again.");
@@ -134,6 +140,16 @@ const Login = () => {
             {loading ? "Please wait..." : "Sign In"}
           </button>
         </form>
+        <div style={{ textAlign: "right", marginTop: 8 }}>
+          <button
+            type="button"
+            className="text-button"
+            style={{ background: "none", border: "none", color: "#2196f3", cursor: "pointer", fontWeight: 500, padding: 0 }}
+            onClick={() => setShowResetModal(true)}
+          >
+            Forgot password?
+          </button>
+        </div>
         <button
           style={{
             marginTop: 16,
@@ -166,6 +182,8 @@ const Login = () => {
           </p>
         </div>
       </div>
+      {/* Move modal outside login-container */}
+      <ResetPasswordModal isOpen={showResetModal} onClose={() => setShowResetModal(false)} />
     </div>
   );
 };

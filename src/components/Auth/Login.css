@@ -1,3 +1,57 @@
+/* Reset Password Modal Styles */
+.reset-password-modal {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  padding: 0 2.5rem 3rem 2.5rem;
+  margin-top: -1.5rem;
+  width: 100%;
+  color: #222;
+  box-sizing: border-box;
+}
+.reset-password-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 0.5rem 0;
+  text-align: center;
+}
+.reset-password-form {
+  margin-top: 18px;
+}
+.reset-password-label {
+  font-weight: 500;
+  color: #444;
+  display: block;
+  margin-bottom: 6px;
+}
+.reset-password-input {
+  width: 100%;
+  padding: 0.8rem 0.75rem;
+  border-radius: 6px;
+  border: 1.5px solid #b5c6d6;
+  background: #fafbfc;
+  color: #222;
+  margin-bottom: 12px;
+  font-size: 1.08rem;
+}
+.reset-password-btn {
+  width: 100%;
+  padding: 0.875rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  background: #3498db;
+  color: #fff;
+  border: none;
+  margin-top: 8px;
+}
+.reset-password-success {
+  color: #27ae60;
+  text-align: center;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
 /* Login Page Styles */
 .login-page {
   min-height: 100vh;
@@ -213,3 +267,4 @@
     font-size: 1.5rem;
   }
 }
+

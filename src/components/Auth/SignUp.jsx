@@ -82,6 +82,7 @@ const SignUp = () => {
               required
               placeholder="Enter your email"
               autoComplete="off"
+              style={{ background: "#fff", color: "#222" }}
             />
           </div>
           <div className="form-group">
@@ -98,6 +99,7 @@ const SignUp = () => {
               required
               placeholder="Enter your name"
               autoComplete="off"
+            style={{ background: "#fff", color: "#222" }}
             />
           </div>
           <div className="form-group">
@@ -114,6 +116,7 @@ const SignUp = () => {
               required
               placeholder="Enter your password"
               autoComplete="new-password"
+            style={{ background: "#fff", color: "#222" }}
             />
           </div>
           <div className="form-group">
@@ -130,6 +133,7 @@ const SignUp = () => {
               required
               placeholder="Re-enter your password"
               autoComplete="new-password"
+            style={{ background: "#fff", color: "#222" }}
             />
           </div>
           <button type="submit" className="login-button" disabled={loading}>

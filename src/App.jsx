@@ -1,6 +1,7 @@
 import Profile from "./components/Profile";
 import "./App.css";
 import SignUp from "./components/Auth/SignUp";
+import NewPasswordPage from "./components/Auth/NewPasswordPage";
 import {
   BrowserRouter as Router,
   Routes,
@@ -29,6 +30,7 @@ function App() {
             {/* Public routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/new-password" element={<NewPasswordPage />} />
             // ...existing code...
             {/* Protected routes */}
             <Route
