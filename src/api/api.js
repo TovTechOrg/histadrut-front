@@ -100,8 +100,13 @@ const apiRequest = async (endpoint, options = {}) => {
 };
 
 export const fetchStats = async () => apiRequest("/stats");
-export const fetchJobs = async (page = 1) =>
-  apiRequest(`/matches2?page=${page}`);
+export const fetchJobs = async (page = 1, minScore) => {
+  let url = `/matches2?page=${page}`;
+  if (typeof minScore === "number") {
+    url += `&min_score=${minScore}`;
+  }
+  return apiRequest(url);
+};
 export const fetchJobListings = async () => apiRequest("/jobs");
 export const fetchCompanies = async () => apiRequest("/companies");
 

@@ -28,12 +28,12 @@ export const useMatchesData = () => {
     setCurrentPage(urlPage);
   }, [searchParams]);
 
-  const loadJobs = async (page) => {
+  const loadJobs = async (page, minScore) => {
     try {
       setLoading(true);
       setError(null);
 
-      const apiResponse = await fetchJobs(page);
+      const apiResponse = await fetchJobs(page, minScore);
       const { jobs, pagination } = transformJobsData(apiResponse);
 
       setJobsData(jobs);
@@ -47,8 +47,8 @@ export const useMatchesData = () => {
   };
 
   useEffect(() => {
-    loadJobs(currentPage);
-  }, [currentPage]);
+    loadJobs(currentPage, filters.minRelevanceScore);
+  }, [currentPage, filters.minRelevanceScore]);
 
   const goToPage = (page) => {
     const clamped = Math.max(1, Math.min(page, totalPages));

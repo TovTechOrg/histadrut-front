@@ -1,6 +1,18 @@
-import React from "react";
+import React, { useRef, useState } from "react";
+
+function useDebouncedCallback(callback, delay) {
+  const timeoutRef = useRef();
+  return (...args) => {
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      callback(...args);
+    }, delay);
+  };
+}
 
 const MatchesFilters = ({ filters, onFiltersChange }) => {
+  const [localMinScore, setLocalMinScore] = useState(filters.minRelevanceScore);
+
   const handleInputChange = (field, value) => {
     onFiltersChange({
       ...filters,
@@ -8,9 +20,20 @@ const MatchesFilters = ({ filters, onFiltersChange }) => {
     });
   };
 
+  const debouncedSliderChange = useDebouncedCallback((value) => {
+    handleInputChange("minRelevanceScore", value);
+  }, 300);
+
   const handleSliderChange = (e) => {
-    handleInputChange("minRelevanceScore", parseFloat(e.target.value));
+    const value = parseFloat(e.target.value);
+    setLocalMinScore(value);
+    debouncedSliderChange(value);
   };
+
+  // Keep localMinScore in sync if filters.minRelevanceScore changes from outside
+  React.useEffect(() => {
+    setLocalMinScore(filters.minRelevanceScore);
+  }, [filters.minRelevanceScore]);
   return (
     <section className="match-filters" aria-labelledby="filters-heading">
       <h2 id="filters-heading" className="match-filters__title">
@@ -73,7 +96,7 @@ const MatchesFilters = ({ filters, onFiltersChange }) => {
 
           <div className="match-filters__field">
             <label className="match-filters__label">
-              Min. Relevance Score ({filters.minRelevanceScore.toFixed(1)})
+              Min. Relevance Score ({localMinScore.toFixed(1)})
             </label>
             <div className="match-filters__slider-container">
               <input
@@ -82,7 +105,7 @@ const MatchesFilters = ({ filters, onFiltersChange }) => {
                 min="0"
                 max="10"
                 step="0.1"
-                value={filters.minRelevanceScore}
+                value={localMinScore}
                 onChange={handleSliderChange}
               />
               <div className="match-filters__slider-track">
