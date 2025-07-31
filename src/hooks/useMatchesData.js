@@ -34,8 +34,17 @@ export const useMatchesData = () => {
       setError(null);
 
       const apiResponse = await fetchJobs(page, minScore);
-      const { jobs, pagination } = transformJobsData(apiResponse);
 
+      // If response is empty or missing jobs key, prompt user to upload CV
+      if (!apiResponse || !apiResponse.jobs) {
+        setError("No jobs found. Please upload your CV to get matches.");
+        setJobsData([]);
+        setTotalPages(1);
+        setLastFetch(new Date());
+        return;
+      }
+
+      const { jobs, pagination } = transformJobsData(apiResponse);
       setJobsData(jobs);
       setTotalPages(pagination.totalPages);
       setLastFetch(new Date());

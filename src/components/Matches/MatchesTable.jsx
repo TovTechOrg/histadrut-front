@@ -91,7 +91,9 @@ const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
           {jobs.length === 0 ? (
             <tr>
               <td colSpan="7" className="match-table__empty">
-                {Array.isArray(allJobs) && allJobs.length === 0
+                {Array.isArray(allJobs) && allJobs.length === 0 && error
+                  ? error
+                  : Array.isArray(allJobs) && allJobs.length === 0
                   ? "There are no current matches."
                   : "No jobs match the current filters."}
               </td>
