@@ -31,7 +31,7 @@ function App() {
             {/* Public routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/new-password" element={<NewPasswordPage />} />
+            <Route path="/reset_password/:token" element={<NewPasswordPage />} />
             // ...existing code...
             {/* Protected routes */}
             <Route

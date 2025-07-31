@@ -1,3 +1,29 @@
+// Request password reset: POST /reset_password with x-www-form-urlencoded
+export const resetPassword = async (email) => {
+  const body = new URLSearchParams();
+  body.append("email", email);
+  const response = await fetch(`${API_BASE_URL}/reset_password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: body.toString(),
+  });
+  if (!response.ok) throw new Error("Failed to send reset email");
+  return response.json();
+};
+
+// Set new password: POST /reset_password/<token> with x-www-form-urlencoded
+export const setNewPassword = async (token, password, confirmPassword) => {
+  const body = new URLSearchParams();
+  body.append("password", password);
+  body.append("confirm_password", confirmPassword);
+  const response = await fetch(`${API_BASE_URL}/reset_password/${encodeURIComponent(token)}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: body.toString(),
+  });
+  if (!response.ok) throw new Error("Failed to set new password");
+  return response.json();
+};
 // Fetch user info from backend session (cookie)
 export const fetchUserFromSession = async () => {
   try {

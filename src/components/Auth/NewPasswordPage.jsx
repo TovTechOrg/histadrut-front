@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { setNewPassword } from "../../api/resetPassword";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { setNewPassword } from "../../api/api";
 import { useAuth } from "../../contexts/AuthContext";
 import "./Login.css";
 
@@ -12,8 +12,8 @@ const NewPasswordPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
-  // Assume email is passed via location.state
-  const email = location.state?.email || "";
+  // Get token from URL params (now /reset_password/:token)
+  const { token } = useParams();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,10 +28,9 @@ const NewPasswordPage = () => {
     }
     setLoading(true);
     try {
-      await setNewPassword(email, password);
-      // Log in with new password
-      await login(email, password);
-      navigate("/matches");
+      await setNewPassword(token, password, confirmPassword);
+      // Optionally, redirect to login page after success
+      navigate("/login");
     } catch (err) {
       setError(err.message || "Failed to set new password");
     } finally {

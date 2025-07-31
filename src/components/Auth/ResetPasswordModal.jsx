@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Modal from "../shared/Modal";
 import "./Login.css";
-import { resetPassword } from "../../api/resetPassword";
+import { resetPassword } from "../../api/api";
 
 const ResetPasswordModal = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState("");
