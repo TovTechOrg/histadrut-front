@@ -1,3 +1,5 @@
+const API_BASE_URL = "https://cv.pythia-match.com";
+
 // Request password reset: POST /reset_password with x-www-form-urlencoded
 export const resetPassword = async (email) => {
   const body = new URLSearchParams();
@@ -73,8 +75,6 @@ export const uploadCV = async (file) => {
   }
   return await response.json().catch(() => ({}));
 };
-
-const API_BASE_URL = "https://cv.pythia-match.com";
 
 // Real login API call
 export const loginUser = async (email, password) => {
