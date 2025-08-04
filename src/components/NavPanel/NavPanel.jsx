@@ -18,6 +18,15 @@ const NavPanel = () => {
 
   const isAdmin = user?.role === "admin";
 
+  // Helper function to capitalize name
+  const capitalizeName = (name) => {
+    if (!name) return "";
+    return name
+      .split(" ")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  };
+
   const handleLogout = async () => {
     try {
       await backendLogout();
@@ -30,7 +39,7 @@ const NavPanel = () => {
     <aside className="nav-panel" role="navigation" aria-label="Main navigation">
       <div className="nav-panel__header">
         <h2 className="nav-panel__title">Navigation</h2>
-        <p className="nav-panel__user">Welcome, {user?.name}</p>
+        <p className="nav-panel__user">Welcome, {capitalizeName(user?.name)}</p>
       </div>
       <nav className="nav-panel__nav" aria-label="Main navigation">
         <ul className="nav-panel__list">
