@@ -16,7 +16,6 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
-  const { setUser } = useAuth();
   const [showResetModal, setShowResetModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -39,10 +38,11 @@ const Login = () => {
     setError("");
     try {
       const result = await login(formData.email, formData.password);
-      console.log("Login result:", result);
-      console.log("Login result.data:", result.data);
-      console.log("Login result.data.user:", result.data?.user);
+      console.log("🔍 Login: login result:", result);
+      
       if (result.status === 200 && result.data?.user_authenticated) {
+        console.log("🔍 Login: Authentication successful");
+        
         // Save credentials only if rememberMe is checked
         if (rememberMe) {
           localStorage.setItem("rememberMe", "true");
@@ -53,19 +53,15 @@ const Login = () => {
           localStorage.removeItem("rememberedEmail");
           localStorage.removeItem("rememberedPassword");
         }
-        // Set user in context using role from response
-        setUser({
-          email: result.data.email,
-          role: result.data.role || "user",
-          hasCV: result.data.hasCV || false,
-        });
+        
         // Redirect based on role
         if ((result.data.role || "user") === "admin") {
+          console.log("🔍 Login: Admin user, navigating to overview");
           navigate("/overview");
         } else {
+          console.log("🔍 Login: Regular user, navigating to user/matches");
           navigate("/user/matches");
         }
-        console.log("Navigate called");
       } else {
         let msg = result.data?.error || result.data?.message || "Login failed";
         if (msg === "User authentication failed" || msg.toLowerCase().includes("authentication failed")) {

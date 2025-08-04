@@ -8,12 +8,6 @@ const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
   const [selectedJob, setSelectedJob] = useState(null);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
 
-  // Debug: log jobs to see if link field is present
-  console.log("Jobs in MatchesTable:", jobs);
-  jobs.forEach((job, index) => {
-    console.log(`Job ${index} link:`, job.link);
-  });
-
   if (loading) {
     return (
       <div className="match-table">

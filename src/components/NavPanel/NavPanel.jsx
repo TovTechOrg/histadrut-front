@@ -16,6 +16,9 @@ const NavPanel = () => {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
 
+  console.log("🔍 NavPanel: user object:", user);
+  console.log("🔍 NavPanel: user?.name:", user?.name);
+
   const isAdmin = user?.role === "admin";
 
   const handleLogout = async () => {

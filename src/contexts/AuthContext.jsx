@@ -19,15 +19,18 @@ export const AuthProvider = ({ children }) => {
   // Check for existing login token on mount
   useEffect(() => {
     const userData = localStorage.getItem("userData");
+    
     if (userData) {
       try {
-        setUser(JSON.parse(userData));
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
         setLoading(false);
         return;
       } catch (error) {
         localStorage.removeItem("userData");
       }
     }
+    
     // If no user in localStorage, try to fetch from backend session (cookie)
     fetchUserFromSession().then((userFromSession) => {
       if (userFromSession) {
@@ -46,18 +49,21 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const result = await loginUser(email, password);
+      
       // result: { status, data }
       if (result.status === 200 && result.data?.user_authenticated) {
-        let userObj = {
-          email: result.data.email,
-          role: result.data.role || "user",
-        };
-        // Omit role if not admin
-        if (userObj.role !== "admin") {
-          userObj = { ...userObj, role: undefined };
+        // After successful login, fetch complete user data from session
+        const userFromSession = await fetchUserFromSession();
+        
+        if (userFromSession) {
+          // Omit role if not admin
+          const userToStore =
+            userFromSession.role === "admin"
+              ? userFromSession
+              : { ...userFromSession, role: undefined };
+          setUser(userToStore);
+          localStorage.setItem("userData", JSON.stringify(userToStore));
         }
-        setUser(userObj);
-        localStorage.setItem("userData", JSON.stringify(userObj));
       }
       return result;
     } catch (err) {
@@ -76,16 +82,17 @@ export const AuthProvider = ({ children }) => {
         // Attempt login with the same credentials
         const loginResult = await loginUser(email, password);
         if (loginResult.status === 200 && loginResult.data?.user_authenticated) {
-          let userObj = {
-            email: loginResult.data.email,
-            role: loginResult.data.role || "user",
-          };
-          // Omit role if not admin
-          if (userObj.role !== "admin") {
-            userObj = { ...userObj, role: undefined };
+          // After successful login, fetch complete user data from session
+          const userFromSession = await fetchUserFromSession();
+          if (userFromSession) {
+            // Omit role if not admin
+            const userToStore =
+              userFromSession.role === "admin"
+                ? userFromSession
+                : { ...userFromSession, role: undefined };
+            setUser(userToStore);
+            localStorage.setItem("userData", JSON.stringify(userToStore));
           }
-          setUser(userObj);
-          localStorage.setItem("userData", JSON.stringify(userObj));
         }
       }
       return result;

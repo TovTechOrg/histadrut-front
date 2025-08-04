@@ -29,24 +29,33 @@ export const setNewPassword = async (token, password, confirmPassword) => {
 // Fetch user info from backend session (cookie)
 export const fetchUserFromSession = async () => {
   try {
+    console.log("🔍 API: fetchUserFromSession called");
     const res = await fetch(`${API_BASE_URL}/me`, {
       credentials: "include",
     });
+    console.log("🔍 API: /me response status:", res.status, res.ok);
+    
     if (!res.ok) return null;
     const data = await res.json();
+    console.log("🔍 API: /me response data:", data);
+    
     // Expecting: { message, status_code, user: { ... } }
     if (data && data.user && data.user.email && data.user.role) {
       // Optionally include other fields like name, id, cv_status
-      return {
+      const userObject = {
         email: data.user.email,
         role: data.user.role,
         name: data.user.name,
         id: data.user.id,
         cv_status: data.user.cv_status,
       };
+      console.log("🔍 API: returning userObject:", userObject);
+      return userObject;
     }
+    console.log("🔍 API: data.user missing required fields, returning null");
     return null;
-  } catch {
+  } catch (error) {
+    console.log("🔍 API: fetchUserFromSession error:", error);
     return null;
   }
 };
@@ -96,10 +105,7 @@ export const registerUser = async (email, password, name) => {
   formData.append("email", email);
   formData.append("password", password);
   formData.append("name", name);
-  // Debug: log FormData contents
-  for (let pair of formData.entries()) {
-    console.log("registerUser field:", pair[0], pair[1]);
-  }
+  
   const response = await fetch(`${API_BASE_URL}/register`, {
     method: "POST",
     body: formData,
@@ -138,17 +144,11 @@ export const fetchCompanies = async () => apiRequest("/companies");
 
 export const transformJobsData = (apiResponse) => {
   const jobs = apiResponse.jobs.map((job, index) => {
-    // Debug: log the job object to see what fields are available
-    console.log(`Job ${index}:`, job);
-    console.log(`Job ${index} link:`, job.link);
-    console.log(`Job ${index} matches:`, job.matches);
-
     // Check if link is in the first match (assuming all matches have the same job link)
     const jobLink =
       job.link ||
       (job.matches && job.matches[0] && job.matches[0].link) ||
       null;
-    console.log(`Job ${index} final link:`, jobLink);
 
     return {
       id: job._id || `job-${index}`,
@@ -206,11 +206,6 @@ export const transformJobListingsData = (apiResponse) => {
   return apiResponse.map((job, index) => {
     const daysAgo = job.days_old || 0;
     const ageCategory = getAgeCategory(daysAgo);
-
-    // Debug logging
-    console.log(
-      `Job ${index}: days_old: ${job.days_old}, Age category: ${ageCategory}`
-    );
 
     return {
       id: job.job_id || `job-${index}`,

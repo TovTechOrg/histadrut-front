@@ -48,11 +48,9 @@ const Profile = () => {
           color: "#222",
         }}
       >
-        Profile
+        Welcome, {user.name || "User"}
       </h2>
       <div style={{ marginBottom: 18 }}>
-        <div style={{ fontWeight: 500, color: "#444" }}>Name:</div>
-        <div style={{ color: "#222", marginBottom: 8 }}>{user.name || "-"}</div>
         <div style={{ fontWeight: 500, color: "#444" }}>Email:</div>
         <div style={{ color: "#222", marginBottom: 8 }}>{user.email || "-"}</div>
         <div style={{ fontWeight: 500, color: "#444" }}>Role:</div>
