@@ -58,7 +58,7 @@ export const fetchUserFromSession = async () => {
 export const backendLogout = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/logout`, {
-      method: "POST",
+      method: "GET",
       credentials: "include",
     });
     

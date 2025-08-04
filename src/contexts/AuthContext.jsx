@@ -142,6 +142,19 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("rememberedEmail");
     localStorage.removeItem("rememberedPassword");
     
+    // Try to clear any non-HTTP-only cookies (limited effectiveness)
+    // Note: HTTP-only cookies can only be cleared by the backend
+    try {
+      // Clear common cookie names that might be used for sessions
+      const cookiesToClear = ['session', 'sessionid', 'token', 'auth', 'jwt'];
+      cookiesToClear.forEach(cookieName => {
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`;
+      });
+    } catch (error) {
+      console.warn("Cookie clearing failed:", error);
+    }
+    
     // Clear user state
     setUser(null);
   };
