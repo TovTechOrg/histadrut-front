@@ -66,6 +66,16 @@ const CVUpload = () => {
       await uploadCV(file);
       setShowSuccess(true);
       setFile(null);
+      
+      // Navigate after successful upload based on where user came from
+      setTimeout(() => {
+        if (location.state?.fromProfile) {
+          navigate("/profile");
+        } else {
+          // User came from signup, go to matches
+          navigate("/user/matches");
+        }
+      }, 2000); // Give user 2 seconds to see the success message
     } catch (err) {
       setError(err.message || "An error occurred while uploading your CV.");
     } finally {
@@ -137,7 +147,14 @@ const CVUpload = () => {
                 Your resume was uploaded. We'll notify you if a match is found.
               </div>
               <button
-                onClick={() => setShowSuccess(false)}
+                onClick={() => {
+                  if (location.state?.fromProfile) {
+                    navigate("/profile");
+                  } else {
+                    // User came from signup, go to matches
+                    navigate("/user/matches");
+                  }
+                }}
                 style={{
                   padding: "0.7rem 2.2rem",
                   fontSize: "1.05rem",

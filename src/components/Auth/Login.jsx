@@ -18,6 +18,7 @@ const Login = () => {
   const { login } = useAuth();
   const { setUser } = useAuth();
   const [showResetModal, setShowResetModal] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -109,18 +110,37 @@ const Login = () => {
             <label htmlFor="password" className="form-label">
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              className="form-input light-input"
-              required
-              placeholder="Enter your password"
-              autoComplete="new-password"
-              style={{ background: "#fff", color: "#222" }}
-            />
+            <div style={{ position: "relative" }}>
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                className="form-input light-input"
+                required
+                placeholder="Enter your password"
+                autoComplete="new-password"
+                style={{ background: "#fff", color: "#222", paddingRight: "40px" }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: "absolute",
+                  right: "10px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  color: "#666"
+                }}
+              >
+                {showPassword ? "👁️" : "👁️‍🗨️"}
+              </button>
+            </div>
           </div>
           <div className="form-group remember-me-group">
             <label
