@@ -57,11 +57,20 @@ export const fetchUserFromSession = async () => {
 // Backend logout
 export const backendLogout = async () => {
   try {
-    await fetch(`${API_BASE_URL}/logout`, {
+    const response = await fetch(`${API_BASE_URL}/logout`, {
       method: "POST",
       credentials: "include",
     });
-  } catch {}
+    
+    if (!response.ok) {
+      throw new Error(`Logout failed: ${response.status}`);
+    }
+    
+    return { success: true };
+  } catch (error) {
+    console.error("Backend logout error:", error);
+    throw error; // Re-throw so caller can handle it
+  }
 };
 // Upload CV as form data
 export const uploadCV = async (file) => {

@@ -128,8 +128,21 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await backendLogout();
+    try {
+      // Try to logout from backend (clear server-side session/cookie)
+      await backendLogout();
+    } catch (error) {
+      console.warn("Backend logout failed:", error);
+      // Continue with local cleanup even if backend fails
+    }
+    
+    // Clear all user-related localStorage data
     localStorage.removeItem("userData");
+    localStorage.removeItem("rememberMe");
+    localStorage.removeItem("rememberedEmail");
+    localStorage.removeItem("rememberedPassword");
+    
+    // Clear user state
     setUser(null);
   };
 
