@@ -44,10 +44,8 @@ const SignUp = () => {
         formData.password,
         formData.name
       );
-      console.log("🔍 SignUp: signUp result:", result);
       
       if (result.status === 201) {
-        console.log("🔍 SignUp: Registration successful, navigating to CV upload");
         setError("");
         navigate("/cv-upload");
       } else {

@@ -29,15 +29,12 @@ export const setNewPassword = async (token, password, confirmPassword) => {
 // Fetch user info from backend session (cookie)
 export const fetchUserFromSession = async () => {
   try {
-    console.log("🔍 API: fetchUserFromSession called");
     const res = await fetch(`${API_BASE_URL}/me`, {
       credentials: "include",
     });
-    console.log("🔍 API: /me response status:", res.status, res.ok);
     
     if (!res.ok) return null;
     const data = await res.json();
-    console.log("🔍 API: /me response data:", data);
     
     // Expecting: { message, status_code, user: { ... } }
     if (data && data.user && data.user.email && data.user.role) {
@@ -49,13 +46,10 @@ export const fetchUserFromSession = async () => {
         id: data.user.id,
         cv_status: data.user.cv_status,
       };
-      console.log("🔍 API: returning userObject:", userObject);
       return userObject;
     }
-    console.log("🔍 API: data.user missing required fields, returning null");
     return null;
   } catch (error) {
-    console.log("🔍 API: fetchUserFromSession error:", error);
     return null;
   }
 };

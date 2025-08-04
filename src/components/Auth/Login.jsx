@@ -38,11 +38,8 @@ const Login = () => {
     setError("");
     try {
       const result = await login(formData.email, formData.password);
-      console.log("🔍 Login: login result:", result);
-      
+
       if (result.status === 200 && result.data?.user_authenticated) {
-        console.log("🔍 Login: Authentication successful");
-        
         // Save credentials only if rememberMe is checked
         if (rememberMe) {
           localStorage.setItem("rememberMe", "true");
@@ -56,10 +53,8 @@ const Login = () => {
         
         // Redirect based on role
         if ((result.data.role || "user") === "admin") {
-          console.log("🔍 Login: Admin user, navigating to overview");
           navigate("/overview");
         } else {
-          console.log("🔍 Login: Regular user, navigating to user/matches");
           navigate("/user/matches");
         }
       } else {
