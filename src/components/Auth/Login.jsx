@@ -150,29 +150,7 @@ const Login = () => {
             Forgot password?
           </button>
         </div>
-        <button
-          style={{
-            marginTop: 16,
-            width: "100%",
-            background: "#f5f5f5",
-            color: "#222",
-            border: "1px solid #2196f3",
-            borderRadius: 4,
-            padding: 10,
-            cursor: "pointer",
-            fontWeight: 600,
-          }}
-          onClick={() => {
-            setUser({
-              email: formData.email || "admin@dev.local",
-              role: "admin",
-              hasCV: true,
-            });
-            navigate("/overview");
-          }}
-        >
-          Log in as admin (dev preview)
-        </button>
+
         <div className="login-footer">
           <p className="login-link">
             Don't have an account?{" "}
