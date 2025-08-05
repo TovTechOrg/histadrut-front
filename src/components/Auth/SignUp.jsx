@@ -158,6 +158,7 @@ const SignUp = () => {
             {loading ? "Please wait..." : "Sign Up"}
           </button>
         </form>
+        
         <div className="login-footer">
           <p className="login-link">
             Already have an account?{" "}
@@ -165,6 +166,18 @@ const SignUp = () => {
               Sign In
             </Link>
           </p>
+        </div>
+
+        {/* Cookie warning message - moved to bottom */}
+        <div style={{
+          textAlign: "center",
+          marginTop: "16px",
+          padding: "8px",
+          fontSize: "0.85rem",
+          color: "#666",
+          lineHeight: "1.4"
+        }}>
+          ⚠️ This site requires third-party cookies to log in. Please enable them in your browser settings.
         </div>
       </div>
     </div>

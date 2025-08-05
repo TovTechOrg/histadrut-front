@@ -10,6 +10,14 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const capitalizeName = (name) => {
+    if (!name) return name;
+    return name
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
+
   useEffect(() => {
     fetchUserFromSession()
       .then((userData) => {
@@ -48,32 +56,38 @@ const Profile = () => {
           color: "#222",
         }}
       >
-        Welcome, {user.name || "User"}
+        Welcome, {capitalizeName(user.name) || "User"}
       </h2>
       <div style={{ marginBottom: 18 }}>
         <div style={{ fontWeight: 500, color: "#444" }}>Email:</div>
         <div style={{ color: "#222", marginBottom: 8 }}>{user.email || "-"}</div>
         <div style={{ fontWeight: 500, color: "#444" }}>Role:</div>
         <div style={{ color: "#222", marginBottom: 8 }}>{user.role || "-"}</div>
-        <div style={{ fontWeight: 500, color: "#444" }}>CV Status:</div>
-        <div style={{ color: "#222" }}>{user.cv_status || "-"}</div>
+        {user.role !== "admin" && (
+          <>
+            <div style={{ fontWeight: 500, color: "#444" }}>CV Status:</div>
+            <div style={{ color: "#222" }}>{user.cv_status || "-"}</div>
+          </>
+        )}
       </div>
-      <button
-        style={{
-          padding: "0.8rem 2.2rem",
-          fontSize: "1.08rem",
-          fontWeight: 600,
-          borderRadius: 6,
-          background: "#3498db",
-          color: "#fff",
-          border: "none",
-          cursor: "pointer",
-          marginTop: 12,
-        }}
-        onClick={() => navigate("/cv-upload", { state: { fromProfile: true } })}
-      >
-        {user.cv_status === "Missing" ? "Upload CV" : "Re-upload CV"}
-      </button>
+      {user.role !== "admin" && (
+        <button
+          style={{
+            padding: "0.8rem 2.2rem",
+            fontSize: "1.08rem",
+            fontWeight: 600,
+            borderRadius: 6,
+            background: "#3498db",
+            color: "#fff",
+            border: "none",
+            cursor: "pointer",
+            marginTop: 12,
+          }}
+          onClick={() => navigate("/cv-upload", { state: { fromProfile: true } })}
+        >
+          {user.cv_status === "Missing" ? "Upload CV" : "Re-upload CV"}
+        </button>
+      )}
     </div>
   );
 };

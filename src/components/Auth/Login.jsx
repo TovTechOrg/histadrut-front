@@ -5,13 +5,9 @@ import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
 
 const Login = () => {
-  const remembered = localStorage.getItem("rememberMe") === "true";
-  const [rememberMe, setRememberMe] = useState(remembered);
   const [formData, setFormData] = useState({
-    email: remembered ? localStorage.getItem("rememberedEmail") || "" : "",
-    password: remembered
-      ? localStorage.getItem("rememberedPassword") || ""
-      : "",
+    email: "",
+    password: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,10 +24,6 @@ const Login = () => {
     setError("");
   };
 
-  const handleRememberMeChange = (e) => {
-    setRememberMe(e.target.checked);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -40,17 +32,6 @@ const Login = () => {
       const result = await login(formData.email, formData.password);
 
       if (result.status === 200 && result.data?.user_authenticated) {
-        // Save credentials only if rememberMe is checked
-        if (rememberMe) {
-          localStorage.setItem("rememberMe", "true");
-          localStorage.setItem("rememberedEmail", formData.email);
-          localStorage.setItem("rememberedPassword", formData.password);
-        } else {
-          localStorage.setItem("rememberMe", "false");
-          localStorage.removeItem("rememberedEmail");
-          localStorage.removeItem("rememberedPassword");
-        }
-        
         // Redirect based on role
         if ((result.data.role || "user") === "admin") {
           navigate("/overview");
@@ -133,34 +114,23 @@ const Login = () => {
               </button>
             </div>
           </div>
-          <div className="form-group remember-me-group">
-            <label
-              className="remember-me-label"
-              style={{ color: "#222", fontWeight: 500 }}
+          
+          {/* Forgot password link moved here */}
+          <div style={{ textAlign: "right", marginBottom: "12px" }}>
+            <button
+              type="button"
+              className="text-button"
+              style={{ background: "none", border: "none", color: "#2196f3", cursor: "pointer", fontWeight: 500, padding: 0, fontSize: "0.9rem" }}
+              onClick={() => setShowResetModal(true)}
             >
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={handleRememberMeChange}
-                style={{ accentColor: "#2196f3", background: "#fff" }}
-              />
-              <span style={{ marginLeft: 8 }}>Remember me</span>
-            </label>
+              Forgot password?
+            </button>
           </div>
+          
           <button type="submit" className="login-button" disabled={loading}>
             {loading ? "Please wait..." : "Sign In"}
           </button>
         </form>
-        <div style={{ textAlign: "right", marginTop: 8 }}>
-          <button
-            type="button"
-            className="text-button"
-            style={{ background: "none", border: "none", color: "#2196f3", cursor: "pointer", fontWeight: 500, padding: 0 }}
-            onClick={() => setShowResetModal(true)}
-          >
-            Forgot password?
-          </button>
-        </div>
 
         <div className="login-footer">
           <p className="login-link">
@@ -169,6 +139,18 @@ const Login = () => {
               Sign Up
             </Link>
           </p>
+        </div>
+
+        {/* Cookie warning message - moved to bottom */}
+        <div style={{
+          textAlign: "center",
+          marginTop: "16px",
+          padding: "8px",
+          fontSize: "0.85rem",
+          color: "#666",
+          lineHeight: "1.4"
+        }}>
+          ⚠️ This site requires third-party cookies to log in. Please enable them in your browser settings.
         </div>
       </div>
       {/* Move modal outside login-container */}

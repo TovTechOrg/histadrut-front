@@ -138,9 +138,10 @@ export const AuthProvider = ({ children }) => {
     
     // Clear all user-related localStorage data
     localStorage.removeItem("userData");
+    // Clean up any existing remember me data (if it exists from before)
     localStorage.removeItem("rememberMe");
     localStorage.removeItem("rememberedEmail");
-    localStorage.removeItem("rememberedPassword");
+    localStorage.removeItem("rememberedPassword"); // Clean up any existing stored passwords
     
     // Try to clear any non-HTTP-only cookies (limited effectiveness)
     // Note: HTTP-only cookies can only be cleared by the backend
