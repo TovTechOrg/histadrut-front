@@ -80,7 +80,25 @@ export const useJobsData = () => {
     return result;
   }, [jobs]);
 
-  const statuses = ["All Ages", "New", "Fresh", "Stale", "Old"];
+  // Get unique age categories for filter dropdown - memoized and based on server data
+  const statuses = useMemo(() => {
+    if (!Array.isArray(jobs) || jobs.length === 0) {
+      return ["All Ages"];
+    }
+
+    const uniqueAgeCategories = jobs
+      .map((job) => job.ageCategory)
+      .filter((category) => category && category.trim())
+      .filter((category, index, arr) => arr.indexOf(category) === index)
+      .sort((a, b) => {
+        // Sort age categories in logical order: 1 day, 2-5 days, 6-14 days, 15+ days
+        const order = ["1 day", "2-5 days", "6-14 days", "15+ days"];
+        return order.indexOf(a) - order.indexOf(b);
+      });
+
+    const result = ["All Ages", ...uniqueAgeCategories];
+    return result;
+  }, [jobs]);
 
   // Filter and sort jobs
   const filteredJobs = useMemo(() => {
@@ -169,14 +187,14 @@ export const useJobsData = () => {
     if (typeof status === "string" && status.trim()) {
       setSelectedStatus(status);
     } else {
-      setSelectedStatus("All Statuses");
+      setSelectedStatus("All Ages");
     }
   }, []);
 
   const resetFilters = useCallback(() => {
     setSearchTerm("");
     setSelectedCompany("All Companies");
-    setSelectedStatus("All Statuses");
+    setSelectedStatus("All Ages");
     setSortField(null);
     setSortDirection("asc");
   }, []);

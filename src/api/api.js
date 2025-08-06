@@ -199,10 +199,10 @@ const AGE_THRESHOLDS = {
 
 // Helper function to calculate age category based on days
 const getAgeCategory = (daysOld) => {
-  if (daysOld <= AGE_THRESHOLDS.NEW) return "New";
-  if (daysOld <= AGE_THRESHOLDS.FRESH) return "Fresh";
-  if (daysOld <= AGE_THRESHOLDS.STALE) return "Stale";
-  return "Old";
+  if (daysOld <= AGE_THRESHOLDS.NEW) return "1 day";
+  if (daysOld <= AGE_THRESHOLDS.FRESH) return "2-5 days";
+  if (daysOld <= AGE_THRESHOLDS.STALE) return "6-14 days";
+  return "15+ days";
 };
 
 export const transformJobListingsData = (apiResponse) => {
