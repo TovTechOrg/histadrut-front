@@ -48,7 +48,7 @@ export const useMatchesData = () => {
       setJobsData(jobs);
       setTotalPages(pagination.totalPages);
       setLastFetch(new Date());
-    } catch {
+    } catch (error) {
       setError("Failed to load jobs. Please try again later.");
     } finally {
       setLoading(false);
@@ -111,6 +111,7 @@ export const useMatchesData = () => {
       filtered = filtered.filter((job) => job.dateAdded >= filters.addedSince);
     }
 
+    // Apply relevance score filter
     filtered = filtered
       .map((job) => ({
         ...job,

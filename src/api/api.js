@@ -146,20 +146,95 @@ export const fetchJobListings = async () => apiRequest("/jobs");
 export const fetchCompanies = async () => apiRequest("/companies");
 
 export const transformJobsData = (apiResponse) => {
+  // Check if apiResponse has the expected structure
+  if (!apiResponse) {
+    throw new Error("No response received from server");
+  }
+  
+  if (!apiResponse.jobs) {
+    throw new Error("Invalid response format: missing jobs array");
+  }
+  
   const jobs = apiResponse.jobs.map((job, index) => {
+    
     // Check if link is in the first match (assuming all matches have the same job link)
+    // Treat "No link found" as invalid/missing link
+    const isValidLink = (link) => link && link !== "No link found" && link.trim() !== "";
+    
     const jobLink =
-      job.link ||
-      (job.matches && job.matches[0] && job.matches[0].link) ||
+      (isValidLink(job.link) ? job.link : null) ||
+      (job.matches && job.matches[0] && isValidLink(job.matches[0].link) ? job.matches[0].link : null) ||
       null;
 
-    return {
+    const transformedJob = {
       id: job._id || `job-${index}`,
       jobTitle: job.job_title || "Unknown Position",
       company: job.company_name || "Unknown Company",
-      dateAdded: job.discovered
-        ? new Date(job.discovered).toISOString().split("T")[0]
-        : new Date().toISOString().split("T")[0],
+      dateAdded: (() => {
+        if (!job.discovered) {
+          return new Date().toISOString().split("T")[0];
+        }
+        
+        // Handle different date formats from backend
+        try {
+          const dateStr = job.discovered.toString().trim();
+          
+          // If it's already an ISO string (YYYY-MM-DD or with time)
+          if (dateStr.includes('-') && (dateStr.includes('T') || dateStr.match(/^\d{4}-\d{2}-\d{2}/))) {
+            return new Date(dateStr).toISOString().split("T")[0];
+          }
+          
+          // If it's MM/DD/YYYY format like "08/10/2024"
+          if (dateStr.includes('/') && dateStr.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+            const [month, day, year] = dateStr.split('/');
+            const date = new Date(year, month - 1, day); // month is 0-indexed
+            return date.toISOString().split("T")[0];
+          }
+          
+          // If it's DD/MM/YYYY format like "10/08/2024" (European)
+          if (dateStr.includes('/') && dateStr.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+            // Try to parse as MM/DD/YYYY first, if that creates invalid date, try DD/MM/YYYY
+            const parts = dateStr.split('/');
+            let date = new Date(parts[2], parts[0] - 1, parts[1]); // MM/DD/YYYY
+            if (isNaN(date.getTime())) {
+              date = new Date(parts[2], parts[1] - 1, parts[0]); // DD/MM/YYYY
+            }
+            return date.toISOString().split("T")[0];
+          }
+          
+          // If it's YYYY/MM/DD format
+          if (dateStr.includes('/') && dateStr.match(/^\d{4}\/\d{1,2}\/\d{1,2}$/)) {
+            const [year, month, day] = dateStr.split('/');
+            const date = new Date(year, month - 1, day);
+            return date.toISOString().split("T")[0];
+          }
+          
+          // If it's DD-MM-YYYY format
+          if (dateStr.includes('-') && dateStr.match(/^\d{1,2}-\d{1,2}-\d{4}$/)) {
+            const [day, month, year] = dateStr.split('-');
+            const date = new Date(year, month - 1, day);
+            return date.toISOString().split("T")[0];
+          }
+          
+          // If it's a timestamp (number)
+          if (!isNaN(dateStr) && dateStr.length >= 10) {
+            const timestamp = parseInt(dateStr);
+            // Handle both seconds and milliseconds timestamps
+            const date = new Date(timestamp < 10000000000 ? timestamp * 1000 : timestamp);
+            return date.toISOString().split("T")[0];
+          }
+          
+          // Fallback: try to parse as-is (handles many other formats)
+          const fallbackDate = new Date(dateStr);
+          if (!isNaN(fallbackDate.getTime())) {
+            return fallbackDate.toISOString().split("T")[0];
+          }
+          
+          throw new Error(`Unrecognized date format: ${dateStr}`);
+        } catch (error) {
+          return new Date().toISOString().split("T")[0];
+        }
+      })(),
       jobDescription: job.job_description || "No description available",
       link: jobLink,
       matchedCandidates: (job.matches || []).map((match, matchIndex) => ({
@@ -170,15 +245,17 @@ export const transformJobsData = (apiResponse) => {
         mmr: match.mandatory_req ? "YES" : "NO",
         _metadata: {
           matchId: match._id,
-          candidateId: match.ID_candiate,
+          candidateId: match.ID_candiate, // Backend still has typo
           coverLetter: match.cover_letter,
           createdAt: match.created_at,
           overview: match.overall_overview,
           strengths: match.strengths || [],
-          weaknesses: match.weeknesses || match.weaknesses || [],
+          weaknesses: match.weeknesses || [], // Backend still has typo
         },
       })),
     };
+    
+    return transformedJob;
   });
 
   return {
