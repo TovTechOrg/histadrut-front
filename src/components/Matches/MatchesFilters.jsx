@@ -12,6 +12,8 @@ function useDebouncedCallback(callback, delay) {
 
 const MatchesFilters = ({ filters, onFiltersChange }) => {
   const [localMinScore, setLocalMinScore] = useState(filters.minRelevanceScore);
+  const [localCompanyName, setLocalCompanyName] = useState(filters.companyName);
+  const [localCandidateName, setLocalCandidateName] = useState(filters.candidateName);
 
   const handleInputChange = (field, value) => {
     onFiltersChange({
@@ -24,16 +26,44 @@ const MatchesFilters = ({ filters, onFiltersChange }) => {
     handleInputChange("minRelevanceScore", value);
   }, 300);
 
+  const debouncedCompanyNameChange = useDebouncedCallback((value) => {
+    handleInputChange("companyName", value);
+  }, 500);
+
+  const debouncedCandidateNameChange = useDebouncedCallback((value) => {
+    handleInputChange("candidateName", value);
+  }, 500);
+
   const handleSliderChange = (e) => {
     const value = parseFloat(e.target.value);
     setLocalMinScore(value);
     debouncedSliderChange(value);
   };
 
-  // Keep localMinScore in sync if filters.minRelevanceScore changes from outside
+  const handleCompanyNameChange = (e) => {
+    const value = e.target.value;
+    setLocalCompanyName(value);
+    debouncedCompanyNameChange(value);
+  };
+
+  const handleCandidateNameChange = (e) => {
+    const value = e.target.value;
+    setLocalCandidateName(value);
+    debouncedCandidateNameChange(value);
+  };
+
+  // Keep local values in sync if filters change from outside
   React.useEffect(() => {
     setLocalMinScore(filters.minRelevanceScore);
   }, [filters.minRelevanceScore]);
+
+  React.useEffect(() => {
+    setLocalCompanyName(filters.companyName);
+  }, [filters.companyName]);
+
+  React.useEffect(() => {
+    setLocalCandidateName(filters.candidateName);
+  }, [filters.candidateName]);
   return (
     <section className="match-filters" aria-labelledby="filters-heading">
       <h2 id="filters-heading" className="match-filters__title">
@@ -56,8 +86,8 @@ const MatchesFilters = ({ filters, onFiltersChange }) => {
               type="text"
               className="match-filters__input"
               placeholder="e.g., Example Tech"
-              value={filters.companyName}
-              onChange={(e) => handleInputChange("companyName", e.target.value)}
+              value={localCompanyName}
+              onChange={handleCompanyNameChange}
             />
           </div>
 
@@ -70,16 +100,14 @@ const MatchesFilters = ({ filters, onFiltersChange }) => {
               type="text"
               className="match-filters__input"
               placeholder="e.g., Shy"
-              value={filters.candidateName}
-              onChange={(e) =>
-                handleInputChange("candidateName", e.target.value)
-              }
+              value={localCandidateName}
+              onChange={handleCandidateNameChange}
             />
           </div>
 
           <div className="match-filters__field">
             <label className="match-filters__label" htmlFor="addedSince">
-              Added Since
+              Posted after
             </label>
             <input
               id="addedSince"
@@ -90,7 +118,7 @@ const MatchesFilters = ({ filters, onFiltersChange }) => {
               aria-describedby="addedSince-help"
             />
             <small id="addedSince-help" className="match-filters__help-text">
-              Show jobs added on or after this date
+              Show jobs posted after this date
             </small>
           </div>
 

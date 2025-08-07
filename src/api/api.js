@@ -135,10 +135,19 @@ const apiRequest = async (endpoint, options = {}) => {
 };
 
 export const fetchStats = async () => apiRequest("/stats");
-export const fetchJobs = async (page = 1, minScore) => {
+export const fetchJobs = async (page = 1, minScore, createdAt, companyName, candidateName) => {
   let url = `/matches2?page=${page}`;
   if (typeof minScore === "number") {
     url += `&min_score=${minScore}`;
+  }
+  if (createdAt) {
+    url += `&created_at=${createdAt}`;
+  }
+  if (companyName && companyName.trim()) {
+    url += `&company_name=${encodeURIComponent(companyName.trim())}`;
+  }
+  if (candidateName && candidateName.trim()) {
+    url += `&candidate_name=${encodeURIComponent(candidateName.trim())}`;
   }
   return apiRequest(url);
 };

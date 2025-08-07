@@ -28,12 +28,12 @@ export const useMatchesData = () => {
     setCurrentPage(urlPage);
   }, [searchParams]);
 
-  const loadJobs = async (page, minScore) => {
+  const loadJobs = async (page, minScore, createdAt, companyName, candidateName) => {
     try {
       setLoading(true);
       setError(null);
 
-      const apiResponse = await fetchJobs(page, minScore);
+      const apiResponse = await fetchJobs(page, minScore, createdAt, companyName, candidateName);
 
       // If response is empty or missing jobs key, prompt user to upload CV
       if (!apiResponse || !apiResponse.jobs) {
@@ -55,9 +55,29 @@ export const useMatchesData = () => {
     }
   };
 
+  // Helper function to format date to MM-DD-YYYY
+  const formatDateForAPI = (dateString) => {
+    if (!dateString) return null;
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return null;
+    
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = date.getFullYear();
+    
+    return `${month}-${day}-${year}`;
+  };
+
   useEffect(() => {
-    loadJobs(currentPage, filters.minRelevanceScore);
-  }, [currentPage, filters.minRelevanceScore]);
+    const formattedDate = formatDateForAPI(filters.addedSince);
+    loadJobs(
+      currentPage, 
+      filters.minRelevanceScore, 
+      formattedDate, 
+      filters.companyName, 
+      filters.candidateName
+    );
+  }, [currentPage, filters.minRelevanceScore, filters.addedSince, filters.companyName, filters.candidateName]);
 
   const goToPage = (page) => {
     const clamped = Math.max(1, Math.min(page, totalPages));
@@ -76,53 +96,8 @@ export const useMatchesData = () => {
     setFilters(newFilters);
   };
 
-  // Filter logic
-  const filteredJobs = useMemo(() => {
-    let filtered = [...jobsData];
-
-    if (filters.companyName.trim()) {
-      filtered = filtered.filter((job) =>
-        job.company
-          .toLowerCase()
-          .includes(filters.companyName.toLowerCase().trim())
-      );
-    }
-
-    // Apply candidate name filter - filter both jobs AND candidates within jobs
-    if (filters.candidateName.trim()) {
-      const candidateNameFilter = filters.candidateName.toLowerCase().trim();
-
-      filtered = filtered
-        .map((job) => ({
-          ...job,
-          matchedCandidates: job.matchedCandidates.filter((candidate) => {
-            // Safety check for candidate.name
-            if (!candidate || !candidate.name) {
-              return false;
-            }
-
-            return candidate.name.toLowerCase().includes(candidateNameFilter);
-          }),
-        }))
-        .filter((job) => job.matchedCandidates.length > 0);
-    }
-
-    if (filters.addedSince) {
-      filtered = filtered.filter((job) => job.dateAdded >= filters.addedSince);
-    }
-
-    // Apply relevance score filter
-    filtered = filtered
-      .map((job) => ({
-        ...job,
-        matchedCandidates: job.matchedCandidates.filter(
-          (candidate) => candidate.score >= filters.minRelevanceScore
-        ),
-      }))
-      .filter((job) => job.matchedCandidates.length > 0);
-
-    return filtered;
-  }, [jobsData, filters]);
+  // No frontend filtering needed - all filtering is handled by the backend
+  const filteredJobs = jobsData;
 
   return {
     jobsData,
