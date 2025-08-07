@@ -1,7 +1,8 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../hooks/useAuth";
 import { backendLogout } from "../../api/api";
+import { capitalizeName } from "../../utils/textHelpers";
 import dashboardIcon from "../../assets/icons/dashboard.svg";
 import profileIcon from "../../assets/icons/profile.svg";
 import listingsIcon from "../../assets/icons/listings.svg";
@@ -9,7 +10,6 @@ import matchesIcon from "../../assets/icons/matches.svg";
 import companiesIcon from "../../assets/icons/companies.svg";
 import usersIcon from "../../assets/icons/users.svg";
 import reportingIcon from "../../assets/icons/reporting.svg";
-// import usersIcon from "../../assets/icons/users.svg";
 import "./NavPanel.css";
 
 const NavPanel = () => {
@@ -18,19 +18,12 @@ const NavPanel = () => {
 
   const isAdmin = user?.role === "admin";
 
-  // Helper function to capitalize name
-  const capitalizeName = (name) => {
-    if (!name) return "";
-    return name
-      .split(" ")
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(" ");
-  };
-
   const handleLogout = async () => {
     try {
       await backendLogout();
-    } catch {}
+    } catch {
+      // Ignore backend logout errors, still proceed with frontend logout
+    }
     logout();
     navigate("/login");
   };

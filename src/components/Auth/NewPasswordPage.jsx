@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { setNewPassword } from "../../api/api";
-import { useAuth } from "../../contexts/AuthContext";
 import "./Login.css";
 
 const NewPasswordPage = () => {
@@ -12,8 +11,6 @@ const NewPasswordPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
-  const { login } = useAuth();
   // Get token from URL params (now /reset_password/:token)
   const { token } = useParams();
 

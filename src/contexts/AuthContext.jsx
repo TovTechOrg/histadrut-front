@@ -1,18 +1,9 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import { loginUser, registerUser, fetchUserFromSession, backendLogout } from "../api/api";
-
 
 const AuthContext = createContext();
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
-};
-
-export const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -26,7 +17,7 @@ export const AuthProvider = ({ children }) => {
         setUser(parsedUser);
         setLoading(false);
         return;
-      } catch (error) {
+      } catch {
         localStorage.removeItem("userData");
       }
     }
@@ -110,23 +101,6 @@ export const AuthProvider = ({ children }) => {
     error: "Not implemented",
   });
 
-  const uploadCV = async (cvFile) => {
-    // Mock CV upload
-    if (!user) {
-      return { success: false, error: "User not authenticated" };
-    }
-
-    const updatedUser = {
-      ...user,
-      hasCV: true,
-      cvUploadedAt: new Date().toISOString(),
-    };
-
-    localStorage.setItem("userData", JSON.stringify(updatedUser));
-    setUser(updatedUser);
-    return { success: true, message: "CV uploaded successfully" };
-  };
-
   const logout = async () => {
     try {
       // Try to logout from backend (clear server-side session/cookie)
@@ -174,7 +148,6 @@ export const AuthProvider = ({ children }) => {
     login,
     signUp,
     claimProfile,
-    uploadCV,
     logout,
     isAuthenticated,
     isAdmin,
@@ -183,3 +156,5 @@ export const AuthProvider = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+
+export { AuthContext, AuthProvider };

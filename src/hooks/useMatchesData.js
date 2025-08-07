@@ -48,7 +48,7 @@ export const useMatchesData = () => {
       setJobsData(jobs);
       setTotalPages(pagination.totalPages);
       setLastFetch(new Date());
-    } catch (error) {
+    } catch {
       setError("Failed to load jobs. Please try again later.");
     } finally {
       setLoading(false);

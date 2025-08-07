@@ -2,21 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchUserFromSession } from "../api/api";
-
+import { capitalizeName } from "../utils/textHelpers";
 
 const Profile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const capitalizeName = (name) => {
-    if (!name) return name;
-    return name
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ');
-  };
 
   useEffect(() => {
     fetchUserFromSession()

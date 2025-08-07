@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useCompaniesData } from "../../hooks/useCompaniesData";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../hooks/useAuth";
 import addIcon from "../../assets/icons/add.svg";
 import viewJobsIcon from "../../assets/icons/viewJobs.svg";
 import editIcon from "../../assets/icons/edit.svg";

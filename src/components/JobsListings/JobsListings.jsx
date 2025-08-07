@@ -3,7 +3,7 @@ import Modal from "../shared/Modal";
 import JobListingsFilters from "./JobListingsFilters";
 import JobListingsTable from "./JobListingsTable";
 import { useJobsData } from "../../hooks/useJobsData";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../hooks/useAuth";
 import "./JobsListings.css";
 
 import addIcon from "../../assets/icons/add.svg";

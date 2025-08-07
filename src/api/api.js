@@ -49,7 +49,7 @@ export const fetchUserFromSession = async () => {
       return userObject;
     }
     return null;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -231,7 +231,7 @@ export const transformJobsData = (apiResponse) => {
           }
           
           throw new Error(`Unrecognized date format: ${dateStr}`);
-        } catch (error) {
+        } catch {
           return new Date().toISOString().split("T")[0];
         }
       })(),
