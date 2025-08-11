@@ -19,9 +19,9 @@ const Matches = () => {
   } = useMatchesData();
 
   return (
-    <section className="matches-page">
+    <section className="main-page matches-page">
       <div className="matches-header">
-        <h1 className="matches-title">Job Match Dashboard</h1>
+  <h1 className="page__title">Job Match Dashboard</h1>
         <p className="matches-subtitle">
           Aggregated view of manually sourced jobs and matched candidates.
         </p>

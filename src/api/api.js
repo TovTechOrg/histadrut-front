@@ -1,3 +1,35 @@
+// Delete company: DELETE /delete_company_data with form data
+export const deleteCompanyData = async (companyName) => {
+  const formData = new FormData();
+  formData.append("company_name", companyName);
+  const response = await fetch(`${API_BASE_URL}/delete_company_data`, {
+    method: "DELETE",
+    credentials: "include",
+    body: formData,
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || "Failed to delete company");
+  }
+  return await response.json();
+};
+// Add new job: POST /upload_job_details with JSON body
+export const uploadJobDetails = async (jobData) => {
+  const formData = new FormData();
+  Object.entries(jobData).forEach(([key, value]) => {
+    formData.append(key, value ?? "");
+  });
+  const response = await fetch(`${API_BASE_URL}/upload_job_details`, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || "Failed to upload job details");
+  }
+  return await response.json();
+};
 const API_BASE_URL = "https://cv.pythia-match.com";
 
 // Request password reset: POST /reset_password with x-www-form-urlencoded

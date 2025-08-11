@@ -27,8 +27,8 @@ const Overview = () => {
   }, []);
 
   return (
-    <section className="overview">
-      <h1 className="overview__title">Dashboard Overview</h1>
+    <section className="main-page overview">
+    <h1 className="page__title">Dashboard Overview</h1>
 
       <Stats data={statsData} loading={loading} error={error} />
 

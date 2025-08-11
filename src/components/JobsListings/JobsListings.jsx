@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import Modal from "../shared/Modal";
 import JobListingsFilters from "./JobListingsFilters";
 import JobListingsTable from "./JobListingsTable";
@@ -28,31 +29,16 @@ const JobsListings = () => {
   } = useJobsData();
 
   const isAdmin = user?.role === "admin";
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalAction, setModalAction] = useState("");
-  const [selectedJob, setSelectedJob] = useState(null);
-
-  const handleAction = useCallback((action, job = null) => {
-    setModalAction(action);
-    setSelectedJob(job);
-    setIsModalOpen(true);
-  }, []);
-
-  const closeModal = useCallback(() => {
-    setIsModalOpen(false);
-    setModalAction("");
-    setSelectedJob(null);
-  }, []);
+  const navigate = useNavigate();
 
   return (
-    <section className="jobs-listings">
+    <section className="main-page jobs-listings">
       <div className="jobs-listings__header">
-        <h1 className="jobs-listings__title">Job Listings Management</h1>
+  <h1 className="page__title">Job Listings Management</h1>
         {isAdmin && (
           <button
             className="jobs-listings__add-btn"
-            onClick={() => handleAction("add")}
+            onClick={() => navigate("/jobs/add")}
           >
             <img src={addIcon} alt="Add" className="btn-icon" />
             Add New Job
@@ -76,55 +62,13 @@ const JobsListings = () => {
         jobs={filteredJobs}
         loading={loading}
         error={error}
-        onAction={handleAction}
         sortField={sortField}
         sortDirection={sortDirection}
         onSort={handleSort}
         showActions={isAdmin}
       />
 
-      {/* Action Modal */}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        title={`${
-          modalAction.charAt(0).toUpperCase() + modalAction.slice(1)
-        } Job`}
-        className="jobs-listings__modal"
-      >
-        <div className="modal-content">
-          <p>
-            <strong>Action:</strong>{" "}
-            {modalAction.charAt(0).toUpperCase() + modalAction.slice(1)}
-          </p>
-          {selectedJob ? (
-            <div className="job-details">
-              <p>
-                <strong>Job ID:</strong> {selectedJob.id}
-              </p>
-              <p>
-                <strong>Title:</strong> {selectedJob.title}
-              </p>
-              <p>
-                <strong>Company:</strong> {selectedJob.company}
-              </p>
-              <p>
-                <strong>Status:</strong> {selectedJob.status}
-              </p>
-              <p>
-                <strong>Posted:</strong> {selectedJob.posted}
-              </p>
-            </div>
-          ) : (
-            <p>Creating a new job...</p>
-          )}
-          <div className="modal-actions">
-            <button onClick={closeModal} className="btn-secondary">
-              Close
-            </button>
-          </div>
-        </div>
-      </Modal>
+  {/* Removed modal for add job, now handled by AddJob page */}
     </section>
   );
 };

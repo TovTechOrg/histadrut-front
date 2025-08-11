@@ -15,12 +15,14 @@ import Matches from "./components/Matches/Matches";
 import Companies from "./components/Companies/Companies";
 import AdminUsers from "./components/Auth/AdminUsers";
 import JobsListings from "./components/JobsListings/JobsListings";
+import AddJob from "./components/JobsListings/AddJob";
 import Reporting from "./components/Reporting/Reporting";
 import Login from "./components/Auth/Login";
 // ...existing code...
 import CVUpload from "./components/Auth/CVUpload";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import "./components/shared/Page.css";
+import "./components/JobsListings/JobForm.css";
 
 function App() {
   return (
@@ -108,6 +110,17 @@ function App() {
                 </ProtectedRoute>
               }
             />
+              <Route
+                path="/jobs/add"
+                element={
+                  <ProtectedRoute>
+                    <NavPanel />
+                    <main className="main-content">
+                      <AddJob />
+                    </main>
+                  </ProtectedRoute>
+                }
+              />
             <Route
               path="/companies"
               element={

@@ -446,9 +446,6 @@
 
 /* Responsive design */
 @media (max-width: 1200px) {
-  .jobs-listings {
-    padding: 1rem;
-  }
 
   .job-filters__grid {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

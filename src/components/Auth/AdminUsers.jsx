@@ -20,9 +20,9 @@ const AdminUsers = () => {
   }, []);
 
   return (
-    <div className="admin-users-page">
+    <div className="main-page admin-users-page">
       <div className="admin-users-header">
-        <h1 className="admin-users-title">All Users</h1>
+  <h1 className="page__title">All Users</h1>
       </div>
       <div className="admin-users-table-container">
         {loading ? (

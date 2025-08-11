@@ -79,6 +79,7 @@
 .modal__body {
   /* Container for modal content - children define their own styles */
   min-height: 0;
+  color: #222;
 }
 
 /* Responsive design */

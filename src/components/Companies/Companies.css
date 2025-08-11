@@ -1,3 +1,45 @@
+/* Delete Modal Styles */
+.delete-modal__text {
+  text-align: center;
+  font-size: 1.1rem;
+  padding: 1.5rem 0;
+  color: #222;
+}
+.delete-modal__result-text {
+  text-align: center;
+  font-size: 1.1rem;
+  padding: 1.5rem 0;
+  color: #222;
+}
+.delete-modal__company,
+.delete-modal__jobs {
+  color: #222;
+}
+.delete-modal__actions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  padding: 0 2rem 1rem 2rem;
+}
+.delete-modal__cancel {
+  background: #f8f9fa;
+  color: #222;
+  border: 1px solid #e1e8ed;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.delete-modal__delete {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
 /* Companies Page Styles */
 .companies-page {
   padding: 2rem;
