@@ -81,7 +81,7 @@ const JobListingsTable = ({
         <table className="job-table__table">
           <thead className="job-table__header">
             <tr>
-              <SortableHeader field="id" sortable={false}>
+              <SortableHeader field="job_id" sortable={false}>
                 ID
               </SortableHeader>
               <SortableHeader field="title">Title</SortableHeader>
@@ -107,8 +107,8 @@ const JobListingsTable = ({
               </tr>
             ) : (
               jobs.map((job, index) => (
-                <tr key={job.id} className="job-table__row">
-                  <td className="job-table__cell">{index + 1}</td>
+                <tr key={job.job_id || job.id || index} className="job-table__row">
+                  <td className="job-table__cell">{job.job_id || ""}</td>
                   <td className="job-table__cell job-table__cell--title">
                     {job.title}
                   </td>

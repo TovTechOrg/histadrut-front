@@ -12,7 +12,7 @@ const initialJobState = {
   job_description: "",
 };
 
-export default function JobForm({ onSubmit, onCancel, initialValues = initialJobState, submitLabel = "OK", pageTitle }) {
+export default function JobForm({ onSubmit, onCancel, initialValues = initialJobState, submitLabel = "OK", pageTitle, viewMode = false }) {
   const [form, setForm] = useState(initialValues);
   const [companies, setCompanies] = useState([]);
   const [companySelect, setCompanySelect] = useState(initialValues.company_name ? initialValues.company_name : "");
@@ -28,6 +28,7 @@ export default function JobForm({ onSubmit, onCancel, initialValues = initialJob
   }, []);
 
   const handleChange = (e) => {
+    if (viewMode) return;
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
@@ -66,7 +67,7 @@ export default function JobForm({ onSubmit, onCancel, initialValues = initialJob
       {pageTitle && (
         <h1 style={{ textAlign: "center", fontSize: "2rem", fontWeight: 600, marginBottom: "2rem" }}>{pageTitle}</h1>
       )}
-      <form className="job-form" onSubmit={handleSubmit}>
+  <form className="job-form" onSubmit={handleSubmit}>
         <div className="job-form__fields">
           <label style={{ textTransform: "uppercase", fontWeight: 600, fontSize: "0.85rem", color: "#5a6c7d", marginBottom: "0.5rem", textAlign: "left" }}>
             Job Title
@@ -74,9 +75,10 @@ export default function JobForm({ onSubmit, onCancel, initialValues = initialJob
               name="job_title"
               value={form.job_title}
               onChange={handleChange}
-              required
+              required={!viewMode}
               placeholder="e.g. Senior Backend Developer"
               style={{ background: "#fafbfc", color: "#222", border: "1px solid #e1e8ed", borderRadius: "4px", fontSize: "0.9rem", padding: "0.75rem" }}
+              disabled={viewMode}
             />
           </label>
           <label style={{ textTransform: "uppercase", fontWeight: 600, fontSize: "0.85rem", color: "#5a6c7d", marginBottom: "0.5rem", textAlign: "left" }}>
@@ -87,6 +89,7 @@ export default function JobForm({ onSubmit, onCancel, initialValues = initialJob
               onChange={handleChange}
               placeholder="Paste job posting URL here"
               style={{ background: "#fafbfc", color: "#222", border: "1px solid #e1e8ed", borderRadius: "4px", fontSize: "0.9rem", padding: "0.75rem" }}
+              disabled={viewMode}
             />
           </label>
           <label style={{ textTransform: "uppercase", fontWeight: 600, fontSize: "0.85rem", color: "#5a6c7d", marginBottom: "0.5rem", textAlign: "left" }}>
@@ -95,14 +98,18 @@ export default function JobForm({ onSubmit, onCancel, initialValues = initialJob
               name="company_name"
               value={companySelect}
               onChange={handleCompanySelect}
-              required
+              required={!viewMode}
               style={{ background: "#fafbfc", color: "#222", border: "1px solid #e1e8ed", borderRadius: "4px", fontSize: "0.9rem", padding: "0.75rem" }}
+              disabled={viewMode}
             >
               <option value="">Select company...</option>
               {companies.map((name) => (
                 <option key={name} value={name}>{name}</option>
               ))}
               <option value="Other">Other</option>
+              {viewMode && companySelect && !companies.includes(companySelect) && (
+                <option value={companySelect}>{companySelect}</option>
+              )}
             </select>
           </label>
           <label style={{ textTransform: "uppercase", fontWeight: 600, fontSize: "0.85rem", color: "#5a6c7d", marginBottom: "0.5rem", textAlign: "left", visibility: showOther ? "visible" : "hidden" }}>
@@ -111,9 +118,10 @@ export default function JobForm({ onSubmit, onCancel, initialValues = initialJob
               name="other_company"
               value={otherCompany}
               onChange={handleOtherCompanyChange}
-              required={showOther}
+              required={showOther && !viewMode}
               placeholder="Enter new company name"
               style={{ background: "#fafbfc", color: "#222", border: "1px solid #e1e8ed", borderRadius: "4px", fontSize: "0.9rem", padding: "0.75rem" }}
+              disabled={viewMode}
             />
           </label>
           <label style={{ textTransform: "uppercase", fontWeight: 600, fontSize: "0.85rem", color: "#5a6c7d", marginBottom: "0.5rem", textAlign: "left" }}>
@@ -124,6 +132,7 @@ export default function JobForm({ onSubmit, onCancel, initialValues = initialJob
               onChange={handleChange}
               placeholder="e.g. Software, Marketing, HR"
               style={{ background: "#fafbfc", color: "#222", border: "1px solid #e1e8ed", borderRadius: "4px", fontSize: "0.9rem", padding: "0.75rem" }}
+              disabled={viewMode}
             />
           </label>
           <label style={{ textTransform: "uppercase", fontWeight: 600, fontSize: "0.85rem", color: "#5a6c7d", marginBottom: "0.5rem", textAlign: "left" }}>
@@ -134,6 +143,7 @@ export default function JobForm({ onSubmit, onCancel, initialValues = initialJob
               onChange={handleChange}
               placeholder="Internal or external job reference ID"
               style={{ background: "#fafbfc", color: "#222", border: "1px solid #e1e8ed", borderRadius: "4px", fontSize: "0.9rem", padding: "0.75rem" }}
+              disabled={viewMode}
             />
           </label>
           <label style={{ textTransform: "uppercase", fontWeight: 600, fontSize: "0.85rem", color: "#5a6c7d", marginBottom: "0.5rem", textAlign: "left" }}>
@@ -144,17 +154,26 @@ export default function JobForm({ onSubmit, onCancel, initialValues = initialJob
               onChange={handleChange}
               placeholder="e.g. Tel Aviv, Remote, Hybrid"
               style={{ background: "#fafbfc", color: "#222", border: "1px solid #e1e8ed", borderRadius: "4px", fontSize: "0.9rem", padding: "0.75rem" }}
+              disabled={viewMode}
             />
           </label>
           <label style={{ textTransform: "uppercase", fontWeight: 600, fontSize: "0.85rem", color: "#5a6c7d", marginBottom: "0.5rem", textAlign: "left" }}>
             Scope
-            <input
+            <select
               name="scope"
               value={form.scope}
               onChange={handleChange}
-              placeholder="e.g. Full-time, Part-time, Contract"
+              required={!viewMode}
               style={{ background: "#fafbfc", color: "#222", border: "1px solid #e1e8ed", borderRadius: "4px", fontSize: "0.9rem", padding: "0.75rem" }}
-            />
+              disabled={viewMode}
+            >
+              <option value="">Select scope...</option>
+              <option value="Full-time">Full-time</option>
+              <option value="Part-time">Part-time</option>
+              {viewMode && form.scope && !["Full-time", "Part-time"].includes(form.scope) && (
+                <option value={form.scope}>{form.scope}</option>
+              )}
+            </select>
           </label>
           <label style={{ textTransform: "uppercase", fontWeight: 600, fontSize: "0.85rem", color: "#5a6c7d", marginBottom: "0.5rem", textAlign: "left" }}>
             Job Description
@@ -164,13 +183,16 @@ export default function JobForm({ onSubmit, onCancel, initialValues = initialJob
               onChange={handleChange}
               placeholder="Describe the responsibilities, requirements, and expectations for this role."
               style={{ background: "#fafbfc", color: "#222", border: "1px solid #e1e8ed", borderRadius: "4px", fontSize: "0.9rem", padding: "0.75rem", minHeight: "80px" }}
+              disabled={viewMode}
             />
           </label>
         </div>
-        <div className="job-form__actions">
-          <button type="button" className="job-form__cancel" onClick={onCancel}>Cancel</button>
-          <button type="submit" className="job-form__ok">{submitLabel}</button>
-        </div>
+        {!viewMode && (
+          <div className="job-form__actions">
+            <button type="button" className="job-form__cancel" onClick={onCancel}>Cancel</button>
+            <button type="submit" className="job-form__ok">{submitLabel}</button>
+          </div>
+        )}
       </form>
     </>
   );

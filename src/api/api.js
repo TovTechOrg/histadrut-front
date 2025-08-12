@@ -330,6 +330,7 @@ export const transformJobListingsData = (apiResponse) => {
 
     return {
       id: job.job_id || `job-${index}`,
+      job_id: job.job_id || `job-${index}`,
       title: job.job_title || "Unknown Position",
       company: job.company_name || "Unknown Company",
       posted: job.posted || new Date().toISOString(),

@@ -108,7 +108,14 @@ const Companies = () => {
               companiesData.map((company) => (
                 <tr key={company.id} className="companies-table__row">
                   <td className="companies-table__cell companies-table__cell--id">{company.id}</td>
-                  <td className="companies-table__cell companies-table__cell--name">{company.name}</td>
+                  <td
+                    className="companies-table__cell companies-table__cell--name companies-table__cell--name-clickable"
+                    onClick={() => handleViewCompany(company.name)}
+                    style={{ cursor: "pointer", textDecoration: "underline" }}
+                    title={`View ${company.name} jobs`}
+                  >
+                    {company.name}
+                  </td>
                   <td className="companies-table__cell companies-table__cell--jobs-count">{company.jobsCount}</td>
                   <td className="companies-table__cell companies-table__cell--actions">
                     <div className="companies-table__actions">
