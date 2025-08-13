@@ -1,3 +1,9 @@
+.job-table__table th:nth-child(5), /* Age column */
+.job-table__table td:nth-child(5) {
+  width: 8% !important;
+  min-width: 45px !important;
+  max-width: 100px !important;
+}
 /* Job Listings Page Styles */
 .jobs-listings {
   padding: 2rem;
@@ -137,19 +143,23 @@
   width: 5%;
 }
 
+
 .job-table__table th:nth-child(2), /* Title column */
 .job-table__table td:nth-child(2) {
-  width: 35%; /* Increased from 30% */
+  width: 32%; /* Give extra space to job title */
 }
 
 .job-table__table th:nth-child(3), /* Company column */
 .job-table__table td:nth-child(3) {
-  width: 20%;
+  width: 14%; /* Narrower company column */
 }
+
 
 .job-table__table th:nth-child(4), /* Posted column */
 .job-table__table td:nth-child(4) {
-  width: 15%;
+  width: 110px; /* Fixed width for date column */
+  min-width: 90px;
+  max-width: 120px;
 }
 
 .job-table__table th:nth-child(5), /* Status column */
@@ -157,9 +167,19 @@
   width: 15%;
 }
 
-.job-table__table th:nth-child(6), /* Actions column */
+
+.job-table__table th:nth-child(6), /* Link column */
 .job-table__table td:nth-child(6) {
-  width: 10%; /* Decreased from 15% */
+  width: 8% !important;
+  min-width: 70px !important;
+  max-width: 150px !important;
+}
+
+.job-table__table th:nth-child(7), /* Actions column */
+.job-table__table td:nth-child(7) {
+  width: 8% !important;
+  min-width: 70px !important;
+  max-width: 120px !important;
 }
 
 .job-table__header {
@@ -205,7 +225,7 @@
 }
 
 .job-table__cell--actions {
-  text-align: center;
+  text-align: left;
 }
 
 .job-table__empty {
@@ -269,7 +289,7 @@
   display: flex;
   gap: 0.25rem;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .action-btn {

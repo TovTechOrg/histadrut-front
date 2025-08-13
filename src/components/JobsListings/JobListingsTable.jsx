@@ -2,6 +2,7 @@ import React from "react";
 import viewIcon from "../../assets/icons/view.svg";
 import editIcon from "../../assets/icons/edit.svg";
 import deleteIcon from "../../assets/icons/delete.svg";
+import linkIcon from "../../assets/icons/link.svg";
 
 const JobListingsTable = ({
   jobs,
@@ -89,6 +90,9 @@ const JobListingsTable = ({
               <SortableHeader field="company">Company</SortableHeader>
               <SortableHeader field="posted">Posted</SortableHeader>
               <SortableHeader field="age">Age</SortableHeader>
+              <SortableHeader field="link" sortable={false}>
+                Link to Job
+              </SortableHeader>
               {showActions && (
                 <SortableHeader field="actions" sortable={false}>
                   Actions
@@ -100,7 +104,7 @@ const JobListingsTable = ({
             {!jobs || jobs.length === 0 ? (
               <tr>
                 <td
-                  colSpan={showActions ? "6" : "5"}
+                  colSpan={showActions ? "7" : "6"}
                   className="job-table__empty"
                 >
                   No jobs found matching your criteria.
@@ -108,7 +112,7 @@ const JobListingsTable = ({
               </tr>
             ) : (
               jobs.map((job, index) => (
-                <tr key={job.job_id || job.id || index} className="job-table__row">
+                <tr key={`${index}_${job.job_id || job.id || 'NA'}_${job.company || 'unknown'}`} className="job-table__row">
                   <td className="job-table__cell">{job.job_id || ""}</td>
                   <td className="job-table__cell job-table__cell--title">
                     <span
@@ -123,11 +127,31 @@ const JobListingsTable = ({
                   <td className="job-table__cell">{job.company}</td>
                   <td className="job-table__cell">{job.posted}</td>
                   <td className="job-table__cell">
-                    <span
-                      className={`age-badge ${getAgeClass(job.ageCategory)}`}
-                    >
-                      {job.age}
-                    </span>
+                    <span className={`age-badge ${getAgeClass(job.ageCategory)}`}>{job.age}</span>
+                  </td>
+                  <td className="job-table__cell job-table__cell--link">
+                    {job.position_link ? (
+                      <a
+                        href={job.position_link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="job-link-btn"
+                        title="View job posting"
+                        aria-label="View job posting"
+                        style={{ margin: 0 }}
+                      >
+                        <img
+                          src={linkIcon}
+                          alt="Link, external link"
+                          className="job-link-icon"
+                        />
+                        <span className="job-link-text">Link to Job</span>
+                      </a>
+                    ) : (
+                      <span className="job-link-unavailable" title="Job link not available">
+                        —
+                      </span>
+                    )}
                   </td>
                   {showActions && (
                     <td className="job-table__cell job-table__cell--actions">

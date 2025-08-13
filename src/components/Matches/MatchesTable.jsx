@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import downloadIcon from "../../assets/icons/download.svg";
 import linkIcon from "../../assets/icons/link.svg";
-import JobModal from "./JobModal";
+import JobDescriptionModal from "../shared/JobDescriptionModal";
 import CandidateModal from "./CandidateModal";
 
 const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
@@ -93,8 +93,8 @@ const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
               </td>
             </tr>
           ) : (
-            jobs.map((job) => (
-              <tr key={job.id} className="match-table__row">
+            jobs.map((job, index) => (
+              <tr key={`${index}_${job.id || 'NA'}_${job.company || 'unknown'}`} className="match-table__row">
                 <td className="match-table__cell match-table__cell--match-title">
                   <span
                     className="match-table__title match-table__title--clickable"
@@ -207,7 +207,7 @@ const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
       </table>
 
       {selectedJob && (
-        <JobModal job={selectedJob} onClose={handleCloseJobModal} />
+        <JobDescriptionModal job={selectedJob} isOpen={!!selectedJob} onClose={handleCloseJobModal} />
       )}
 
       {selectedCandidate && (

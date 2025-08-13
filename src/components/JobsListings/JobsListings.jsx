@@ -8,6 +8,7 @@ import { useAuth } from "../../hooks/useAuth";
 import "./JobsListings.css";
 
 import addIcon from "../../assets/icons/add.svg";
+import JobDescriptionModal from "../shared/JobDescriptionModal";
 
 const JobsListings = () => {
   const { user } = useAuth();
@@ -30,11 +31,12 @@ const JobsListings = () => {
 
   const isAdmin = user?.role === "admin";
   const navigate = useNavigate();
+  const [viewJob, setViewJob] = useState(null);
 
   return (
     <section className="main-page jobs-listings">
       <div className="jobs-listings__header">
-  <h1 className="page__title">Job Listings Management</h1>
+        <h1 className="page__title">Job Listings Management</h1>
         {isAdmin && (
           <button
             className="jobs-listings__add-btn"
@@ -75,8 +77,11 @@ const JobsListings = () => {
           const url = `${base}?${params.toString()}`;
           navigate(url);
         }}
+        onAction={(action, job) => {
+          if (action === "view") setViewJob(job);
+        }}
       />
-  {/* Removed modal for add job, now handled by AddJob page */}
+  <JobDescriptionModal isOpen={!!viewJob} job={viewJob} onClose={() => setViewJob(null)} />
     </section>
   );
 };

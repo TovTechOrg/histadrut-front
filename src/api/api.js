@@ -141,13 +141,6 @@ export const transformJobsData = (apiResponse) => {
   
   // Debug log for discovered date and company for first 10 jobs
   if (apiResponse && Array.isArray(apiResponse.jobs)) {
-    // eslint-disable-next-line no-console
-    console.log('Job mapping sample:', apiResponse.jobs.slice(0, 10).map(j => ({
-      company_name: j.company_name,
-      discovered: j.discovered,
-      job_id: j.job_id,
-      job_title: j.job_title
-    })));
   }
 
   // Format discovered date as DD/MM/YYYY
@@ -254,7 +247,7 @@ export const transformJobListingsData = (apiResponse) => {
     const ageCategory = getAgeCategory(daysAgo);
 
     return {
-      id: job.job_id || `job-${index}`,
+      id: job.id || job.job_id || `job-${index}`,
       job_id: job.job_id || `job-${index}`,
       title: job.job_title || "Unknown Position",
       company: job.company_name || "Unknown Company",
@@ -262,6 +255,9 @@ export const transformJobListingsData = (apiResponse) => {
       age: `${daysAgo} days`,
       ageCategory: ageCategory,
       ageDisplay: `${daysAgo} days`,
+      job_description: job.job_description || '',
+      field: job.field || '',
+      position_link: job.position_link || '',
     };
   });
 };
