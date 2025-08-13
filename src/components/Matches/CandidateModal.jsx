@@ -28,6 +28,11 @@ const CandidateModal = ({ candidate, onClose }) => {
         <div className="candidate-modal__mmr">
           <strong>MMR:</strong> {candidate.mmr}
         </div>
+        {candidate._metadata?.createdAt && (
+          <div className="candidate-modal__matched-at">
+            <strong>Matched at:</strong> {new Date(candidate._metadata.createdAt).toLocaleString('en-CA')}
+          </div>
+        )}
       </div>
 
       <div className="candidate-modal__overview">

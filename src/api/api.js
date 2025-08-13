@@ -44,66 +44,6 @@ export const resetPassword = async (email) => {
   if (!response.ok) throw new Error("Failed to send reset email");
   return response.json();
 };
-
-// Set new password: POST /reset_password/<token> with x-www-form-urlencoded
-export const setNewPassword = async (token, password, confirmPassword) => {
-  const body = new URLSearchParams();
-  body.append("password", password);
-  body.append("confirm_password", confirmPassword);
-  const response = await fetch(`${API_BASE_URL}/reset_password/${encodeURIComponent(token)}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: body.toString(),
-  });
-  if (!response.ok) throw new Error("Failed to set new password");
-  return response.json();
-};
-// Fetch user info from backend session (cookie)
-export const fetchUserFromSession = async () => {
-  try {
-    const res = await fetch(`${API_BASE_URL}/me`, {
-      credentials: "include",
-    });
-    
-    if (!res.ok) return null;
-    const data = await res.json();
-    
-    // Expecting: { message, status_code, user: { ... } }
-    if (data && data.user && data.user.email && data.user.role) {
-      // Optionally include other fields like name, id, cv_status
-      const userObject = {
-        email: data.user.email,
-        role: data.user.role,
-        name: data.user.name,
-        id: data.user.id,
-        cv_status: data.user.cv_status,
-      };
-      return userObject;
-    }
-    return null;
-  } catch {
-    return null;
-  }
-};
-
-// Backend logout
-export const backendLogout = async () => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/logout`, {
-      method: "GET",
-      credentials: "include",
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Logout failed: ${response.status}`);
-    }
-    
-    return { success: true };
-  } catch (error) {
-    console.error("Backend logout error:", error);
-    throw error; // Re-throw so caller can handle it
-  }
-};
 // Upload CV as form data
 export const uploadCV = async (file) => {
   const formData = new FormData();
@@ -199,6 +139,35 @@ export const transformJobsData = (apiResponse) => {
     throw new Error("Invalid response format: missing jobs array");
   }
   
+  // Debug log for discovered date and company for first 10 jobs
+  if (apiResponse && Array.isArray(apiResponse.jobs)) {
+    // eslint-disable-next-line no-console
+    console.log('Job mapping sample:', apiResponse.jobs.slice(0, 10).map(j => ({
+      company_name: j.company_name,
+      discovered: j.discovered,
+      job_id: j.job_id,
+      job_title: j.job_title
+    })));
+  }
+
+  // Format discovered date as DD/MM/YYYY
+  function formatDateDDMMYYYY(dateStr) {
+    if (!dateStr) return '';
+    let d = new Date(dateStr);
+    if (isNaN(d.getTime())) {
+      // Try to parse as YYYY-MM-DD or YYYY-MM-DD HH:mm:ss
+      const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (match) {
+        return `${match[3]}/${match[2]}/${match[1]}`;
+      }
+      return dateStr;
+    }
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
   const jobs = apiResponse.jobs.map((job, index) => {
     
     // Check if link is in the first match (assuming all matches have the same job link)
@@ -214,71 +183,7 @@ export const transformJobsData = (apiResponse) => {
       id: job._id || `job-${index}`,
       jobTitle: job.job_title || "Unknown Position",
       company: job.company_name || "Unknown Company",
-      dateAdded: (() => {
-        if (!job.discovered) {
-          return new Date().toISOString().split("T")[0];
-        }
-        
-        // Handle different date formats from backend
-        try {
-          const dateStr = job.discovered.toString().trim();
-          
-          // If it's already an ISO string (YYYY-MM-DD or with time)
-          if (dateStr.includes('-') && (dateStr.includes('T') || dateStr.match(/^\d{4}-\d{2}-\d{2}/))) {
-            return new Date(dateStr).toISOString().split("T")[0];
-          }
-          
-          // If it's MM/DD/YYYY format like "08/10/2024"
-          if (dateStr.includes('/') && dateStr.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
-            const [month, day, year] = dateStr.split('/');
-            const date = new Date(year, month - 1, day); // month is 0-indexed
-            return date.toISOString().split("T")[0];
-          }
-          
-          // If it's DD/MM/YYYY format like "10/08/2024" (European)
-          if (dateStr.includes('/') && dateStr.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
-            // Try to parse as MM/DD/YYYY first, if that creates invalid date, try DD/MM/YYYY
-            const parts = dateStr.split('/');
-            let date = new Date(parts[2], parts[0] - 1, parts[1]); // MM/DD/YYYY
-            if (isNaN(date.getTime())) {
-              date = new Date(parts[2], parts[1] - 1, parts[0]); // DD/MM/YYYY
-            }
-            return date.toISOString().split("T")[0];
-          }
-          
-          // If it's YYYY/MM/DD format
-          if (dateStr.includes('/') && dateStr.match(/^\d{4}\/\d{1,2}\/\d{1,2}$/)) {
-            const [year, month, day] = dateStr.split('/');
-            const date = new Date(year, month - 1, day);
-            return date.toISOString().split("T")[0];
-          }
-          
-          // If it's DD-MM-YYYY format
-          if (dateStr.includes('-') && dateStr.match(/^\d{1,2}-\d{1,2}-\d{4}$/)) {
-            const [day, month, year] = dateStr.split('-');
-            const date = new Date(year, month - 1, day);
-            return date.toISOString().split("T")[0];
-          }
-          
-          // If it's a timestamp (number)
-          if (!isNaN(dateStr) && dateStr.length >= 10) {
-            const timestamp = parseInt(dateStr);
-            // Handle both seconds and milliseconds timestamps
-            const date = new Date(timestamp < 10000000000 ? timestamp * 1000 : timestamp);
-            return date.toISOString().split("T")[0];
-          }
-          
-          // Fallback: try to parse as-is (handles many other formats)
-          const fallbackDate = new Date(dateStr);
-          if (!isNaN(fallbackDate.getTime())) {
-            return fallbackDate.toISOString().split("T")[0];
-          }
-          
-          throw new Error(`Unrecognized date format: ${dateStr}`);
-        } catch {
-          return new Date().toISOString().split("T")[0];
-        }
-      })(),
+      dateAdded: formatDateDDMMYYYY(job.discovered),
       jobDescription: job.job_description || "No description available",
       link: jobLink,
       matchedCandidates: (job.matches || []).map((match, matchIndex) => ({
@@ -364,4 +269,59 @@ const getAbsoluteUrl = (url) => {
   if (!url) return null;
   if (url.startsWith("http://") || url.startsWith("https://")) return url;
   return `${API_BASE_URL}${url.startsWith("/") ? url : `/${url}`}`;
+};
+
+// Set new password: POST /reset_password/<token> with x-www-form-urlencoded
+export const setNewPassword = async (token, password, confirmPassword) => {
+  const body = new URLSearchParams();
+  body.append("password", password);
+  body.append("confirm_password", confirmPassword);
+  const response = await fetch(`${API_BASE_URL}/reset_password/${encodeURIComponent(token)}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: body.toString(),
+  });
+  if (!response.ok) throw new Error("Failed to set new password");
+  return response.json();
+};
+
+// Fetch user info from backend session (cookie)
+export const fetchUserFromSession = async () => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/me`, {
+      credentials: "include",
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data && data.user && data.user.email && data.user.role) {
+      const userObject = {
+        email: data.user.email,
+        role: data.user.role,
+        name: data.user.name,
+        id: data.user.id,
+        cv_status: data.user.cv_status,
+      };
+      return userObject;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+};
+
+// Backend logout
+export const backendLogout = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/logout`, {
+      method: "GET",
+      credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error(`Logout failed: ${response.status}`);
+    }
+    return { success: true };
+  } catch (error) {
+    console.error("Backend logout error:", error);
+    throw error;
+  }
 };

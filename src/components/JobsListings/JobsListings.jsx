@@ -67,11 +67,12 @@ const JobsListings = () => {
         onSort={handleSort}
         showActions={isAdmin}
         onJobTitleClick={(job) => {
-          // Redirect to /user/matches with filters for company and job title using SPA navigation
+          // Redirect to /admin/matches for admins, /user/matches for regular users
           const params = new URLSearchParams();
           if (job.company) params.set("companyName", job.company);
           if (job.title) params.set("job_title", job.title);
-          const url = `/user/matches?${params.toString()}`;
+          const base = isAdmin ? "/admin/matches" : "/user/matches";
+          const url = `${base}?${params.toString()}`;
           navigate(url);
         }}
       />
