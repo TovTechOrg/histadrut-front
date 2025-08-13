@@ -17,13 +17,24 @@ function useDebounce(callback, delay) {
 
 const MatchesFilters = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const companyName = searchParams.get("companyName") || "";
-  const jobTitle = searchParams.get("job_title") || "";
-  const candidateName = searchParams.get("candidateName") || "";
+  const [localCompanyName, setLocalCompanyName] = React.useState(searchParams.get("companyName") || "");
+  const [localJobTitle, setLocalJobTitle] = React.useState(searchParams.get("job_title") || "");
+  const [localCandidateName, setLocalCandidateName] = React.useState(searchParams.get("candidateName") || "");
   const addedSince = searchParams.get("addedSince") || "";
   const minRelevanceScore = searchParams.get("minRelevanceScore") ? parseFloat(searchParams.get("minRelevanceScore")) : 7.0;
 
-  // General debounce hook
+  // Sync local state with URL params if they change externally
+  React.useEffect(() => {
+    setLocalCompanyName(searchParams.get("companyName") || "");
+  }, [searchParams.get("companyName")]);
+  React.useEffect(() => {
+    setLocalJobTitle(searchParams.get("job_title") || "");
+  }, [searchParams.get("job_title")]);
+  React.useEffect(() => {
+    setLocalCandidateName(searchParams.get("candidateName") || "");
+  }, [searchParams.get("candidateName")]);
+
+  // Debounced update for each input
   const debouncedSetParam = useDebounce((field, value) => {
     setSearchParams(prev => {
       const params = new URLSearchParams(prev);
@@ -44,8 +55,17 @@ const MatchesFilters = () => {
     });
   }, DEBOUNCE_TIMEOUT);
 
-  const handleInputChange = (field, value) => {
-    debouncedSetParam(field, value);
+  const handleCompanyNameChange = (e) => {
+    setLocalCompanyName(e.target.value);
+    debouncedSetParam("companyName", e.target.value);
+  };
+  const handleJobTitleChange = (e) => {
+    setLocalJobTitle(e.target.value);
+    debouncedSetParam("job_title", e.target.value);
+  };
+  const handleCandidateNameChange = (e) => {
+    setLocalCandidateName(e.target.value);
+    debouncedSetParam("candidateName", e.target.value);
   };
   return (
     <section className="match-filters" aria-labelledby="filters-heading">
@@ -70,8 +90,8 @@ const MatchesFilters = () => {
               type="text"
               className="match-filters__input"
               placeholder="e.g., Example Tech"
-              value={companyName}
-              onChange={e => handleInputChange("companyName", e.target.value)}
+              value={localCompanyName}
+              onChange={handleCompanyNameChange}
             />
           </div>
 
@@ -84,8 +104,8 @@ const MatchesFilters = () => {
               type="text"
               className="match-filters__input"
               placeholder="e.g., Backend Developer"
-              value={jobTitle}
-              onChange={e => handleInputChange("job_title", e.target.value)}
+              value={localJobTitle}
+              onChange={handleJobTitleChange}
             />
           </div>
 
@@ -98,8 +118,8 @@ const MatchesFilters = () => {
               type="text"
               className="match-filters__input"
               placeholder="e.g., Shy"
-              value={candidateName}
-              onChange={e => handleInputChange("candidateName", e.target.value)}
+              value={localCandidateName}
+              onChange={handleCandidateNameChange}
             />
           </div>
 
