@@ -69,8 +69,10 @@ export default function JobForm({ onSubmit, onCancel, initialValues = initialJob
       )}
   <form className="job-form" onSubmit={handleSubmit}>
         <div className="job-form__fields">
-          <label style={{ textTransform: "uppercase", fontWeight: 600, fontSize: "0.85rem", color: "#5a6c7d", marginBottom: "0.5rem", textAlign: "left" }}>
-            Job Title
+          <label className="job-form__label job-form__label--required">
+            <span className="job-form__label-text">
+              Job Title <span className="job-form__asterisk">*</span>
+            </span>
             <input
               name="job_title"
               value={form.job_title}
@@ -92,8 +94,10 @@ export default function JobForm({ onSubmit, onCancel, initialValues = initialJob
               disabled={viewMode}
             />
           </label>
-          <label style={{ textTransform: "uppercase", fontWeight: 600, fontSize: "0.85rem", color: "#5a6c7d", marginBottom: "0.5rem", textAlign: "left" }}>
-            Company Name
+          <label className="job-form__label job-form__label--required">
+            <span className="job-form__label-text">
+              Company Name <span className="job-form__asterisk">*</span>
+            </span>
             <select
               name="company_name"
               value={companySelect}
@@ -135,12 +139,15 @@ export default function JobForm({ onSubmit, onCancel, initialValues = initialJob
               disabled={viewMode}
             />
           </label>
-          <label style={{ textTransform: "uppercase", fontWeight: 600, fontSize: "0.85rem", color: "#5a6c7d", marginBottom: "0.5rem", textAlign: "left" }}>
-            Job ID
+          <label className="job-form__label job-form__label--required">
+            <span className="job-form__label-text">
+              Job ID <span className="job-form__asterisk">*</span>
+            </span>
             <input
               name="job_id"
               value={form.job_id}
               onChange={handleChange}
+              required={!viewMode}
               placeholder="Internal or external job reference ID"
               style={{ background: "#fafbfc", color: "#222", border: "1px solid #e1e8ed", borderRadius: "4px", fontSize: "0.9rem", padding: "0.75rem" }}
               disabled={viewMode}
@@ -163,7 +170,6 @@ export default function JobForm({ onSubmit, onCancel, initialValues = initialJob
               name="scope"
               value={form.scope}
               onChange={handleChange}
-              required={!viewMode}
               style={{ background: "#fafbfc", color: "#222", border: "1px solid #e1e8ed", borderRadius: "4px", fontSize: "0.9rem", padding: "0.75rem" }}
               disabled={viewMode}
             >

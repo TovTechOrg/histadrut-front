@@ -12,6 +12,7 @@ const JobListingsTable = ({
   sortDirection,
   onSort,
   showActions = true,
+  onJobTitleClick,
 }) => {
   if (loading) {
     return (
@@ -110,7 +111,14 @@ const JobListingsTable = ({
                 <tr key={job.job_id || job.id || index} className="job-table__row">
                   <td className="job-table__cell">{job.job_id || ""}</td>
                   <td className="job-table__cell job-table__cell--title">
-                    {job.title}
+                    <span
+                      className="job-table__link-title"
+                      style={{ color: '#3498db', cursor: 'pointer', textDecoration: 'underline' }}
+                      onClick={() => onJobTitleClick && onJobTitleClick(job)}
+                      title="Find matches for this job"
+                    >
+                      {job.title}
+                    </span>
                   </td>
                   <td className="job-table__cell">{job.company}</td>
                   <td className="job-table__cell">{job.posted}</td>

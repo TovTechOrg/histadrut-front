@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { fetchJobs, transformJobsData } from "../api/api";
 
 // Custom hook for managing matches data and filtering
+
 export const useMatchesData = () => {
   const [jobsData, setJobsData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,30 +11,28 @@ export const useMatchesData = () => {
   const [lastFetch, setLastFetch] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
 
-  const [filters, setFilters] = useState({
-    companyName: "",
-    candidateName: "",
-    addedSince: "",
-    minRelevanceScore: 7.0,
-  });
-
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const pageFromUrl = parseInt(searchParams.get("page") || "1", 10);
-  const [currentPage, setCurrentPage] = useState(pageFromUrl);
-
-  // Sync page from URL into local state
-  useEffect(() => {
-    const urlPage = parseInt(searchParams.get("page") || "1", 10);
-    setCurrentPage(urlPage);
+  // Always derive filters from searchParams
+  const filters = useMemo(() => {
+    const params = Object.fromEntries([...searchParams]);
+    return {
+      companyName: params.companyName || "",
+      job_title: params.job_title || "",
+      candidateName: params.candidateName || "",
+      addedSince: params.addedSince || "",
+      minRelevanceScore: params.minRelevanceScore ? parseFloat(params.minRelevanceScore) : 7.0,
+    };
   }, [searchParams]);
 
-  const loadJobs = async (page, minScore, createdAt, companyName, candidateName) => {
+  const currentPage = parseInt(searchParams.get("page") || "1", 10);
+
+  const loadJobs = async (page, minScore, createdAt, companyName, candidateName, job_title) => {
     try {
       setLoading(true);
       setError(null);
 
-      const apiResponse = await fetchJobs(page, minScore, createdAt, companyName, candidateName);
+      const apiResponse = await fetchJobs(page, minScore, createdAt, companyName, candidateName, job_title);
 
       // If response is empty or missing jobs key, prompt user to upload CV
       if (!apiResponse || !apiResponse.jobs) {
@@ -71,17 +70,18 @@ export const useMatchesData = () => {
   useEffect(() => {
     const formattedDate = formatDateForAPI(filters.addedSince);
     loadJobs(
-      currentPage, 
-      filters.minRelevanceScore, 
-      formattedDate, 
-      filters.companyName, 
-      filters.candidateName
+      currentPage,
+      filters.minRelevanceScore,
+      formattedDate,
+      filters.companyName,
+      filters.candidateName,
+      filters.job_title
     );
-  }, [currentPage, filters.minRelevanceScore, filters.addedSince, filters.companyName, filters.candidateName]);
+  }, [currentPage, filters.minRelevanceScore, filters.addedSince, filters.companyName, filters.candidateName, filters.job_title]);
 
   const goToPage = (page) => {
     const clamped = Math.max(1, Math.min(page, totalPages));
-    setSearchParams({ page: clamped.toString() });
+    setSearchParams({ ...Object.fromEntries([...searchParams]), page: clamped.toString() });
   };
 
   const goToNextPage = () => {
@@ -92,8 +92,9 @@ export const useMatchesData = () => {
     if (currentPage > 1) goToPage(currentPage - 1);
   };
 
+  // Update filters by updating the URL search params
   const updateFilters = (newFilters) => {
-    setFilters(newFilters);
+    setSearchParams({ ...Object.fromEntries([...searchParams]), ...newFilters, page: "1" });
   };
 
   // No frontend filtering needed - all filtering is handled by the backend
@@ -113,3 +114,4 @@ export const useMatchesData = () => {
     goToPreviousPage,
   };
 };
+

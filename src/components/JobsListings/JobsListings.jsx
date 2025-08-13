@@ -66,8 +66,15 @@ const JobsListings = () => {
         sortDirection={sortDirection}
         onSort={handleSort}
         showActions={isAdmin}
+        onJobTitleClick={(job) => {
+          // Redirect to /user/matches with filters for company and job title using SPA navigation
+          const params = new URLSearchParams();
+          if (job.company) params.set("companyName", job.company);
+          if (job.title) params.set("job_title", job.title);
+          const url = `/user/matches?${params.toString()}`;
+          navigate(url);
+        }}
       />
-
   {/* Removed modal for add job, now handled by AddJob page */}
     </section>
   );

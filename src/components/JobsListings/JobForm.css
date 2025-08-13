@@ -1,3 +1,22 @@
+.job-form__label {
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #5a6c7d;
+  margin-bottom: 0.5rem;
+  text-align: left;
+  display: block;
+}
+.job-form__label-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+}
+.job-form__asterisk {
+  color: red;
+  font-size: 1.1em;
+  line-height: 1;
+}
 .job-form {
   max-width: 600px;
   margin: 0 auto;

@@ -111,7 +111,7 @@ const Companies = () => {
                   <td
                     className="companies-table__cell companies-table__cell--name companies-table__cell--name-clickable"
                     onClick={() => handleViewCompany(company.name)}
-                    style={{ cursor: "pointer", textDecoration: "underline" }}
+                    style={{ cursor: "pointer", textDecoration: "underline", color: '#3498db' }}
                     title={`View ${company.name} jobs`}
                   >
                     {company.name}
