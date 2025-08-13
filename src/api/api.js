@@ -232,6 +232,23 @@ const getAgeCategory = (daysOld) => {
 };
 
 export const transformJobListingsData = (apiResponse) => {
+  // Helper to format date as DD/MM/YYYY
+  function formatDateDDMMYYYY(dateStr) {
+    if (!dateStr) return '';
+    let d = new Date(dateStr);
+    if (isNaN(d.getTime())) {
+      // Try to parse as YYYY-MM-DD or YYYY-MM-DD HH:mm:ss
+      const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (match) {
+        return `${match[3]}/${match[2]}/${match[1]}`;
+      }
+      return dateStr;
+    }
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
   return apiResponse.map((job, index) => {
     const daysAgo = job.days_old || 0;
     const ageCategory = getAgeCategory(daysAgo);
@@ -241,7 +258,7 @@ export const transformJobListingsData = (apiResponse) => {
       job_id: job.job_id || `job-${index}`,
       title: job.job_title || "Unknown Position",
       company: job.company_name || "Unknown Company",
-      posted: job.posted || new Date().toISOString(),
+      posted: formatDateDDMMYYYY(job.posted) || formatDateDDMMYYYY(new Date().toISOString()),
       age: `${daysAgo} days`,
       ageCategory: ageCategory,
       ageDisplay: `${daysAgo} days`,

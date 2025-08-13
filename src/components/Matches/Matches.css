@@ -322,7 +322,7 @@
 .match-table__cell--link {
   display: table-cell;
   vertical-align: top;
-  text-align: center;
+  text-align: left;
   padding: 0.5rem;
 }
 
