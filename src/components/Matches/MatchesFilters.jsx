@@ -21,6 +21,7 @@ function useDebounce(callback, delay) {
 
 const MatchesFilters = () => {
   const { isAdmin } = useAuth();
+  const isAdminUser = typeof isAdmin === 'function' ? isAdmin() : isAdmin;
   const [searchParams, setSearchParams] = useSearchParams();
   const [localCompanyName, setLocalCompanyName] = React.useState(searchParams.get("companyName") || "");
   const [companyOptions, setCompanyOptions] = React.useState([]);
@@ -230,7 +231,7 @@ const MatchesFilters = () => {
 
           <div
             className="match-filters__field"
-            style={!isAdmin ? { visibility: "hidden", height: 0, margin: 0, padding: 0 } : {}}
+            style={!isAdminUser ? { visibility: "hidden", height: 0, margin: 0, padding: 0 } : {}}
           >
             <label className="match-filters__label" htmlFor="candidateName">
               Candidate Name
