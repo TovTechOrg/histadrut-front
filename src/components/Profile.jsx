@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchUserFromSession, unsubscribeFromEmails } from "../api/api";
+import { fetchUserFromSession, unsubscribeFromEmails, resubscribeToEmails } from "../api/api";
 import { capitalizeName } from "../utils/textHelpers";
 import "./Profile.css";
 import Modal from "./shared/Modal";
@@ -122,7 +122,7 @@ const Profile = () => {
                     if (!subChecked || subLoading) return;
                     setSubLoading(true);
                     try {
-                      await import('../api/api').then(api => api.resubscribeToEmails(user.email));
+                      await resubscribeToEmails(user.email);
                       setSubscribed(true);
                       setSubChecked(false);
                       setModalMessage('You have been subscribed to job offer emails.');
