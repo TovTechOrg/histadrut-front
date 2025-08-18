@@ -1,3 +1,9 @@
+.modal__sticky-header-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #fff;
+}
 /* General Modal Styles */
 .modal__overlay {
   position: fixed;
@@ -33,6 +39,9 @@
   border-bottom: 1px solid #e1e8ed;
   background: #f8f9fa;
   border-radius: 8px 8px 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .reset-modal .modal__header {

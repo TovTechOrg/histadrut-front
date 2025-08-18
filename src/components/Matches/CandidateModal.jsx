@@ -23,19 +23,22 @@ const CandidateModal = ({ candidate, onClose }) => {
       title={candidate.name}
       className="candidate-modal"
     >
-      <div className="candidate-modal__info">
-        <div className="candidate-modal__score">
-          <strong>Match Score:</strong> {candidate.score}
-        </div>
-        <div className="candidate-modal__mmr">
-          <strong>MMR:</strong> {candidate.mmr}
-        </div>
-        {candidate._metadata?.createdAt && (
-          <div className="candidate-modal__matched-at">
-            <strong>Matched at:</strong> {new Date(candidate._metadata.createdAt).toLocaleString('en-CA')}
+      {/* Place info bar inside sticky header wrap using a React fragment */}
+      <React.Fragment>
+        <div className="candidate-modal__info">
+          <div className="candidate-modal__score">
+            <strong>Match Score:</strong> {candidate.score}
           </div>
-        )}
-      </div>
+          <div className="candidate-modal__mmr">
+            <strong>MMR:</strong> {candidate.mmr}
+          </div>
+          {candidate._metadata?.createdAt && (
+            <div className="candidate-modal__matched-at">
+              <strong>Matched at:</strong> {new Date(candidate._metadata.createdAt).toLocaleString('en-CA')}
+            </div>
+          )}
+        </div>
+      </React.Fragment>
 
       <div className="candidate-modal__overview">
         <h3>Candidate Overview</h3>
@@ -50,33 +53,34 @@ const CandidateModal = ({ candidate, onClose }) => {
         </div>
       </div>
 
-      <div className="candidate-modal__overview">
-        <h3>Strengths</h3>
-        <div className="candidate-modal__overview-content">
-          {candidate._metadata?.strengths && candidate._metadata.strengths.length > 0 ? (
-            <ul>
-              {candidate._metadata.strengths.map((s, i) => (
-                <li key={i}>{s}</li>
-              ))}
-            </ul>
-          ) : (
-            <span>No strengths listed.</span>
-          )}
+      <div className="candidate-modal__strweak-flex">
+        <div className="candidate-modal__strweak-section">
+          <h3 className="candidate-modal__strweak-title">Strengths</h3>
+          <div className="candidate-modal__strweak-content">
+            {candidate._metadata?.strengths && candidate._metadata.strengths.length > 0 ? (
+              <ul>
+                {candidate._metadata.strengths.map((s, i) => (
+                  <li key={i}>{s}</li>
+                ))}
+              </ul>
+            ) : (
+              <span>No strengths listed.</span>
+            )}
+          </div>
         </div>
-      </div>
-
-      <div className="candidate-modal__overview">
-        <h3>Weaknesses</h3>
-        <div className="candidate-modal__overview-content">
-          {candidate._metadata?.weaknesses && candidate._metadata.weaknesses.length > 0 ? (
-            <ul>
-              {candidate._metadata.weaknesses.map((w, i) => (
-                <li key={i}>{w}</li>
-              ))}
-            </ul>
-          ) : (
-            <span>No weaknesses listed.</span>
-          )}
+        <div className="candidate-modal__strweak-section">
+          <h3 className="candidate-modal__strweak-title">Weaknesses</h3>
+          <div className="candidate-modal__strweak-content">
+            {candidate._metadata?.weaknesses && candidate._metadata.weaknesses.length > 0 ? (
+              <ul>
+                {candidate._metadata.weaknesses.map((w, i) => (
+                  <li key={i}>{w}</li>
+                ))}
+              </ul>
+            ) : (
+              <span>No weaknesses listed.</span>
+            )}
+          </div>
         </div>
       </div>
     </Modal>

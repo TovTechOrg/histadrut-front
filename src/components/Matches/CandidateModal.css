@@ -1,3 +1,64 @@
+.candidate-modal__info {
+  position: sticky;
+  top: 68px; /* adjust to match modal__header height */
+  z-index: 15;
+  background: #f8f9fa;
+}
+
+/* Light scrollbar for modal content */
+.modal__content,
+.candidate-modal__body-scrollable {
+  scrollbar-width: thin;
+  scrollbar-color: #e1e8ed #fafbfc;
+}
+.modal__content::-webkit-scrollbar,
+.candidate-modal__body-scrollable::-webkit-scrollbar {
+  width: 8px;
+  background: #fafbfc;
+}
+.modal__content::-webkit-scrollbar-thumb,
+.candidate-modal__body-scrollable::-webkit-scrollbar-thumb {
+  background: #e1e8ed;
+  border-radius: 8px;
+}
+
+.candidate-modal__strweak-flex {
+  display: flex;
+  gap: 32px;
+  margin-top: 18px;
+}
+.candidate-modal__strweak-section {
+  flex: 1 1 0;
+  min-width: 180px;
+}
+.candidate-modal__strweak-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #222;
+}
+.candidate-modal__strweak-content {
+  background: #fafbfc;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 0.92rem;
+  color: #495057;
+  line-height: 1.5;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+.candidate-modal__strweak-content ul {
+  margin: 0;
+  padding-left: 18px;
+}
+.candidate-modal__strweak-content li {
+  font-size: 0.85rem;
+}
+@media (max-width: 768px) {
+  .candidate-modal__strweak-flex {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
 /* Candidate Modal Specific Styles */
 .candidate-modal__info {
   padding: 1rem 1.5rem;
@@ -29,8 +90,13 @@
   color: #e74c3c;
 }
 
+
 .candidate-modal__overview {
-  padding: 1.5rem;
+  padding: 1.5rem 2rem;
+}
+
+.candidate-modal__strweak-flex {
+  padding: 0 2rem 1.5rem 2rem;
 }
 
 .candidate-modal__overview h3 {
@@ -62,12 +128,20 @@
   font-family: "Arial", "Helvetica", sans-serif;
 }
 
+/* .candidate-modal__info is no longer sticky, handled by modal__sticky-header-wrap */
 /* Responsive design */
 @media (max-width: 768px) {
   .candidate-modal__info {
     padding: 0.75rem 1rem;
     flex-direction: column;
+.candidate-modal__overview {
+  padding: 1.5rem 2rem;
+}
     gap: 0.5rem;
+.candidate-modal__body-scrollable {
+  max-height: 500px;
+  overflow-y: auto;
+}
   }
 
   .candidate-modal__overview {
