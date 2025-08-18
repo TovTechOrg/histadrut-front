@@ -1,0 +1,149 @@
+/* Spinner for loading state on buttons */
+.profile-btn-spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 3px solid #fff;
+  border-top: 3px solid #1976d2;
+  border-radius: 50%;
+  animation: profile-spin 0.8s linear infinite;
+  vertical-align: middle;
+}
+
+@keyframes profile-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+/* Modal content centering and confirm button */
+.profile-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px 24px 16px;
+}
+
+.profile-modal-message {
+  font-size: 1.1rem;
+  color: #222;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.profile-modal-confirm-btn {
+  padding: 8px 32px;
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.profile-modal-confirm-btn:hover {
+  background: #1251a3;
+}
+/* Make loading text visible and centered */
+.profile-loading {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.profile-container {
+  max-width: 420px;
+  margin: 2.5rem auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  padding: 2.5rem 2rem;
+}
+
+.profile-title {
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 16px;
+  color: #222;
+}
+
+.profile-section {
+  margin-bottom: 18px;
+}
+
+.profile-label {
+  font-weight: 500;
+  color: #444;
+}
+
+.profile-value {
+  color: #222;
+  margin-bottom: 8px;
+}
+
+.profile-error {
+  text-align: center;
+  margin-top: 40px;
+  color: #b22222;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.profile-status {
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.profile-status-subscribed {
+  color: #222;
+}
+.profile-status-unsubscribed {
+  color: #c0392b;
+}
+
+.profile-sub-block {
+  margin: 18px 0 0 0;
+  padding: 16px 0;
+  border-top: 1px solid #eee;
+}
+
+.profile-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #444;
+}
+
+.profile-checkbox {
+  margin-right: 8px;
+}
+
+.profile-btn {
+  margin-top: 12px;
+  padding: 0.8rem 2.2rem;
+  font-size: 1.08rem;
+  font-weight: 600;
+  border-radius: 6px;
+  color: #fff;
+  border: none;
+  width: 100%;
+  display: block;
+  transition: background 0.2s;
+}
+
+.profile-btn-unsub {
+  background: #e74c3c;
+}
+
+.profile-btn-sub {
+  background: #27ae60;
+}
+
+.profile-btn-cv {
+  background: #3498db;
+  margin-top: 12px;
+}
+
+.profile-btn-disabled {
+  background: #ccc !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
+}

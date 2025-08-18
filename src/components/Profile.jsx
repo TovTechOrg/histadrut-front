@@ -1,8 +1,9 @@
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchUserFromSession } from "../api/api";
+import { fetchUserFromSession, unsubscribeFromEmails } from "../api/api";
 import { capitalizeName } from "../utils/textHelpers";
+import "./Profile.css";
+import Modal from "./shared/Modal";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -10,76 +11,151 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [subscribed, setSubscribed] = useState(true);
+  const [subChecked, setSubChecked] = useState(false);
+  const [unsubChecked, setUnsubChecked] = useState(false);
+  const [subLoading, setSubLoading] = useState(false);
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
   useEffect(() => {
-    fetchUserFromSession()
-      .then((userData) => {
+    const fetchUser = async () => {
+      try {
+        const userData = await fetchUserFromSession();
         setUser(userData);
+        setSubscribed(
+          userData && typeof userData.subscribed === 'boolean' ? userData.subscribed : true
+        );
         setLoading(false);
-      })
-      .catch(() => {
-        setError("Failed to load user info");
+      } catch (err) {
+        setModalMessage('Failed to load user profile.');
+        setShowModal(true);
         setLoading(false);
-      });
+      }
+    };
+    fetchUser();
   }, []);
 
   if (loading) {
-    return <div style={{ textAlign: "center", marginTop: 40 }}>Loading profile...</div>;
+    return <div className="profile-loading text-basic">Loading profile...</div>;
   }
   if (error || !user) {
-    return <div style={{ textAlign: "center", marginTop: 40, color: "#c00" }}>Unable to load profile.</div>;
+    return <div className="profile-error">Unable to load profile.</div>;
   }
 
   return (
-    <div
-      style={{
-        maxWidth: 420,
-        margin: "2.5rem auto",
-        background: "#fff",
-        borderRadius: 12,
-        boxShadow: "0 4px 24px rgba(0,0,0,0.07)",
-        padding: "2.5rem 2rem",
-      }}
-    >
-      <h2
-        style={{
-          fontWeight: 700,
-          fontSize: "2rem",
-          marginBottom: 16,
-          color: "#222",
-        }}
-      >
+    <div className="profile-container">
+      <h2 className="profile-title">
         Welcome, {capitalizeName(user.name) || "User"}
       </h2>
-      <div style={{ marginBottom: 18 }}>
-        <div style={{ fontWeight: 500, color: "#444" }}>Email:</div>
-        <div style={{ color: "#222", marginBottom: 8 }}>{user.email || "-"}</div>
-        <div style={{ fontWeight: 500, color: "#444" }}>Role:</div>
-        <div style={{ color: "#222", marginBottom: 8 }}>{user.role || "-"}</div>
+      <div className="profile-section">
+        <div className="profile-label">Email:</div>
+        <div className="profile-value">{user.email || "-"}</div>
+        <div className="profile-label">Role:</div>
+        <div className="profile-value">{user.role || "-"}</div>
         {user.role !== "admin" && (
           <>
-            <div style={{ fontWeight: 500, color: "#444" }}>CV Status:</div>
-            <div style={{ color: "#222" }}>{user.cv_status || "-"}</div>
+            <div className="profile-label">CV Status:</div>
+            <div className="profile-value">{user.cv_status || "-"}</div>
           </>
         )}
       </div>
+      {/* Subscription/Unsubscribe UI (not for admin) */}
+      {user.role !== "admin" && (
+        <>
+          <hr style={{ margin: '24px 0 18px 0', border: 0, borderTop: '1px solid #eee' }} />
+          <div className={`profile-status ${subscribed ? 'profile-status-subscribed' : 'profile-status-unsubscribed'}`}
+               style={{ marginBottom: 10 }}>
+            You are currently <b>{subscribed ? 'subscribed' : 'unsubscribed'}</b> to receive job matches via email.
+          </div>
+          <div className="profile-sub-block">
+            {subscribed ? (
+              <>
+                <label className="profile-checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={unsubChecked}
+                    onChange={e => setUnsubChecked(e.target.checked)}
+                    className="profile-checkbox"
+                  />
+                  I <b>do not wish</b> to receive job matches via email
+                </label>
+                <button
+                  className={`profile-btn profile-btn-unsub${unsubChecked ? '' : ' profile-btn-disabled'}`}
+                  disabled={!unsubChecked || subLoading}
+                  onClick={async () => {
+                    if (!unsubChecked || subLoading) return;
+                    setSubLoading(true);
+                    try {
+                      await unsubscribeFromEmails(user.email);
+                      setSubscribed(false);
+                      setUnsubChecked(false);
+                      setModalMessage('You have been unsubscribed from job offer emails.');
+                      setShowModal(true);
+                    } catch (err) {
+                      setModalMessage('Failed to unsubscribe. Please try again.');
+                      setShowModal(true);
+                    } finally {
+                      setSubLoading(false);
+                    }
+                  }}
+                >
+                  {subLoading ? <span className="profile-btn-spinner"></span> : 'Unsubscribe'}
+                </button>
+              </>
+            ) : (
+              <>
+                <label className="profile-checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={subChecked}
+                    onChange={e => setSubChecked(e.target.checked)}
+                    className="profile-checkbox"
+                  />
+                  I <b>wish</b> to receive job matches via email
+                </label>
+                <button
+                  className={`profile-btn profile-btn-sub${subChecked ? '' : ' profile-btn-disabled'}`}
+                  disabled={!subChecked || subLoading}
+                  onClick={async () => {
+                    if (!subChecked || subLoading) return;
+                    setSubLoading(true);
+                    try {
+                      await import('../api/api').then(api => api.resubscribeToEmails(user.email));
+                      setSubscribed(true);
+                      setSubChecked(false);
+                      setModalMessage('You have been subscribed to job offer emails.');
+                      setShowModal(true);
+                    } catch (err) {
+                      setModalMessage('Failed to subscribe. Please try again.');
+                      setShowModal(true);
+                    } finally {
+                      setSubLoading(false);
+                    }
+                  }}
+                >
+                  {subLoading ? <span className="profile-btn-spinner"></span> : 'Subscribe'}
+                </button>
+              </>
+            )}
+          </div>
+        </>
+      )}
       {user.role !== "admin" && (
         <button
-          style={{
-            padding: "0.8rem 2.2rem",
-            fontSize: "1.08rem",
-            fontWeight: 600,
-            borderRadius: 6,
-            background: "#3498db",
-            color: "#fff",
-            border: "none",
-            cursor: "pointer",
-            marginTop: 12,
-          }}
+          className="profile-btn profile-btn-cv"
           onClick={() => navigate("/cv-upload", { state: { fromProfile: true } })}
         >
           {user.cv_status === "Missing" ? "Upload CV" : "Re-upload CV"}
         </button>
       )}
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="">
+        <div className="profile-modal-content">
+          <div className="profile-modal-message">{modalMessage}</div>
+          <button className="profile-modal-confirm-btn" onClick={() => setShowModal(false)}>OK</button>
+        </div>
+      </Modal>
     </div>
   );
 };

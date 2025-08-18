@@ -1,3 +1,37 @@
+const API_BASE_URL = "https://cv.pythia-match.com";
+
+// Unsubscribe from job offer emails
+export const unsubscribeFromEmails = async (email) => {
+  const url = `${API_BASE_URL}/unsubscribe`;
+  const formData = new FormData();
+  formData.append("email", email);
+  const response = await fetch(url, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || "Failed to unsubscribe");
+  }
+  return await response.json();
+};
+// Resubscribe to job offer emails
+export const resubscribeToEmails = async (email) => {
+  const url = `${API_BASE_URL}/resubscribe`;
+  const formData = new FormData();
+  formData.append("email", email);
+  const response = await fetch(url, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || "Failed to resubscribe");
+  }
+  return await response.json();
+};
 // Delete company: DELETE /delete_company_data with form data
 export const deleteCompanyData = async (companyName) => {
   const formData = new FormData();
@@ -30,7 +64,6 @@ export const uploadJobDetails = async (jobData) => {
   }
   return await response.json();
 };
-const API_BASE_URL = "https://cv.pythia-match.com";
 
 // Request password reset: POST /reset_password with x-www-form-urlencoded
 export const resetPassword = async (email) => {
@@ -313,6 +346,7 @@ export const fetchUserFromSession = async () => {
         name: data.user.name,
         id: data.user.id,
         cv_status: data.user.cv_status,
+        subscribed: typeof data.user.subscribed === 'boolean' ? data.user.subscribed : true,
       };
       return userObject;
     }
