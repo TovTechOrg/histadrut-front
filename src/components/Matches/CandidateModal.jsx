@@ -7,6 +7,8 @@ import {
 import "./CandidateModal.css";
 
 const CandidateModal = ({ candidate, onClose }) => {
+
+  
   if (!candidate) return null;
 
   // Get the overview text and detect language
@@ -45,6 +47,36 @@ const CandidateModal = ({ candidate, onClose }) => {
           }}
         >
           {overviewText}
+        </div>
+      </div>
+
+      <div className="candidate-modal__overview">
+        <h3>Strengths</h3>
+        <div className="candidate-modal__overview-content">
+          {candidate._metadata?.strengths && candidate._metadata.strengths.length > 0 ? (
+            <ul>
+              {candidate._metadata.strengths.map((s, i) => (
+                <li key={i}>{s}</li>
+              ))}
+            </ul>
+          ) : (
+            <span>No strengths listed.</span>
+          )}
+        </div>
+      </div>
+
+      <div className="candidate-modal__overview">
+        <h3>Weaknesses</h3>
+        <div className="candidate-modal__overview-content">
+          {candidate._metadata?.weaknesses && candidate._metadata.weaknesses.length > 0 ? (
+            <ul>
+              {candidate._metadata.weaknesses.map((w, i) => (
+                <li key={i}>{w}</li>
+              ))}
+            </ul>
+          ) : (
+            <span>No weaknesses listed.</span>
+          )}
         </div>
       </div>
     </Modal>
