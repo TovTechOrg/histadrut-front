@@ -1,3 +1,18 @@
+// Delete job and its matches: DELETE /delete_job with form data (job_id)
+export const deleteJobAndMatches = async (job_id) => {
+  const formData = new FormData();
+  formData.append("job_id", job_id);
+  const response = await fetch(`${API_BASE_URL}/delete_job`, {
+    method: "DELETE",
+    credentials: "include",
+    body: formData,
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || "Failed to delete job and matches");
+  }
+  return await response.json();
+};
 const API_BASE_URL = "https://cv.pythia-match.com";
 
 // Unsubscribe from job offer emails
