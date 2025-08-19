@@ -181,12 +181,15 @@ export default function JobForm({ onSubmit, onCancel, initialValues = initialJob
               )}
             </select>
           </label>
-          <label style={{ textTransform: "uppercase", fontWeight: 600, fontSize: "0.85rem", color: "#5a6c7d", marginBottom: "0.5rem", textAlign: "left" }}>
-            Job Description
+          <label className="job-form__label job-form__label--required">
+            <span className="job-form__label-text">
+              Job Description <span className="job-form__asterisk" style={{ color: '#e74c3c' }}>*</span>
+            </span>
             <textarea
               name="job_description"
               value={form.job_description}
               onChange={handleChange}
+              required={!viewMode}
               placeholder="Describe the responsibilities, requirements, and expectations for this role."
               style={{ background: "#fafbfc", color: "#222", border: "1px solid #e1e8ed", borderRadius: "4px", fontSize: "0.9rem", padding: "0.75rem", minHeight: "80px" }}
               disabled={viewMode}
