@@ -30,7 +30,7 @@ const CandidateModal = ({ candidate, onClose }) => {
             <strong>Match Score:</strong> {candidate.score}
           </div>
           <div className="candidate-modal__mmr">
-            <strong>MMR:</strong> {candidate.mmr}
+            <strong>MMR:</strong> <span className={candidate.mmr === 'YES' ? 'candidate-modal__mmr-yes' : 'candidate-modal__mmr-no'}>{candidate.mmr}</span>
           </div>
           {candidate._metadata?.createdAt && (
             <div className="candidate-modal__matched-at">

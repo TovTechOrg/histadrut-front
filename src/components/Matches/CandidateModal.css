@@ -1,3 +1,11 @@
+.candidate-modal__mmr-yes {
+  color: #27ae60;
+  font-weight: 600;
+}
+.candidate-modal__mmr-no {
+  color: #e74c3c;
+  font-weight: 600;
+}
 .candidate-modal__info {
   position: sticky;
   top: 68px; /* adjust to match modal__header height */
