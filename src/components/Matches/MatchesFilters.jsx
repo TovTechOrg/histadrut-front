@@ -30,6 +30,7 @@ const MatchesFilters = () => {
   const [localCandidateName, setLocalCandidateName] = React.useState(searchParams.get("candidateName") || "");
   const addedSince = searchParams.get("addedSince") || "";
   const minRelevanceScore = searchParams.get("minRelevanceScore") ? parseFloat(searchParams.get("minRelevanceScore")) : 7.0;
+  const [localMinScore, setLocalMinScore] = React.useState(minRelevanceScore);
 
   // Sync local state with URL params if they change externally
   React.useEffect(() => {
@@ -99,7 +100,7 @@ const MatchesFilters = () => {
   };
   // Handle date and slider changes for addedSince and minRelevanceScore
   const handleInputChange = (field, value) => {
-    if (field === "addedSince" || field === "minRelevanceScore") {
+    if (field === "addedSince") {
       setSearchParams(prev => {
         const params = new URLSearchParams(prev);
         if (value && value !== "") {
@@ -117,7 +118,36 @@ const MatchesFilters = () => {
         return params;
       });
     }
+    if (field === "minRelevanceScore") {
+      setLocalMinScore(parseFloat(value));
+    }
   };
+
+  // Debounce updating the URL param for minRelevanceScore
+  React.useEffect(() => {
+    const handler = setTimeout(() => {
+      if (localMinScore !== minRelevanceScore) {
+        setSearchParams(prev => {
+          const params = new URLSearchParams(prev);
+          if (localMinScore !== "" && localMinScore !== null) {
+            params.set("minRelevanceScore", localMinScore);
+          } else {
+            params.delete("minRelevanceScore");
+          }
+          params.set("page", "1");
+          return params;
+        });
+      }
+    }, 300);
+    return () => clearTimeout(handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localMinScore]);
+
+  // Keep localMinScore in sync with URL param if it changes externally
+  React.useEffect(() => {
+    setLocalMinScore(minRelevanceScore);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [minRelevanceScore]);
   return (
     <section className="match-filters" aria-labelledby="filters-heading">
       <h2 id="filters-heading" className="match-filters__title">
@@ -274,7 +304,7 @@ const MatchesFilters = () => {
                 min="0"
                 max="10"
                 step="0.1"
-                value={minRelevanceScore}
+                value={localMinScore}
                 onChange={e => handleInputChange("minRelevanceScore", e.target.value)}
               />
               <div className="match-filters__slider-track">
