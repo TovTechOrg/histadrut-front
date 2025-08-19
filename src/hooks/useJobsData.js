@@ -15,7 +15,7 @@ export const useJobsData = () => {
   // Filter state
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCompany, setSelectedCompany] = useState(
-    companyFromUrl || "All Companies"
+    companyFromUrl || ""
   );
   const [selectedStatus, setSelectedStatus] = useState("All Ages");
 
@@ -51,24 +51,12 @@ export const useJobsData = () => {
     }
   }, [companyFromUrl]);
 
-  // Ensure selectedCompany is valid when jobs change (helps with Strict Mode)
-  useEffect(() => {
-    if (
-      Array.isArray(jobs) &&
-      jobs.length > 0 &&
-      selectedCompany !== "All Companies"
-    ) {
-      const availableCompanies = jobs.map((job) => job.company).filter(Boolean);
-      if (!availableCompanies.includes(selectedCompany)) {
-        setSelectedCompany("All Companies");
-      }
-    }
-  }, [jobs, selectedCompany]);
+  // (Removed effect that cleared selectedCompany if not in jobs list)
 
   // Get unique companies for filter dropdown - memoized to prevent unnecessary re-renders
   const companies = useMemo(() => {
     if (!Array.isArray(jobs) || jobs.length === 0) {
-      return ["All Companies"];
+      return [];
     }
 
     const uniqueCompanies = jobs
@@ -76,8 +64,7 @@ export const useJobsData = () => {
       .filter((company) => company && company.trim())
       .filter((company, index, arr) => arr.indexOf(company) === index);
 
-    const result = ["All Companies", ...uniqueCompanies];
-    return result;
+    return uniqueCompanies;
   }, [jobs]);
 
   // Get unique age categories for filter dropdown - memoized and based on server data
@@ -179,7 +166,7 @@ export const useJobsData = () => {
     if (typeof company === "string" && company.trim()) {
       setSelectedCompany(company);
     } else {
-      setSelectedCompany("All Companies");
+      setSelectedCompany("");
     }
   }, []);
 

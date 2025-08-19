@@ -36,6 +36,7 @@ const JobsListings = () => {
   const [deleteJob, setDeleteJob] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setDeleteError] = useState("");
+  const [showDeleteSuccess, setShowDeleteSuccess] = useState(false);
 
   return (
     <section className="main-page jobs-listings">
@@ -102,7 +103,7 @@ const JobsListings = () => {
         Are you sure you want to delete this job and <b>all of its matches</b>? This action cannot be undone.
       </p>
       <div style={{ margin: '1.2rem 0 1.2rem 0', color: '#333', fontSize: '1.05rem', lineHeight: 1.7 }}>
-  <b>Job ID:</b> {deleteJob?.job_id} <br />
+        <b>Job ID:</b> {deleteJob?.job_id} <br />
         <b>Job:</b> {deleteJob?.title} <br />
         <b>Company:</b> {deleteJob?.company}
       </div>
@@ -125,8 +126,7 @@ const JobsListings = () => {
             try {
               await deleteJobAndMatches(deleteJob.id);
               setDeleteJob(null);
-              // Optionally, show a success message here
-              window.location.reload(); // simplest way to refresh jobs
+              setShowDeleteSuccess(true);
             } catch (err) {
               setDeleteError(err.message || "Failed to delete job.");
             } finally {
@@ -138,6 +138,26 @@ const JobsListings = () => {
         >
           {deleteLoading ? 'Deleting...' : 'Delete'}
         </button>
+      </div>
+    </div>
+  </Modal>
+
+  {/* Success modal after delete */}
+  <Modal
+    isOpen={showDeleteSuccess}
+    onClose={() => {
+      setShowDeleteSuccess(false);
+      window.location.reload();
+    }}
+    title="Job Deleted"
+  >
+    <div style={{ padding: '2.5rem 2.5rem 2rem 2.5rem', textAlign: 'center' }}>
+      <div style={{ fontSize: 48, color: '#27ae60', marginBottom: 16 }}>✔</div>
+      <div style={{ fontWeight: 600, fontSize: '1.2rem', color: '#222', marginBottom: 8 }}>
+        Job and all its matches were deleted successfully.
+      </div>
+      <div style={{ color: '#666', fontSize: '1rem' }}>
+        Close this message to refresh the list.
       </div>
     </div>
   </Modal>
