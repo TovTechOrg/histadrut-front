@@ -132,32 +132,18 @@ const Companies = () => {
                         />
                       </button>
                       {isAdmin && (
-                        <>
-                          <button
-                            className="companies-table__action-btn companies-table__action-btn--edit"
-                            onClick={() => handleEditCompany(company.name)}
-                            title={`Edit ${company.name}`}
-                            aria-label={`Edit ${company.name}`}
-                          >
-                            <img
-                              src={editIcon}
-                              alt="Edit, created by Gemini"
-                              className="companies-table__action-icon"
-                            />
-                          </button>
-                          <button
-                            className="companies-table__action-btn companies-table__action-btn--delete"
-                            onClick={() => handleDeleteCompany(company.name, company.jobsCount)}
-                            title={`Delete ${company.name}`}
-                            aria-label={`Delete ${company.name}`}
-                          >
-                            <img
-                              src={deleteIcon}
-                              alt="Delete, created by Gemini"
-                              className="companies-table__action-icon"
-                            />
-                          </button>
-                        </>
+                        <button
+                          className="companies-table__action-btn companies-table__action-btn--delete"
+                          onClick={() => handleDeleteCompany(company.name, company.jobsCount)}
+                          title={`Delete ${company.name}`}
+                          aria-label={`Delete ${company.name}`}
+                        >
+                          <img
+                            src={deleteIcon}
+                            alt="Delete, created by Gemini"
+                            className="companies-table__action-icon"
+                          />
+                        </button>
                       )}
                     </div>
                   </td>
