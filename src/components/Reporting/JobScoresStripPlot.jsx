@@ -14,9 +14,8 @@ if (typeof HighchartsMore === "function") {
 
 const JobScoresStripPlot = ({ data = [] }) => {
   // data: [{ job: string, scores: number[] }]
-  // Only include jobs with at least 3 scores
-  let jobs = data.filter(j => Array.isArray(j.scores) && j.scores.length > 2);
-  // Sort by number of scores (descending) and take top 20
+  // Only include jobs with at least 1 score (no filter), then take top 20 by count
+  let jobs = data.filter(j => Array.isArray(j.scores) && j.scores.length > 0);
   jobs = jobs.sort((a, b) => b.scores.length - a.scores.length).slice(0, 20);
 
   if (jobs.length === 0) {
@@ -39,24 +38,39 @@ const JobScoresStripPlot = ({ data = [] }) => {
       const rounded = Math.round(s * 100) / 100;
       scoreCounts[rounded] = (scoreCounts[rounded] || 0) + 1;
     });
-    // Find max count for this job for normalization
-    const maxCount = Math.max(...Object.values(scoreCounts));
-    const scatterData = Object.entries(scoreCounts).map(([score, count]) => ({
-      x: jobIndex,
-      y: parseFloat(score),
-      count,
-      job: job.job,
-      alpha: maxCount > 1 ? Math.max(0.2, Math.min(1, count / maxCount)) : 1
-    }));
+    // Global alpha and size: 1 match = 0.1, 10+ = 1, 2-9 spread equally
+    const scatterData = Object.entries(scoreCounts).map(([score, count]) => {
+      // 1 match = 40% alpha, 2-10+ spread evenly from 40% to 100%
+      let alpha = 0.4;
+      if (count >= 10) alpha = 1;
+      else if (count > 1) alpha = 0.4 + 0.6 * (count - 1) / 9;
+      // Marker size: 1 match = 3, 10+ = 10, 2-9 spread equally
+      let radius = 3;
+      if (count >= 10) radius = 10;
+      else if (count > 1) radius = 3 + (7 * (count - 1) / 9); // 2=3.78..., 3=4.56..., ..., 9=9.22...
+      return {
+        x: jobIndex,
+        y: parseFloat(score),
+        count,
+        job: job.job,
+        alpha,
+        marker: {
+          radius,
+          fillColor: `rgba(52,152,219,${alpha})`,
+          symbol: 'circle',
+          lineWidth: 0
+        }
+      };
+    });
     scatterSeries.push({
       type: 'scatter',
       name: job.job + ' scores',
       data: scatterData,
-      color: 'rgba(52,152,219,1)',
+      color: undefined, // use per-point color
       marker: {
-        radius: 4,
+        radius: 3,
         symbol: 'circle',
-        fillColor: undefined, // We'll set color per point
+        fillColor: undefined, // per-point
         lineWidth: 0,
       },
       zIndex: 3,
@@ -69,18 +83,7 @@ const JobScoresStripPlot = ({ data = [] }) => {
       lineWidth: 0,
       connectNulls: false,
       states: { hover: { lineWidthPlus: 0 } },
-      // Set per-point color with alpha
-      point: {
-        events: {
-          mouseOver: function () {},
-        }
-      },
-      // Use point color for alpha
       dataLabels: { enabled: false },
-    });
-    // Set per-point color with alpha
-    scatterSeries[scatterSeries.length - 1].data.forEach(point => {
-      point.color = `rgba(52,152,219,${point.alpha})`;
     });
   });
 
@@ -88,11 +91,11 @@ const JobScoresStripPlot = ({ data = [] }) => {
   const options = {
     chart: {
       type: 'scatter',
-      height: 500, // Increased height for more vertical space
-      width: 1200, // Make the card longer horizontally
+      height: 500, // Less vertical space, fits card
+      width: 1000, // Fit card and titles better
       style: { fontFamily: 'inherit' },
     },
-    title: { text: 'Job Scores Violin Plot', align: 'left' },
+  title: { text: 'Score Density across top jobs', align: 'left' },
     credits: { enabled: false },
     legend: { enabled: false },
     xAxis: {
@@ -100,9 +103,13 @@ const JobScoresStripPlot = ({ data = [] }) => {
       max: categories.length - 0.5,
       tickPositions: categories.map((_, i) => i),
       labels: {
-        formatter: function () { return categories[this.value]; },
-        rotation: -65,
-        style: { fontSize: '9px', color: '#222', fontWeight: 400, maxWidth: 40, textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+        formatter: function () {
+          const label = categories[this.value];
+          if (!label) return '';
+          return label.length > 35 ? label.slice(0, 32) + '...' : label;
+        },
+        rotation: -80,
+        style: { fontSize: '11px', color: '#222', fontWeight: 400, maxWidth: 60, textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
       },
       title: { text: 'Job' },
     },
@@ -116,7 +123,7 @@ const JobScoresStripPlot = ({ data = [] }) => {
       useHTML: true,
       formatter: function () {
         if (this.point && typeof this.point.count !== 'undefined') {
-          return `<b>${categories[this.x]}</b><br/>Score: <b>${this.y.toFixed(2)}</b><br/>Count: <b>${this.point.count}</b>`;
+          return `<b>${this.point.job}</b><br/>Score: <b>${this.y.toFixed(2)}</b><br/>Count: <b>${this.point.count}</b>`;
         }
         return false;
       }
