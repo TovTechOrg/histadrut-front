@@ -1,5 +1,113 @@
-.sorter {
+.reportingPageColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  min-height: 800px;
+  padding: 0 24px;
+}
+
+.error {
+  color: red;
+}
+
+.filterBar {
+  display: flex;
+  align-items: flex-end;
+  gap: 32px;
   margin-bottom: -60px;
+}
+
+.minScoreFilter {
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+}
+
+.minScoreSlider {
+  width: 100%;
+}
+
+.reportingCard {
+  min-height: 350px;
+  max-height: 500px;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #0001;
+  padding: 16px;
+}
+
+.reportingCardLarge {
+  min-height: 400px;
+  max-height: 600px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #0001;
+  padding: 16px;
+}
+
+.spinnerWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+.spinner {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.companySelectorBar {
+  margin-bottom: 24px;
+  max-width: 260px;
+}
+.companySelectorLabel {
+  font-weight: 500;
+  color: #5a6c7d;
+  font-size: 1rem;
+  margin-bottom: 4px;
+  display: block;
+}
+.companySelector {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e1e8ed;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  background-color: #fafbfc;
+  color: #2c3e50;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  margin-top: 2px;
+}
+
+.flexRowGraphs {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  align-items: flex-start;
+  min-height: 350px;
+}
+.pieChartCol {
+  min-width: 340px;
+  max-width: 400px;
+  flex: 1 1 340px;
+}
+.stripPlotCol {
+  flex: 2 1 480px;
+  min-width: 320px;
+  max-width: 900px;
+}
+.sorter {
   max-width: 220px;
 }
 .sorter__label {
