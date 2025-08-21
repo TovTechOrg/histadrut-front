@@ -1,3 +1,7 @@
+// Fetch report matches for reporting page
+export const fetchReportMatches = async () => {
+  return apiRequest("/report_matches");
+};
 // Delete job and its matches: DELETE /delete_job with form data (job_id)
 export const deleteJobAndMatches = async (job_id) => {
   const formData = new FormData();
