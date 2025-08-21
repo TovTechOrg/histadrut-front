@@ -163,6 +163,7 @@ const JobListingsTable = ({
                         >
                           <img src={viewIcon} alt="View" />
                         </button>
+                        {/*
                         <button
                           className="action-btn edit-btn"
                           onClick={() => onAction("edit", job)}
@@ -170,6 +171,7 @@ const JobListingsTable = ({
                         >
                           <img src={editIcon} alt="Edit" />
                         </button>
+                        */}
                         <button
                           className="action-btn delete-btn"
                           onClick={() => onAction("delete", job)}
