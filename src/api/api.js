@@ -1,3 +1,5 @@
+const API_BASE_URL = "https://cv.pythia-match.com";
+
 // Fetch report matches for reporting page
 export const fetchReportMatches = async () => {
   return apiRequest("/report_matches");
@@ -17,7 +19,29 @@ export const deleteJobAndMatches = async (job_id) => {
   }
   return await response.json();
 };
-const API_BASE_URL = "https://cv.pythia-match.com";
+
+// Get all user: GET /users
+export const fetchUsers = async () => {
+  const res = await fetch(`${API_BASE_URL}/users`, { credentials: "include" });
+  if (!res.ok) throw new Error("Failed to fetch users");
+  return await res.json();
+};
+
+// Delete user: DELETE /delete_user with form data (_id)
+export const deleteUser = async (user_id) => {
+  const formData = new FormData();
+  formData.append("user_id", user_id);
+  const response = await fetch(`${API_BASE_URL}/delete_user`, {
+    method: "DELETE",
+    credentials: "include",
+    body: formData,
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || "Failed to delete user");
+  }
+  return await response.json();
+};
 
 // Unsubscribe from job offer emails
 export const unsubscribeFromEmails = async (email) => {

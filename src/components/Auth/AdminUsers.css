@@ -1,5 +1,3 @@
-
-
 .admin-users-header {
   display: flex;
   align-items: center;
@@ -17,7 +15,7 @@
 .admin-users-table-container {
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
   padding: 2rem;
   overflow-x: auto;
 }
@@ -59,4 +57,84 @@
   padding: 2rem 0;
   color: #888;
   font-size: 1.1rem;
+}
+
+.users-table__action-btn--delete {
+  color: #e74c3c;
+  background: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+  width: 28px;
+  height: 28px;
+}
+
+.users-table__action-btn--delete .users-table__action-icon {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) saturate(100%) invert(26%) sepia(89%) saturate(1583%) hue-rotate(348deg) brightness(99%) contrast(85%);
+  transition: filter 0.2s;
+}
+
+.users-table__action-btn--delete:hover {
+  background: #e74c3c;
+}
+
+.users-table__action-btn--delete:hover .users-table__action-icon {
+  filter: brightness(0) invert(1); /* makes icon white */
+}
+
+/* --- Copy these from Companies.css --- */
+.delete-modal__text {
+  text-align: center;
+  font-size: 1.1rem;
+  padding: 1.5rem 0.5rem;
+  color: #222;
+}
+.delete-modal__actions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  padding: 0 2rem 1rem 2rem;
+}
+.delete-modal__cancel {
+  background: #f8f9fa;
+  color: #222;
+  border: 1px solid #e1e8ed;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.delete-modal__delete {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.delete-modal__delete:hover {
+  background: #c0392b;
+}
+.delete-modal__close {
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete-modal__close:hover {
+  background: #219150;
 }

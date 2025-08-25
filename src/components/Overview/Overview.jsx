@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Stats from "./Stats";
-import RecentActions from "./RecentActions";
 import { fetchStats, transformStatsData } from "../../api/api";
 import "./Overview.css";
 
@@ -31,8 +30,6 @@ const Overview = () => {
     <h1 className="page__title">Dashboard Overview</h1>
 
       <Stats data={statsData} loading={loading} error={error} />
-
-      <RecentActions />
     </section>
   );
 };
