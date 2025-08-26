@@ -56,45 +56,53 @@ const Reporting = () => {
     }
   }, [data]);
 
-
   // --- DATA MAPPING FOR CHARTS ---
   // 1. Bar chart: [{ company, job, matches, score }]
-  const barChartData = data && data.per_job
-    ? data.per_job.map(j => ({
-        company: j.company,
-        job: j.job,
-        matches: j.matches,
-        score: j.score
-      }))
-    : [];
+  const barChartData =
+    data && data.per_job
+      ? data.per_job.map((j) => ({
+          company: j.company,
+          job: j.job,
+          matches: j.matches,
+          score: j.score,
+          job_id: j.job_id,
+        }))
+      : [];
 
   // 2. Pie chart: [{ company, job }]
-  const pieChartData = data && data.per_job
-    ? data.per_job.map(j => ({
-        company: j.company,
-        job: j.job
-      }))
-    : [];
+  const pieChartData =
+    data && data.per_job
+      ? data.per_job.map((j) => ({
+          company: j.company,
+          job: j.job,
+        }))
+      : [];
 
   // 3. Strip plot: { [company]: [{ job, scores }] }
   const stripPlotData = {};
   if (data && data.per_job) {
-    data.per_job.forEach(j => {
+    data.per_job.forEach((j) => {
       if (!stripPlotData[j.company]) stripPlotData[j.company] = [];
       stripPlotData[j.company].push({
         job: j.job,
-        scores: j.scores
+        scores: j.scores,
       });
     });
   }
 
   // Jobs for selected company (for strip plot)
-  const companyJobs = selectedCompany && stripPlotData[selectedCompany] ? stripPlotData[selectedCompany] : [];
+  const companyJobs =
+    selectedCompany && stripPlotData[selectedCompany]
+      ? stripPlotData[selectedCompany]
+      : [];
 
   // Handler for pie chart click (to be passed to CompanyJobsPieChart)
   const handlePieClick = (company) => {
     setSelectedCompany(company);
   };
+
+  // Dynamic chart title based on minScore
+  const chartTitle = `Jobs with high-scoring matches (above ${minScore} score)`;
 
   return (
     <section className="main-page page">
@@ -143,12 +151,15 @@ const Reporting = () => {
                 <div className={styles.spinner} />
               </div>
             ) : (
-              <PerJobBarChart
-                data={barChartData}
-                sortIndex={sortIndex}
-                setSortIndex={setSortIndex}
-                minScore={minScore}
-              />
+              <>
+                <h2 className={styles.chartTitle}>{chartTitle}</h2>
+                <PerJobBarChart
+                  data={barChartData}
+                  sortIndex={sortIndex}
+                  setSortIndex={setSortIndex}
+                  minScore={minScore}
+                />
+              </>
             )}
           </div>
           <div className={styles.reportingCardLarge}>

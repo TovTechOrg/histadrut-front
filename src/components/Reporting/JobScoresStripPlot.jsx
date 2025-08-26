@@ -1,4 +1,3 @@
-
 import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
@@ -29,6 +28,18 @@ const JobScoresStripPlot = ({ data = [] }) => {
 
   const categories = jobs.map(j => j.job);
 
+  let maxCount = 1;
+  jobs.forEach(job => {
+    const scoreCounts = {};
+    job.scores.forEach(s => {
+      const rounded = Math.round(s * 100) / 100;
+      scoreCounts[rounded] = (scoreCounts[rounded] || 0) + 1;
+    });
+    Object.values(scoreCounts).forEach(count => {
+      if (count > maxCount) maxCount = count;
+    });
+  });
+
   // Only scatter dots for unique scores
   const scatterSeries = [];
   jobs.forEach((job, jobIndex) => {
@@ -38,16 +49,17 @@ const JobScoresStripPlot = ({ data = [] }) => {
       const rounded = Math.round(s * 100) / 100;
       scoreCounts[rounded] = (scoreCounts[rounded] || 0) + 1;
     });
-    // Global alpha and size: 1 match = 0.1, 10+ = 1, 2-9 spread equally
+
     const scatterData = Object.entries(scoreCounts).map(([score, count]) => {
-      // 1 match = 40% alpha, 2-10+ spread evenly from 40% to 100%
-      let alpha = 0.4;
-      if (count >= 10) alpha = 1;
-      else if (count > 1) alpha = 0.4 + 0.6 * (count - 1) / 9;
-      // Marker size: 1 match = 3, 10+ = 10, 2-9 spread equally
+      // 1 match = 50% alpha, maxCount = 100%, 2-maxCount spread evenly
+      let alpha = 0.5; 
+      if (count >= maxCount) alpha = 1;
+      else if (count > 1) alpha = 0.4 + 0.6 * (count - 1) / (maxCount - 1);
+
       let radius = 3;
-      if (count >= 10) radius = 10;
-      else if (count > 1) radius = 3 + (7 * (count - 1) / 9); // 2=3.78..., 3=4.56..., ..., 9=9.22...
+      if (count >= maxCount) radius = 10;
+      else if (count > 1) radius = 3 + (7 * (count - 1) / (maxCount - 1));
+
       return {
         x: jobIndex,
         y: parseFloat(score),
@@ -91,11 +103,11 @@ const JobScoresStripPlot = ({ data = [] }) => {
   const options = {
     chart: {
       type: 'scatter',
-      height: 500, // Less vertical space, fits card
-      width: 1000, // Fit card and titles better
+      height: 500,
+      width: 1000,
       style: { fontFamily: 'inherit' },
     },
-  title: { text: 'Score Density across top jobs', align: 'left' },
+    title: { text: 'Score Density across top jobs', align: 'left' },
     credits: { enabled: false },
     legend: { enabled: false },
     xAxis: {
@@ -131,6 +143,11 @@ const JobScoresStripPlot = ({ data = [] }) => {
     plotOptions: {
       scatter: {
         marker: { radius: 3, symbol: 'circle', fillColor: '#3498db' },
+        states: {
+          inactive: {
+            opacity: 0.8
+          }
+        }
       },
       areasplinerange: {
         enableMouseTracking: false,
@@ -148,6 +165,7 @@ const JobScoresStripPlot = ({ data = [] }) => {
       ...scatterSeries
     ]
   };
+
 
   return <HighchartsReact highcharts={Highcharts} options={options} />;
 };
