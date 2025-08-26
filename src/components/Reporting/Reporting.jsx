@@ -111,57 +111,63 @@ const Reporting = () => {
         <div className={styles.reportingPageColumn}>
           {error && <div className={styles.error}>{error}</div>}
           {/* Filter bar: sorter + min score slider */}
-          <div className={styles.filterBar}>
-            <div className={styles.sorter}>
-              <label htmlFor="sort-bar-chart" className={styles.sorter__label}>
-                Sort by
-              </label>
-              <select
-                id="sort-bar-chart"
-                value={sortIndex}
-                onChange={(e) => setSortIndex(Number(e.target.value))}
-                className={styles.sorter__select}
-              >
-                <option value={0}>Company (A-Z)</option>
-                <option value={1}>Matches (High → Low)</option>
-              </select>
-            </div>
-            <div className={styles.minScoreFilter}>
-              <label
-                htmlFor="min-score-slider"
-                className={styles.sorter__label}
-              >
-                Min Score: <b>{minScore}</b>
-              </label>
-              <input
-                id="min-score-slider"
-                type="range"
-                min={7.5}
-                max={maxScore}
-                step={0.1}
-                value={minScore}
-                onChange={(e) => setMinScore(Number(e.target.value))}
-                className={styles.minScoreSlider}
-              />
-            </div>
-          </div>
-          <div className={`custom-scrollbar ${styles.reportingCard}`}>
-            {loading ? (
-              <div className={styles.spinnerWrapper}>
-                <div className={styles.spinner} />
-              </div>
-            ) : (
+          <>
+            {!loading && (
               <>
+                <div className={styles.filterBar}>
+                  <div className={styles.sorter}>
+                    <label htmlFor="sort-bar-chart" className={styles.sorter__label}>
+                      Sort by
+                    </label>
+                    <select
+                      id="sort-bar-chart"
+                      value={sortIndex}
+                      onChange={(e) => setSortIndex(Number(e.target.value))}
+                      className={styles.sorter__select}
+                    >
+                      <option value={0}>Company (A-Z)</option>
+                      <option value={1}>Matches (High → Low)</option>
+                    </select>
+                  </div>
+                  <div className={styles.minScoreFilter}>
+                    <label
+                      htmlFor="min-score-slider"
+                      className={styles.sorter__label}
+                    >
+                      Min Score: <b>{minScore}</b>
+                    </label>
+                    <input
+                      id="min-score-slider"
+                      type="range"
+                      min={7.5}
+                      max={maxScore}
+                      step={0.1}
+                      value={minScore}
+                      onChange={(e) => setMinScore(Number(e.target.value))}
+                      className={styles.minScoreSlider}
+                    />
+                  </div>
+                </div>
                 <h2 className={styles.chartTitle}>{chartTitle}</h2>
+              </>
+            )}
+            <div
+              className={`custom-scrollbar ${styles.reportingCard} ${loading ? styles.noMarginTop : ""}`}
+            >
+              {loading ? (
+                <div className={styles.spinnerWrapper}>
+                  <div className={styles.spinner} />
+                </div>
+              ) : (
                 <PerJobBarChart
                   data={barChartData}
                   sortIndex={sortIndex}
                   setSortIndex={setSortIndex}
                   minScore={minScore}
                 />
-              </>
-            )}
-          </div>
+              )}
+            </div>
+          </>
           <div className={styles.reportingCardLarge}>
             <div
               className="custom-scrollbar"

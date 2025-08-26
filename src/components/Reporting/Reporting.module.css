@@ -35,6 +35,7 @@
   border-radius: 12px;
   box-shadow: 0 2px 8px #0001;
   padding: 16px;
+  margin-top: -52px; /* 64px (gap) - 12px (title margin) = 52px */
 }
 
 .reportingCardLarge {
@@ -145,4 +146,9 @@
   color: #333333;
   font-size: 1.2em;
   font-weight: bold;
+  margin-bottom: 12px; 
+}
+
+.noMarginTop {
+  margin-top: 0 !important;
 }
