@@ -1,11 +1,9 @@
 import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-// Accept data as prop from parent
-import { getCompanyColorMap } from "./PerJobBarChart";
 
 
-const CompanyJobsPieChart = ({ data = [], onSliceClick, selectedCompany }) => {
+const CompanyJobsPieChart = ({ data = [], onSliceClick, selectedCompany, companyColorMap = {} }) => {
 	// data: [{ company, job }]
 	// Aggregate by company
 	const companyCounts = {};
@@ -16,21 +14,16 @@ const CompanyJobsPieChart = ({ data = [], onSliceClick, selectedCompany }) => {
 	let aggData = Object.entries(companyCounts).map(([name, y]) => ({ name, y }));
 	// Sort descending and take top 5, group rest as 'Other'
 	aggData.sort((a, b) => b.y - a.y);
-	// Color map by company name
-	let colorMap = getCompanyColorMap(
-		aggData.map(d => ({ company: d.name }))
-	);
 	let pieData = aggData;
 	if (aggData.length > 5) {
 		const top5 = aggData.slice(0, 5);
 		const otherSum = aggData.slice(5).reduce((sum, d) => sum + d.y, 0);
 		pieData = [...top5, { name: 'Other', y: otherSum }];
-		colorMap = { ...colorMap, Other: '#bdc3c7' };
 	}
 	// Assign colors
 	pieData = pieData.map(d => ({
 		...d,
-		color: colorMap[d.name],
+		color: companyColorMap[d.name] || "#bdc3c7",
 		sliced: selectedCompany && d.name === selectedCompany
 	}));
 

@@ -35,6 +35,7 @@ const PerJobBarChart = ({
   sortIndex,
   setSortIndex,
   minScore = 7.5,
+  companyColorMap, // <-- add this prop
 }) => {
   const navigate = useNavigate();
   // Filter jobs by minScore, recalculate matches, and remove jobs with 0 matches
@@ -56,7 +57,7 @@ const PerJobBarChart = ({
     .filter((job) => job.matches > 0);
 
   const sortedData = [...filteredData].sort(sorters[sortIndex].fn);
-  const companyColorMap = getCompanyColorMap(sortedData);
+  // const companyColorMap = getCompanyColorMap(sortedData);
 
   const options = {
     title: {
@@ -165,7 +166,14 @@ const PerJobBarChart = ({
     ],
   };
 
-  return <HighchartsReact highcharts={Highcharts} options={options} />;
+  return (
+    <div
+      className="custom-scrollbar"
+      style={{ overflowY: "auto", maxHeight: "400px" }}
+    >
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </div>
+  );
 };
 
 export default PerJobBarChart;

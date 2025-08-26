@@ -9,9 +9,14 @@ if (typeof HighchartsMore === "function") {
   HighchartsMore(Highcharts);
 }
 
+function hexToRgb(hex) {
+  hex = hex.replace(/^#/, "");
+  if (hex.length === 3) hex = hex.split("").map(x => x + x).join("");
+  const num = parseInt(hex, 16);
+  return [(num >> 16) & 255, (num >> 8) & 255, num & 255].join(",");
+}
 
-
-const JobScoresStripPlot = ({ data = [] }) => {
+const JobScoresStripPlot = ({ data = [], companyColorMap = {}, selectedCompany }) => {
   // data: [{ job: string, scores: number[] }]
   // Only include jobs with at least 1 score (no filter), then take top 20 by count
   let jobs = data.filter(j => Array.isArray(j.scores) && j.scores.length > 0);
@@ -68,7 +73,9 @@ const JobScoresStripPlot = ({ data = [] }) => {
         alpha,
         marker: {
           radius,
-          fillColor: `rgba(52,152,219,${alpha})`,
+          fillColor: companyColorMap[selectedCompany]
+            ? `rgba(${hexToRgb(companyColorMap[selectedCompany])},${alpha})`
+            : `rgba(52,152,219,${alpha})`,
           symbol: 'circle',
           lineWidth: 0
         }

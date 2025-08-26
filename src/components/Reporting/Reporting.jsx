@@ -104,6 +104,32 @@ const Reporting = () => {
   // Dynamic chart title based on minScore
   const chartTitle = `Jobs with high-scoring matches (above ${minScore} score)`;
 
+  // At the top of Reporting.jsx, after you get allCompanies:
+  const companyColorPalette = [
+    "#3498db",
+    "#e67e22",
+    "#2ecc71",
+    "#e74c3c",
+    "#9b59b6",
+    "#f1c40f",
+    "#1abc9c",
+    "#34495e",
+    "#fd79a8",
+    "#00b894",
+    "#fdcb6e",
+    "#636e72",
+    "#00cec9",
+    "#6c5ce7",
+    "#fab1a0",
+    "#d35400",
+    // ...add more if needed
+  ];
+
+  const companyColorMap = {};
+  allCompanies.forEach((company, idx) => {
+    companyColorMap[company] = companyColorPalette[idx % companyColorPalette.length];
+  });
+
   return (
     <section className="main-page page">
       <h1 className="page__title">Reporting</h1>
@@ -112,7 +138,7 @@ const Reporting = () => {
           {error && <div className={styles.error}>{error}</div>}
           {/* Filter bar: sorter + min score slider */}
           <>
-            {!loading && (
+            {!loading ? (
               <>
                 <div className={styles.filterBar}>
                   <div className={styles.sorter}>
@@ -150,10 +176,11 @@ const Reporting = () => {
                 </div>
                 <h2 className={styles.chartTitle}>{chartTitle}</h2>
               </>
+            ) : (
+              // Placeholder with same height as filters+title
+              <div style={{ height: "72px" }} /> // Adjust height as needed
             )}
-            <div
-              className={`custom-scrollbar ${styles.reportingCard} ${loading ? styles.noMarginTop : ""}`}
-            >
+            <div className={styles.reportingCard}>
               {loading ? (
                 <div className={styles.spinnerWrapper}>
                   <div className={styles.spinner} />
@@ -164,6 +191,7 @@ const Reporting = () => {
                   sortIndex={sortIndex}
                   setSortIndex={setSortIndex}
                   minScore={minScore}
+                  companyColorMap={companyColorMap}
                 />
               )}
             </div>
@@ -184,6 +212,7 @@ const Reporting = () => {
                       data={pieChartData}
                       onSliceClick={handlePieClick}
                       selectedCompany={selectedCompany}
+                      companyColorMap={companyColorMap}
                     />
                   </div>
                   <div className={styles.stripPlotCol}>
@@ -207,7 +236,11 @@ const Reporting = () => {
                         ))}
                       </select>
                     </div>
-                    <JobScoresStripPlot data={companyJobs} />
+                    <JobScoresStripPlot
+                      data={companyJobs}
+                      companyColorMap={companyColorMap}
+                      selectedCompany={selectedCompany}
+                    />
                   </div>
                 </div>
               )}
