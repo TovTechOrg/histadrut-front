@@ -1,4 +1,3 @@
-
 import React, { useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "../../contexts/useAuth";
@@ -30,6 +29,7 @@ const MatchesFilters = () => {
   // No longer need showCompanyDropdown, handled by shared component
   const [localJobTitle, setLocalJobTitle] = React.useState(searchParams.get("job_title") || "");
   const [localCandidateName, setLocalCandidateName] = React.useState(searchParams.get("candidateName") || "");
+  const [localJobId, setLocalJobId] = React.useState(searchParams.get("job_id") || "");
   const addedSince = searchParams.get("addedSince") || "";
   const minRelevanceScore = searchParams.get("minRelevanceScore") ? parseFloat(searchParams.get("minRelevanceScore")) : 7.0;
   const [localMinScore, setLocalMinScore] = React.useState(minRelevanceScore);
@@ -53,6 +53,9 @@ const MatchesFilters = () => {
   React.useEffect(() => {
     setLocalCandidateName(searchParams.get("candidateName") || "");
   }, [searchParams.get("candidateName")]);
+  React.useEffect(() => {
+    setLocalJobId(searchParams.get("job_id") || "");
+  }, [searchParams.get("job_id")]);
 
   // Debounced update for each input
   const debouncedSetParam = useDebounce((field, value) => {
@@ -86,6 +89,10 @@ const MatchesFilters = () => {
   const handleCandidateNameChange = (e) => {
     setLocalCandidateName(e.target.value);
     debouncedSetParam("candidateName", e.target.value);
+  };
+  const handleJobIdChange = (e) => {
+    setLocalJobId(e.target.value);
+    debouncedSetParam("job_id", e.target.value);
   };
   // Handle date and slider changes for addedSince and minRelevanceScore
   const handleInputChange = (field, value) => {
@@ -191,6 +198,20 @@ const MatchesFilters = () => {
               placeholder="e.g., Shy"
               value={localCandidateName}
               onChange={handleCandidateNameChange}
+            />
+          </div>
+
+          <div className="match-filters__field">
+            <label className="match-filters__label" htmlFor="jobId">
+              Job ID
+            </label>
+            <input
+              id="jobId"
+              type="text"
+              className="match-filters__input"
+              placeholder="e.g., 12345"
+              value={localJobId}
+              onChange={handleJobIdChange}
             />
           </div>
 
