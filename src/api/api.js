@@ -275,6 +275,7 @@ export const transformJobsData = (apiResponse) => {
           weaknesses: match.weeknesses || [], // Backend still has typo
         },
       })),
+      job_id: job.job_id || "", // <-- Make sure this is present!
     };
     
     return transformedJob;

@@ -493,3 +493,15 @@
   color: #5a6c7d;
   font-weight: 500;
 }
+
+.match-table__cell--job-id {
+  max-width: 100px;
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: ltr;
+  font-family: "Consolas", "Menlo", "Monaco", monospace;
+  font-size: 0.95em;
+  cursor: pointer;
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import downloadIcon from "../../assets/icons/download.svg";
 import linkIcon from "../../assets/icons/link.svg";
 import JobDescriptionModal from "../shared/JobDescriptionModal";
@@ -8,6 +8,13 @@ const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
   const [selectedJob, setSelectedJob] = useState(null);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
 
+  // Print the first row's full data to the console for debugging
+  useEffect(() => {
+    if (jobs && jobs.length > 0) {
+      console.log("First row job data:", jobs[0]);
+    }
+  }, [jobs]);
+
   if (loading) {
     return (
       <div className="match-table">
@@ -15,7 +22,6 @@ const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
       </div>
     );
   }
-
 
   // If there is an error, but allJobs is empty and loading is false, show no matches message instead of error
   if (error && !(Array.isArray(allJobs) && allJobs.length === 0 && !loading)) {
@@ -63,6 +69,9 @@ const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
         <thead className="match-table__header">
           <tr>
             <th className="match-table__cell match-table__cell--header">
+              Job ID
+            </th>
+            <th className="match-table__cell match-table__cell--header">
               Job Title
             </th>
             <th className="match-table__cell match-table__cell--header">
@@ -84,7 +93,7 @@ const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
         <tbody>
           {jobs.length === 0 ? (
             <tr>
-              <td colSpan="7" className="match-table__empty">
+              <td colSpan="8" className="match-table__empty">
                 {Array.isArray(allJobs) && allJobs.length === 0 && error
                   ? error
                   : Array.isArray(allJobs) && allJobs.length === 0
@@ -95,6 +104,12 @@ const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
           ) : (
             jobs.map((job, index) => (
               <tr key={`${index}_${job.id || 'NA'}_${job.company || 'unknown'}`} className="match-table__row">
+                <td
+                  className="match-table__cell match-table__cell--job-id"
+                  title={job.job_id || ""}
+                >
+                  {job.job_id || ""}
+                </td>
                 <td className="match-table__cell match-table__cell--match-title">
                   <span
                     className="match-table__title match-table__title--clickable"
