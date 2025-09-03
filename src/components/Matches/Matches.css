@@ -237,6 +237,8 @@
 .match-table__cell--candidates {
   display: table-cell;
   vertical-align: top;
+  justify-content: flex-start;
+  padding: 0 1rem;
 }
 
 .candidate-match__container,
@@ -244,7 +246,7 @@
 .candidate-info-item {
   display: flex;
   align-items: center;
-  justify-content: center; /* Center content horizontally */
+  justify-content: flex-start; /* Center content horizontally */
   padding: 0.5rem 0; /* Add vertical padding */
   margin-bottom: 0;
   direction: ltr;
@@ -252,9 +254,9 @@
   min-height: 40px;
 }
 
-.candidate-info-item:not(:last-child) {
-  border-bottom: 1px solid #f0f0f0; /* Add separator */
-}
+/* .candidate-info-item:not(:last-child) {
+  border-bottom: 1px solid #f0f0f0; 
+} */
 
 .candidate-match__name {
   font-weight: 500;
@@ -287,6 +289,7 @@
   display: table-cell;
   vertical-align: top;
   text-align: center;
+  padding: 0 1rem;
 }
 
 .cv-download-btn {
@@ -391,6 +394,7 @@
 .match-table__cell--mmr {
   display: table-cell;
   vertical-align: top;
+  padding: 0 1rem;
 }
 
 .mmr-badge {
@@ -439,6 +443,8 @@
 .match-table__cell--status,
 .match-table__cell--actions {
   white-space: nowrap;
+  padding: 0 1rem;
+  justify-content: flex-start;
 }
 
 .match-table__cell--actions {
@@ -459,7 +465,8 @@
   color: #2c3e50;
   gap: 0.5rem;
   white-space: nowrap;
-  width: 7rem;
+  width: 7rem !important;
+  margin-left: -3rem;
 }
 
 .action-btn:hover:not(:disabled) {
