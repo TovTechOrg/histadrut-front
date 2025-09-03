@@ -43,6 +43,23 @@ export const deleteUser = async (user_id) => {
   return await response.json();
 };
 
+// Mark a match as sent or pending
+export const setMatchSent = async (match_id, action = "sent") => {
+  const formData = new FormData();
+  formData.append("match_id", match_id);
+  formData.append("action", action);
+  const response = await fetch(`${API_BASE_URL}/set_match_sent`, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || "Failed to mark match as sent");
+  }
+  return await response.json();
+};
+
 // Unsubscribe from job offer emails
 export const unsubscribeFromEmails = async (email) => {
   const url = `${API_BASE_URL}/unsubscribe`;
@@ -262,6 +279,7 @@ export const transformJobsData = (apiResponse) => {
       matchedCandidates: (job.matches || []).map((match, matchIndex) => ({
         name: match.name || `Candidate ${matchIndex + 1}`,
         score: match.score || 0,
+        status: match.job_status || 'pending',
         cv: !!match.cv_link,
         cvLink: match.cv_link ? getAbsoluteUrl(match.cv_link) : null,
         mmr: match.mandatory_req ? "YES" : "NO",

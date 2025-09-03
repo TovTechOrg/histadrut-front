@@ -201,6 +201,10 @@
 
 .match-table__cell--match-title {
   color: #2c3e50;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .match-table__link {
@@ -236,10 +240,20 @@
 }
 
 .candidate-match__container,
-.mmr-badge__container {
-  margin-bottom: 1.5rem;
+.mmr-badge__container,
+.candidate-info-item {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center content horizontally */
+  padding: 0.5rem 0; /* Add vertical padding */
+  margin-bottom: 0;
   direction: ltr;
-  text-align: left;
+  text-align: center;
+  min-height: 40px;
+}
+
+.candidate-info-item:not(:last-child) {
+  border-bottom: 1px solid #f0f0f0; /* Add separator */
 }
 
 .candidate-match__name {
@@ -396,6 +410,106 @@
 .mmr-badge--no {
   background: #f8d7da;
   color: #721c24;
+}
+
+.status-badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  min-width: 60px;
+  text-align: center;
+}
+
+.status-badge--pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-badge--sent {
+  background: #d4edda;
+  color: #155724;
+}
+
+.match-table__cell--cv,
+.match-table__cell--mmr,
+.match-table__cell--status,
+.match-table__cell--actions {
+  white-space: nowrap;
+}
+
+.match-table__cell--actions {
+  width: 7rem;
+}
+
+.action-btn {
+  background: transparent;
+  border: 1px solid #e1e8ed;
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  color: #2c3e50;
+  gap: 0.5rem;
+  white-space: nowrap;
+  width: 7rem;
+}
+
+.action-btn:hover:not(:disabled) {
+  background: #e8f4fd;
+  border-color: #3498db;
+}
+
+.action-btn--revert {
+  border-color: #f39c12;
+  color: #f39c12;
+}
+
+.action-btn--revert:hover:not(:disabled) {
+  background: #fdf3e1;
+  border-color: #e67e22;
+  color: #e67e22;
+}
+
+.action-btn:disabled {
+  background: #f8f9fa;
+  cursor: not-allowed;
+  color: #bdc3c7;
+}
+
+.action-icon {
+  width: 14px;
+  height: 14px;
+  filter: brightness(0) saturate(100%) invert(50%) sepia(0%) saturate(0%)
+    hue-rotate(0deg) brightness(90%) contrast(90%);
+  transition: filter 0.2s ease;
+}
+
+.action-btn:hover:not(:disabled) .action-icon {
+  filter: brightness(0) saturate(100%) invert(31%) sepia(72%) saturate(1179%)
+    hue-rotate(192deg) brightness(97%) contrast(85%);
+}
+
+.action-btn--revert .action-icon {
+  filter: brightness(0) saturate(100%) invert(75%) sepia(29%) saturate(5619%)
+    hue-rotate(324deg) brightness(101%) contrast(94%);
+}
+
+.action-btn--revert:hover:not(:disabled) .action-icon {
+  filter: brightness(0) saturate(100%) invert(59%) sepia(53%) saturate(1254%)
+    hue-rotate(354deg) brightness(92%) contrast(91%);
+}
+
+.action-icon--sent {
+  filter: brightness(0) saturate(100%) invert(48%) sepia(44%) saturate(494%)
+    hue-rotate(83deg) brightness(91%) contrast(88%);
 }
 
 .match-table__loading,

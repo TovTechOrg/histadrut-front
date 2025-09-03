@@ -1,19 +1,44 @@
 import React, { useState, useEffect } from "react";
+import { setMatchSent } from "../../api/api";
 import downloadIcon from "../../assets/icons/download.svg";
 import linkIcon from "../../assets/icons/link.svg";
+import checkIcon from "../../assets/icons/check.svg";
 import JobDescriptionModal from "../shared/JobDescriptionModal";
 import CandidateModal from "./CandidateModal";
 
-const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
+const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
+  const [jobs, setJobs] = useState(initialJobs);
   const [selectedJob, setSelectedJob] = useState(null);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
 
-  // Print the first row's full data to the console for debugging
   useEffect(() => {
-    if (jobs && jobs.length > 0) {
-      console.log("First row job data:", jobs[0]);
+    setJobs(initialJobs);
+  }, [initialJobs]);
+
+  const handleToggleMatchStatus = async (jobId, matchId, currentStatus) => {
+    try {
+      const newStatus = currentStatus === "pending" ? "sent" : "pending";
+      await setMatchSent(matchId, newStatus);
+      
+      // Update the local state to reflect the change
+      const updatedJobs = jobs.map((job) => {
+        if (job.id === jobId) {
+          const updatedCandidates = job.matchedCandidates.map((candidate) => {
+            if (candidate._metadata.matchId === matchId) {
+              return { ...candidate, status: newStatus };
+            }
+            return candidate;
+          });
+          return { ...job, matchedCandidates: updatedCandidates };
+        }
+        return job;
+      });
+      setJobs(updatedJobs);
+    } catch (error) {
+      console.error("Failed to update match status:", error);
+      alert("Failed to update match status. Please try again.");
     }
-  }, [jobs]);
+  };
 
   if (loading) {
     return (
@@ -88,12 +113,16 @@ const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
             </th>
             <th className="match-table__cell match-table__cell--header">CV</th>
             <th className="match-table__cell match-table__cell--header">MMR</th>
+            <th className="match-table__cell match-table__cell--header">
+              Applied Status
+            </th>
+            <th className="match-table__cell match-table__cell--header"></th>
           </tr>
         </thead>
         <tbody>
           {jobs.length === 0 ? (
             <tr>
-              <td colSpan="8" className="match-table__empty">
+              <td colSpan="10" className="match-table__empty">
                 {Array.isArray(allJobs) && allJobs.length === 0 && error
                   ? error
                   : Array.isArray(allJobs) && allJobs.length === 0
@@ -149,11 +178,7 @@ const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
                 </td>
                 <td className="match-table__cell match-table__cell--candidates">
                   {job.matchedCandidates.map((candidate, index) => (
-                    <div
-                      className="candidate-match__container"
-                      key={index}
-                      dir="ltr"
-                    >
+                    <div className="candidate-info-item" key={index}>
                       <span
                         className="candidate-match__name candidate-match__name--clickable"
                         onClick={() => handleCandidateClick(candidate)}
@@ -164,13 +189,12 @@ const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
                       <span className="candidate-match__score">
                         {candidate.score}
                       </span>
-                      {index < job.matchedCandidates.length - 1 && <br />}
                     </div>
                   ))}
                 </td>
                 <td className="match-table__cell match-table__cell--cv">
                   {job.matchedCandidates.map((candidate, index) => (
-                    <div key={index}>
+                    <div className="candidate-info-item" key={index}>
                       {candidate.cv && candidate.cvLink ? (
                         <button
                           className="cv-download-btn"
@@ -195,13 +219,12 @@ const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
                           —
                         </span>
                       )}
-                      {index < job.matchedCandidates.length - 1 && <br />}
                     </div>
                   ))}
                 </td>
                 <td className="match-table__cell match-table__cell--mmr">
                   {job.matchedCandidates.map((candidate, index) => (
-                    <div className="mmr-badge__container" key={index}>
+                    <div className="candidate-info-item" key={index}>
                       <span
                         className={`mmr-badge ${
                           candidate.mmr === "YES"
@@ -211,7 +234,57 @@ const MatchesTable = ({ jobs, allJobs = [], loading, error }) => {
                       >
                         {candidate.mmr}
                       </span>
-                      {index < job.matchedCandidates.length - 1 && <br />}
+                    </div>
+                  ))}
+                </td>
+                <td className="match-table__cell match-table__cell--status">
+                  {job.matchedCandidates.map((candidate, index) => (
+                    <div className="candidate-info-item" key={index}>
+                      <span
+                        className={`status-badge status-badge--${candidate.status}`}
+                      >
+                        {candidate.status}
+                      </span>
+                    </div>
+                  ))}
+                </td>
+                <td className="match-table__cell match-table__cell--actions">
+                  {job.matchedCandidates.map((candidate, index) => (
+                    <div className="candidate-info-item" key={index}>
+                      <button
+                        className={`action-btn mark-as-sent-btn ${
+                          candidate.status === "sent" ? "action-btn--revert" : ""
+                        }`}
+                        onClick={() =>
+                          handleToggleMatchStatus(
+                            job.id,
+                            candidate._metadata.matchId,
+                            candidate.status
+                          )
+                        }
+                        title={
+                          candidate.status === "pending"
+                            ? "Mark as sent"
+                            : "Revert to pending"
+                        }
+                      >
+                        <img
+                          src={checkIcon}
+                          alt={
+                            candidate.status === "pending"
+                              ? "Mark as sent"
+                              : "Revert to pending"
+                          }
+                          className={`action-icon ${
+                            candidate.status === "sent"
+                              ? "action-icon--sent"
+                              : ""
+                          }`}
+                        />
+                        {candidate.status === "pending"
+                          ? "Mark as Sent"
+                          : "Revert Status"}
+                      </button>
                     </div>
                   ))}
                 </td>
