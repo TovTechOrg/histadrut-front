@@ -201,6 +201,8 @@ const apiRequest = async (endpoint, options = {}) => {
 
 export const fetchStats = async () => apiRequest("/stats");
 
+export const fetchCompaniesToday = async () => apiRequest("/get_companies_today");
+
 export const fetchJobs = async (page = 1, minScore, createdAt, companyName, candidateName, job_title, job_id, match_status) => {
   let url = `/matches2?page=${page}`;
   if (typeof minScore === "number") {

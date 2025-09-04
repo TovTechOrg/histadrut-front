@@ -11,11 +11,21 @@
   margin-bottom: 3rem;
 }
 
-.stats__grid {
+.stats__container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
+}
+
+.stats__grid {
+  display: contents;
+}
+
+/* Companies Today Section - positioned to appear below "Jobs Added Last Day" */
+.stats__companies-today {
+  grid-column: 4; /* Position in the 4th column (below "Jobs Added Last Day") */
+  grid-row: 2; /* Second row */
 }
 
 .stats__card {
@@ -85,6 +95,59 @@
 
 .stats__card--orange .stats__card-value {
   color: #c6720c;
+}
+
+.stats__card--companies {
+  border-left-color: #e67e22;
+}
+
+.stats__card--companies .stats__card-value {
+  color: #e67e22;
+}
+
+.stats__companies-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stats__company-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #e9ecef;
+  transition: background-color 0.2s ease;
+}
+
+.stats__company-item:hover {
+  background: #e9ecef;
+}
+
+.stats__company-name {
+  font-size: 0.85rem;
+  color: #2c3e50;
+  font-weight: 500;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 0.5rem;
+}
+
+.stats__company-count {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #e67e22;
+  background: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #e67e22;
+  min-width: 30px;
+  text-align: center;
+  flex-shrink: 0;
 }
 
 .stats__additional {
@@ -209,9 +272,14 @@
     padding: 1rem;
   }
 
-  .stats__grid {
+  .stats__container {
     grid-template-columns: 1fr;
     gap: 1rem;
+  }
+
+  .stats__companies-today {
+    grid-column: 1;
+    grid-row: auto;
   }
 
   .stats__card {
