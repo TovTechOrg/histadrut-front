@@ -30,6 +30,7 @@ const MatchesFilters = () => {
   const [localJobTitle, setLocalJobTitle] = React.useState(searchParams.get("job_title") || "");
   const [localCandidateName, setLocalCandidateName] = React.useState(searchParams.get("candidateName") || "");
   const [localJobId, setLocalJobId] = React.useState(searchParams.get("job_id") || "");
+  const [localAppliedStatus, setLocalAppliedStatus] = React.useState(searchParams.get("match_status") || "");
   const addedSince = searchParams.get("addedSince") || "";
   const minRelevanceScore = searchParams.get("minRelevanceScore") ? parseFloat(searchParams.get("minRelevanceScore")) : 7.0;
   const [localMinScore, setLocalMinScore] = React.useState(minRelevanceScore);
@@ -56,6 +57,9 @@ const MatchesFilters = () => {
   React.useEffect(() => {
     setLocalJobId(searchParams.get("job_id") || "");
   }, [searchParams.get("job_id")]);
+  React.useEffect(() => {
+    setLocalAppliedStatus(searchParams.get("match_status") || "");
+  }, [searchParams.get("match_status")]);
 
   // Debounced update for each input
   const debouncedSetParam = useDebounce((field, value) => {
@@ -93,6 +97,10 @@ const MatchesFilters = () => {
   const handleJobIdChange = (e) => {
     setLocalJobId(e.target.value);
     debouncedSetParam("job_id", e.target.value);
+  };
+  const handleAppliedStatusChange = (e) => {
+    setLocalAppliedStatus(e.target.value);
+    debouncedSetParam("match_status", e.target.value);
   };
   // Handle date and slider changes for addedSince and minRelevanceScore
   const handleInputChange = (field, value) => {
@@ -213,6 +221,29 @@ const MatchesFilters = () => {
               value={localJobId}
               onChange={handleJobIdChange}
             />
+          </div>
+
+          <div className="match-filters__field">
+            <label className="match-filters__label" htmlFor="appliedStatus">
+              Applied Status
+            </label>
+            <select
+              id="appliedStatus"
+              className="match-filters__input"
+              value={localAppliedStatus}
+              onChange={handleAppliedStatusChange}
+              aria-describedby="appliedStatus-help"
+            >
+              <option value="">All Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="sent">Sent</option>
+            </select>
+            <small id="appliedStatus-help" className="match-filters__help-text">
+              {isAdminUser 
+                ? "View the matches candidates have applied for"
+                : "View the matches you have applied for"
+              }
+            </small>
           </div>
 
           <div className="match-filters__field">

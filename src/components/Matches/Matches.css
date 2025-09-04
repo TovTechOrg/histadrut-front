@@ -438,6 +438,21 @@
   color: #155724;
 }
 
+.status-badge--changing {
+  background: #e2e3e5;
+  color: #6c757d;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
 .match-table__cell--cv,
 .match-table__cell--mmr,
 .match-table__cell--status,

@@ -10,33 +10,45 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
   const [jobs, setJobs] = useState(initialJobs);
   const [selectedJob, setSelectedJob] = useState(null);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
+  const [changingMatches, setChangingMatches] = useState(new Set());
 
   useEffect(() => {
     setJobs(initialJobs);
   }, [initialJobs]);
 
   const handleToggleMatchStatus = async (jobId, matchId, currentStatus) => {
+    // Add this match to the changing set
+    setChangingMatches(prev => new Set([...prev, matchId]));
+    
     try {
       const newStatus = currentStatus === "pending" ? "sent" : "pending";
       await setMatchSent(matchId, newStatus);
       
-      // Update the local state to reflect the change
-      const updatedJobs = jobs.map((job) => {
-        if (job.id === jobId) {
-          const updatedCandidates = job.matchedCandidates.map((candidate) => {
-            if (candidate._metadata.matchId === matchId) {
-              return { ...candidate, status: newStatus };
-            }
-            return candidate;
-          });
-          return { ...job, matchedCandidates: updatedCandidates };
-        }
-        return job;
-      });
-      setJobs(updatedJobs);
+      // Only update the local state after successful API response
+      setJobs(prevJobs => 
+        prevJobs.map((job) => {
+          if (job.id === jobId) {
+            const updatedCandidates = job.matchedCandidates.map((candidate) => {
+              if (candidate._metadata.matchId === matchId) {
+                return { ...candidate, status: newStatus };
+              }
+              return candidate;
+            });
+            return { ...job, matchedCandidates: updatedCandidates };
+          }
+          return job;
+        })
+      );
     } catch (error) {
       console.error("Failed to update match status:", error);
       alert("Failed to update match status. Please try again.");
+    } finally {
+      // Remove this match from the changing set
+      setChangingMatches(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(matchId);
+        return newSet;
+      });
     }
   };
 
@@ -241,52 +253,68 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                   {job.matchedCandidates.map((candidate, index) => (
                     <div className="candidate-info-item" key={index}>
                       <span
-                        className={`status-badge status-badge--${candidate.status}`}
+                        className={`status-badge ${
+                          changingMatches.has(candidate._metadata.matchId)
+                            ? "status-badge--changing"
+                            : `status-badge--${candidate.status}`
+                        }`}
                       >
-                        {candidate.status}
+                        {changingMatches.has(candidate._metadata.matchId)
+                          ? "changing..."
+                          : candidate.status}
                       </span>
                     </div>
                   ))}
                 </td>
                 <td className="match-table__cell match-table__cell--actions">
-                  {job.matchedCandidates.map((candidate, index) => (
-                    <div className="candidate-info-item" key={index}>
-                      <button
-                        className={`action-btn mark-as-sent-btn ${
-                          candidate.status === "sent" ? "action-btn--revert" : ""
-                        }`}
-                        onClick={() =>
-                          handleToggleMatchStatus(
-                            job.id,
-                            candidate._metadata.matchId,
-                            candidate.status
-                          )
-                        }
-                        title={
-                          candidate.status === "pending"
-                            ? "Mark as sent"
-                            : "Revert to pending"
-                        }
-                      >
-                        <img
-                          src={checkIcon}
-                          alt={
-                            candidate.status === "pending"
+                  {job.matchedCandidates.map((candidate, index) => {
+                    const isChanging = changingMatches.has(candidate._metadata.matchId);
+                    return (
+                      <div className="candidate-info-item" key={index}>
+                        <button
+                          className={`action-btn mark-as-sent-btn ${
+                            candidate.status === "sent" ? "action-btn--revert" : ""
+                          }`}
+                          onClick={() =>
+                            handleToggleMatchStatus(
+                              job.id,
+                              candidate._metadata.matchId,
+                              candidate.status
+                            )
+                          }
+                          disabled={isChanging}
+                          title={
+                            isChanging
+                              ? "Updating status..."
+                              : candidate.status === "pending"
                               ? "Mark as sent"
                               : "Revert to pending"
                           }
-                          className={`action-icon ${
-                            candidate.status === "sent"
-                              ? "action-icon--sent"
-                              : ""
-                          }`}
-                        />
-                        {candidate.status === "pending"
-                          ? "Mark as Sent"
-                          : "Revert Status"}
-                      </button>
-                    </div>
-                  ))}
+                        >
+                          <img
+                            src={checkIcon}
+                            alt={
+                              isChanging
+                                ? "Updating status..."
+                                : candidate.status === "pending"
+                                ? "Mark as sent"
+                                : "Revert to pending"
+                            }
+                            className={`action-icon ${
+                              candidate.status === "sent"
+                                ? "action-icon--sent"
+                                : ""
+                            }`}
+                          />
+                          {isChanging
+                            ? "Updating..."
+                            : candidate.status === "pending"
+                            ? "Mark as Sent"
+                            : "Revert Status"}
+                        </button>
+                      </div>
+                    );
+                  })}
                 </td>
               </tr>
             ))

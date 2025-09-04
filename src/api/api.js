@@ -201,7 +201,7 @@ const apiRequest = async (endpoint, options = {}) => {
 
 export const fetchStats = async () => apiRequest("/stats");
 
-export const fetchJobs = async (page = 1, minScore, createdAt, companyName, candidateName, job_title, job_id) => {
+export const fetchJobs = async (page = 1, minScore, createdAt, companyName, candidateName, job_title, job_id, match_status) => {
   let url = `/matches2?page=${page}`;
   if (typeof minScore === "number") {
     url += `&min_score=${minScore}`;
@@ -220,6 +220,9 @@ export const fetchJobs = async (page = 1, minScore, createdAt, companyName, cand
   }
   if (job_id && job_id.trim()) {
     url += `&job_id=${encodeURIComponent(job_id.trim())}`;
+  }
+  if (match_status && match_status.trim()) {
+    url += `&match_status=${encodeURIComponent(match_status.trim())}`;
   }
   return apiRequest(url);
 };

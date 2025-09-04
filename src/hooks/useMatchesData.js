@@ -23,17 +23,18 @@ export const useMatchesData = () => {
       addedSince: params.addedSince || "",
       minRelevanceScore: params.minRelevanceScore ? parseFloat(params.minRelevanceScore) : 7.0,
       job_id: params.job_id || "",
+      match_status: params.match_status || "",
     };
   }, [searchParams]);
 
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
 
-  const loadJobs = async (page, minScore, createdAt, companyName, candidateName, job_title, job_id) => {
+  const loadJobs = async (page, minScore, createdAt, companyName, candidateName, job_title, job_id, match_status) => {
     try {
       setLoading(true);
       setError(null);
 
-      const apiResponse = await fetchJobs(page, minScore, createdAt, companyName, candidateName, job_title, job_id); 
+      const apiResponse = await fetchJobs(page, minScore, createdAt, companyName, candidateName, job_title, job_id, match_status); 
 
       // If response is empty or missing jobs key, prompt user to upload CV
       if (!apiResponse || !apiResponse.jobs) {
@@ -77,7 +78,8 @@ export const useMatchesData = () => {
       filters.companyName,
       filters.candidateName,
       filters.job_title,
-      filters.job_id 
+      filters.job_id,
+      filters.match_status 
     );
   }, [
     currentPage,
@@ -86,7 +88,8 @@ export const useMatchesData = () => {
     filters.companyName,
     filters.candidateName,
     filters.job_title,
-    filters.job_id 
+    filters.job_id,
+    filters.match_status 
   ]);
 
   const goToPage = (page) => {
