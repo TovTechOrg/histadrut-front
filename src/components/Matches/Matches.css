@@ -462,42 +462,47 @@
   justify-content: flex-start;
 }
 
-.match-table__cell--actions {
-  width: 7rem;
-}
-
 .action-btn {
-  background: transparent;
-  border: 1px solid #e1e8ed;
-  border-radius: 4px;
-  padding: 0.4rem 0.8rem;
-  cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
-  font-size: 0.8rem;
-  color: #2c3e50;
   gap: 0.5rem;
+  background: #e8f4fd;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  color: #2980b9;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
   white-space: nowrap;
-  width: 7rem !important;
-  margin-left: -3rem;
+  width: auto;
+  margin-left: 0;
+  min-height: auto;
+  box-sizing: border-box;
+}
+
+.mark-as-sent-btn {
+  width: 7.1rem !important;
+  height: 2.2rem !important;
+  margin-left: -4rem !important;
 }
 
 .action-btn:hover:not(:disabled) {
-  background: #e8f4fd;
-  border-color: #3498db;
+  background: #2980b9;
+  color: white;
 }
 
 .action-btn--revert {
-  border-color: #f39c12;
+  background: #fdf3e1;
   color: #f39c12;
 }
 
 .action-btn--revert:hover:not(:disabled) {
-  background: #fdf3e1;
-  border-color: #e67e22;
-  color: #e67e22;
+  background: #f39c12;
+  color: white;
 }
 
 .action-btn:disabled {
@@ -509,14 +514,13 @@
 .action-icon {
   width: 14px;
   height: 14px;
-  filter: brightness(0) saturate(100%) invert(50%) sepia(0%) saturate(0%)
-    hue-rotate(0deg) brightness(90%) contrast(90%);
+  filter: brightness(0) saturate(100%) invert(31%) sepia(72%) saturate(1179%)
+    hue-rotate(192deg) brightness(97%) contrast(85%);
   transition: filter 0.2s ease;
 }
 
 .action-btn:hover:not(:disabled) .action-icon {
-  filter: brightness(0) saturate(100%) invert(31%) sepia(72%) saturate(1179%)
-    hue-rotate(192deg) brightness(97%) contrast(85%);
+  filter: brightness(0) saturate(100%) invert(100%);
 }
 
 .action-btn--revert .action-icon {
@@ -525,13 +529,16 @@
 }
 
 .action-btn--revert:hover:not(:disabled) .action-icon {
-  filter: brightness(0) saturate(100%) invert(59%) sepia(53%) saturate(1254%)
-    hue-rotate(354deg) brightness(92%) contrast(91%);
+  filter: brightness(0) saturate(100%) invert(100%);
 }
 
 .action-icon--sent {
   filter: brightness(0) saturate(100%) invert(48%) sepia(44%) saturate(494%)
     hue-rotate(83deg) brightness(91%) contrast(88%);
+}
+
+.action-btn-text {
+  font-size: 0.8rem;
 }
 
 .match-table__loading,

@@ -306,11 +306,13 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                                 : ""
                             }`}
                           />
-                          {isChanging
-                            ? "Updating..."
-                            : candidate.status === "pending"
-                            ? "Mark as Sent"
-                            : "Revert Status"}
+                          <span className="action-btn-text">
+                            {isChanging
+                              ? "Updating..."
+                              : candidate.status === "pending"
+                              ? "Mark as Sent"
+                              : "Revert Status"}
+                          </span>
                         </button>
                       </div>
                     );
