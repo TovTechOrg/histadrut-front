@@ -419,6 +419,7 @@ export const fetchUserFromSession = async () => {
         name: data.user.name,
         id: data.user.id,
         cv_status: data.user.cv_status,
+        cv_link: getAbsoluteUrl(data.user.cv_link || "/s3_get_cv?id=6889ef76b3f0e41f730476b2"), //FALLBACK LOGIC REMOVE THIS LATER
         subscribed: typeof data.user.subscribed === 'boolean' ? data.user.subscribed : true,
       };
       return userObject;

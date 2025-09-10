@@ -18,6 +18,25 @@ const Profile = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [showCvModal, setShowCvModal] = useState(false);
+
+  const handleDownloadCV = () => {
+    const cvLink = user.cv_link;
+    
+    if (!cvLink) {
+      setModalMessage('No CV available to download.');
+      setShowModal(true);
+      return;
+    }
+
+    // Download the CV file
+    const link = document.createElement('a');
+    link.href = cvLink;
+    link.download = `${user.name || 'CV'}_resume`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -143,12 +162,22 @@ const Profile = () => {
         </>
       )}
       {user.role !== "admin" && (
-        <button
-          className="profile-btn profile-btn-cv"
-          onClick={() => navigate("/cv-upload", { state: { fromProfile: true } })}
-        >
-          {user.cv_status === "Missing" ? "Upload CV" : "Re-upload CV"}
-        </button>
+        <div className="profile-cv-actions">
+          {(user.cv_link || true) && (
+            <button
+              className="profile-btn profile-btn-view-cv"
+              onClick={handleDownloadCV}
+            >
+              Download CV
+            </button>
+          )}
+          <button
+            className="profile-btn profile-btn-cv"
+            onClick={() => navigate("/cv-upload", { state: { fromProfile: true } })}
+          >
+            {user.cv_status === "Missing" ? "Upload CV" : "Re-upload CV"}
+          </button>
+        </div>
       )}
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="">
         <div className="profile-modal-content">
