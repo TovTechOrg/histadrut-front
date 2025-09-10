@@ -9,6 +9,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { LanguageProvider } from "./contexts/LanguageContext";
 import NavPanel from "./components/NavPanel/NavPanel";
 import Overview from "./components/Overview/Overview";
 import Matches from "./components/Matches/Matches";
@@ -26,9 +27,10 @@ import "./components/JobsListings/JobForm.css";
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="app">
+    <LanguageProvider>
+      <AuthProvider>
+        <Router>
+          <div className="app">
           <Routes>
             {/* Public routes */}
             <Route path="/login" element={<Login />} />
@@ -169,6 +171,7 @@ function App() {
         </div>
       </Router>
     </AuthProvider>
+    </LanguageProvider>
   );
 }
 
