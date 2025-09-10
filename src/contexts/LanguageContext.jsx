@@ -4,23 +4,46 @@ import React, { createContext, useContext, useReducer } from 'react';
 const languageReducer = (state, action) => {
   switch (action.type) {
     case 'SET_LANGUAGE':
+      // Save to localStorage when language changes
+      try {
+        localStorage.setItem('selectedLanguage', action.payload);
+      } catch (error) {
+        console.warn('Could not save language to localStorage:', error);
+      }
       return {
         ...state,
         currentLanguage: action.payload
       };
     case 'TOGGLE_LANGUAGE':
+      const newLanguage = state.currentLanguage === 'en' ? 'he' : 'en';
+      // Save to localStorage when language toggles
+      try {
+        localStorage.setItem('selectedLanguage', newLanguage);
+      } catch (error) {
+        console.warn('Could not save language to localStorage:', error);
+      }
       return {
         ...state,
-        currentLanguage: state.currentLanguage === 'en' ? 'he' : 'en'
+        currentLanguage: newLanguage
       };
     default:
       return state;
   }
 };
 
-// Initial state
+// Initial state - check localStorage first
+const getInitialLanguage = () => {
+  try {
+    const saved = localStorage.getItem('selectedLanguage');
+    return saved && ['en', 'he'].includes(saved) ? saved : 'en';
+  } catch (error) {
+    console.warn('Could not access localStorage:', error);
+    return 'en';
+  }
+};
+
 const initialState = {
-  currentLanguage: 'en', // default to English
+  currentLanguage: getInitialLanguage(),
   supportedLanguages: ['en', 'he']
 };
 

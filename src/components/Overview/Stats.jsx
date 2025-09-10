@@ -1,10 +1,14 @@
 import React from "react";
+import { useTranslations } from "../../utils/translations";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const Stats = ({ data, companiesToday, loading, error }) => {
+  const { t } = useTranslations('overview');
+  const { currentLanguage } = useLanguage();
   if (loading) {
     return (
       <div className="stats">
-        <div className="stats__loading">Loading statistics...</div>
+        <div className="stats__loading">{t('loadingStats')}</div>
       </div>
     );
   }
@@ -12,34 +16,34 @@ const Stats = ({ data, companiesToday, loading, error }) => {
   if (error) {
     return (
       <div className="stats">
-        <div className="stats__error">Error loading stats: {error}</div>
+        <div className="stats__error">{t('errorLoadingStats')}: {error}</div>
       </div>
     );
   }
 
   const statsCards = [
     {
-      title: "Total Active Jobs",
+      title: t('totalActiveJobs'),
       value: data?.jobs || 0,
       color: "blue",
     },
     {
-      title: "Total Candidates",
+      title: t('totalCandidates'),
       value: data?.candidates || 0,
       color: "green",
     },
     {
-      title: "Total Matches",
+      title: t('totalMatches'),
       value: data?.matches || 0,
       color: "purple",
     },
     {
-      title: "Jobs Added Last Day",
+      title: t('jobsAddedLastDay'),
       value: data?.jobsLastDay || 0,
       color: "orange",
     },
     {
-      title: "Jobs Added Last Week",
+      title: t('jobsAddedLastWeek'),
       value: data?.jobsLastWeek || 0,
       color: "teal",
     },
@@ -49,7 +53,7 @@ const Stats = ({ data, companiesToday, loading, error }) => {
   const shouldShowCompaniesCard = data?.jobsLastDay > 0 && companiesToday && companiesToday.length > 0;
 
   return (
-    <section className="stats" aria-labelledby="stats-heading">
+    <section className="stats" aria-labelledby="stats-heading" style={{ direction: currentLanguage === 'he' ? 'rtl' : 'ltr' }}>
       <h2 id="stats-heading" className="sr-only">
         Dashboard Statistics
       </h2>
@@ -70,7 +74,7 @@ const Stats = ({ data, companiesToday, loading, error }) => {
         {shouldShowCompaniesCard && (
           <div className="stats__companies-today">
             <article className="stats__card stats__card--companies">
-              <h3 className="stats__card-title">New Jobs by Company Today</h3>
+              <h3 className="stats__card-title">{t('newJobsByCompanyToday')}</h3>
               <div className="stats__companies-list">
                 {companiesToday.map((company, index) => (
                   <div key={index} className="stats__company-item">
