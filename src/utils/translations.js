@@ -40,6 +40,34 @@ export const translations = {
     }
   },
 
+  // Navigation panel
+  navigation: {
+    en: {
+      title: "Navigation",
+      welcome: "Welcome",
+      overview: "Overview",
+      users: "Users", 
+      jobsListings: "Jobs Listings",
+      jobMatches: "Job Matches",
+      companies: "Companies",
+      reporting: "Reporting",
+      profile: "Profile",
+      logout: "Logout"
+    },
+    he: {
+      title: "ניווט",
+      welcome: "ברוך הבא",
+      overview: "סקירה כללית",
+      users: "משתמשים",
+      jobsListings: "רשימת משרות",
+      jobMatches: "התאמות משרות",
+      companies: "חברות",
+      reporting: "דוחות",
+      profile: "פרופיל",
+      logout: "התנתק"
+    }
+  },
+
   // Profile page
   profile: {
     en: {
@@ -282,6 +310,64 @@ export const translations = {
     }
   },
 
+  // Companies page
+  companies: {
+    en: {
+      title: "Company Management",
+      loading: "Loading companies...",
+      error: "Error loading companies",
+      noCompanies: "No companies found.",
+      table: {
+        headers: {
+          id: "",
+          companyName: "Company Name",
+          jobsCount: "Jobs Count", 
+          actions: ""
+        }
+      },
+      actions: {
+        viewJobs: "View {company} jobs",
+        deleteCompany: "Delete {company}"
+      },
+      modal: {
+        deleteTitle: "Confirm Deletion",
+        deleteMessage: "You're about to delete {company}, that have {jobsCount} active jobs.",
+        deleteConfirm: "Are you sure?",
+        cancel: "Cancel",
+        delete: "Delete",
+        successTitle: "Success",
+        errorTitle: "Error"
+      }
+    },
+    he: {
+      title: "ניהול חברות",
+      loading: "טוען חברות...",
+      error: "שגיאה בטעינת חברות",
+      noCompanies: "לא נמצאו חברות.",
+      table: {
+        headers: {
+          id: "",
+          companyName: "שם החברה",
+          jobsCount: "מספר משרות",
+          actions: ""
+        }
+      },
+      actions: {
+        viewJobs: "הצג משרות של {company}",
+        deleteCompany: "מחק את {company}"
+      },
+      modal: {
+        deleteTitle: "אישור מחיקה",
+        deleteMessage: "אתה עומד למחוק את {company}, שיש לה {jobsCount} משרות פעילות.",
+        deleteConfirm: "האם אתה בטוח?",
+        cancel: "בטל",
+        delete: "מחק",
+        successTitle: "הצלחה",
+        errorTitle: "שגיאה"
+      }
+    }
+  },
+
   // Common elements
   common: {
     en: {
@@ -304,6 +390,72 @@ export const translations = {
       edit: "ערוך",
       close: "סגור"
     }
+  },
+
+  // Users page
+  users: {
+    en: {
+      title: "All Users",
+      loading: "Loading users...",
+      error: "Failed to load users.",
+      table: {
+        headers: {
+          name: "Name",
+          email: "Email",
+          cvStatus: "CV Status",
+          signedUp: "Signed Up",
+          totalMatches: "Total Matches",
+          actions: ""
+        }
+      },
+      actions: {
+        deleteUser: "Delete user"
+      },
+      modal: {
+        deleteTitle: "Confirm Deletion",
+        deleteMessage: "Are you sure you want to completely delete the user {userName}",
+        deleteMessageWithCV: ", their CV",
+        deleteMessageWithMatches: " and {matchCount} matches",
+        deleteWarning: "This action can't be reversed!",
+        deleting: "Deleting...",
+        delete: "Delete",
+        cancel: "Cancel",
+        successTitle: "User Deleted",
+        successMessage: "User was deleted successfully.",
+        ok: "OK"
+      }
+    },
+    he: {
+      title: "כל המשתמשים",
+      loading: "טוען משתמשים...",
+      error: "כשל בטעינת משתמשים.",
+      table: {
+        headers: {
+          name: "שם",
+          email: "אימייל",
+          cvStatus: "סטטוס קורות חיים",
+          signedUp: "תאריך הרשמה",
+          totalMatches: "סה״כ התאמות",
+          actions: ""
+        }
+      },
+      actions: {
+        deleteUser: "מחק משתמש"
+      },
+      modal: {
+        deleteTitle: "אישור מחיקה",
+        deleteMessage: "האם אתה בטוח שברצונך למחוק לחלוטין את המשתמש {userName}",
+        deleteMessageWithCV: ", את קורות החיים שלו",
+        deleteMessageWithMatches: " ו-{matchCount} התאמות",
+        deleteWarning: "פעולה זו אינה ניתנת לביטול!",
+        deleting: "מוחק...",
+        delete: "מחק",
+        cancel: "בטל",
+        successTitle: "המשתמש נמחק",
+        successMessage: "המשתמש נמחק בהצלחה.",
+        ok: "אישור"
+      }
+    }
   }
 };
 
@@ -312,14 +464,25 @@ export const getTranslation = (section, key, language = 'en', variables = {}) =>
   try {
     // Handle nested keys like 'errors.loginFailed'
     const keys = key.split('.');
-    let value = translations[section][language];
+    let value = translations[section]?.[language];
     
     for (const k of keys) {
-      value = value[k];
+      value = value?.[k];
     }
     
-    if (!value) {
-      value = translations[section]['en'][key] || key; // fallback to English or key itself
+    // If not found in current language, try fallback to English
+    if (value === undefined && language !== 'en') {
+      let fallbackValue = translations[section]?.['en'];
+      for (const k of keys) {
+        fallbackValue = fallbackValue?.[k];
+      }
+      value = fallbackValue;
+    }
+    
+    // If still not found, return the key as fallback
+    if (value === undefined) {
+      console.warn(`Translation not found for: ${section}.${key} in ${language}`);
+      return key;
     }
     
     // Replace template variables like {current} and {total}

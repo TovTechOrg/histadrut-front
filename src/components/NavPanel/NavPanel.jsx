@@ -3,6 +3,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { backendLogout } from "../../api/api";
 import { capitalizeName } from "../../utils/textHelpers";
+import { useTranslations } from "../../utils/translations";
+import { useLanguage } from "../../contexts/LanguageContext";
 import dashboardIcon from "../../assets/icons/dashboard.svg";
 import profileIcon from "../../assets/icons/profile.svg";
 import listingsIcon from "../../assets/icons/listings.svg";
@@ -15,6 +17,8 @@ import "./NavPanel.css";
 const NavPanel = () => {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslations('navigation');
+  const { currentLanguage } = useLanguage();
 
   const isAdmin = user?.role === "admin";
 
@@ -29,10 +33,15 @@ const NavPanel = () => {
   };
 
   return (
-    <aside className="nav-panel" role="navigation" aria-label="Main navigation">
+    <aside 
+      className="nav-panel" 
+      role="navigation" 
+      aria-label="Main navigation"
+      style={{ direction: currentLanguage === 'he' ? 'rtl' : 'ltr' }}
+    >
       <div className="nav-panel__header">
-        <h2 className="nav-panel__title">Navigation</h2>
-        <p className="nav-panel__user">Welcome, {capitalizeName(user?.name)}</p>
+        <h2 className="nav-panel__title">{t('title')}</h2>
+        <p className="nav-panel__user">{t('welcome')}, {capitalizeName(user?.name)}</p>
       </div>
       <nav className="nav-panel__nav" aria-label="Main navigation">
         <ul className="nav-panel__list">
@@ -50,7 +59,7 @@ const NavPanel = () => {
                     alt="Overview Dashboard, created by Gemini"
                     className="nav-panel__icon"
                   />
-                  Overview
+                  {t('overview')}
                 </NavLink>
               </li>
               <li className="nav-panel__item">
@@ -65,7 +74,7 @@ const NavPanel = () => {
                     alt="Users"
                     className="nav-panel__icon"
                   />
-                  Users
+                  {t('users')}
                 </NavLink>
               </li>
               <li className="nav-panel__item">
@@ -80,7 +89,7 @@ const NavPanel = () => {
                     alt="Jobs Listings, created by Gemini"
                     className="nav-panel__icon"
                   />
-                  Jobs Listings
+                  {t('jobsListings')}
                 </NavLink>
               </li>
               <li className="nav-panel__item">
@@ -95,7 +104,7 @@ const NavPanel = () => {
                     alt="Job Matches"
                     className="nav-panel__icon"
                   />
-                  Job Matches
+                  {t('jobMatches')}
                 </NavLink>
               </li>
               <li className="nav-panel__item">
@@ -110,7 +119,7 @@ const NavPanel = () => {
                     alt="Companies, created by Gemini"
                     className="nav-panel__icon"
                   />
-                  Companies
+                  {t('companies')}
                 </NavLink>
               </li>
               <li className="nav-panel__item">
@@ -125,7 +134,7 @@ const NavPanel = () => {
                     alt="Reporting, created by Gemini"
                     className="nav-panel__icon"
                   />
-                  Reporting
+                  {t('reporting')}
                 </NavLink>
               </li>
             </>
@@ -143,7 +152,7 @@ const NavPanel = () => {
                     alt="Job Matches"
                     className="nav-panel__icon"
                   />
-                  Job Matches
+                  {t('jobMatches')}
                 </NavLink>
               </li>
             </>
@@ -165,12 +174,15 @@ const NavPanel = () => {
             src={profileIcon}
             alt="Profile"
             className="nav-panel__icon"
-            style={{ marginRight: 8 }}
+            style={{ 
+              marginRight: currentLanguage === 'he' ? 0 : 8,
+              marginLeft: currentLanguage === 'he' ? 8 : 0
+            }}
           />
-          Profile
+          {t('profile')}
         </NavLink>
         <button onClick={handleLogout} className="nav-panel__logout">
-          Logout
+          {t('logout')}
         </button>
       </div>
     </aside>

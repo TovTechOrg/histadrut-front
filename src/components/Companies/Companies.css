@@ -56,6 +56,12 @@
   min-height: 100vh;
 }
 
+/* RTL Support - Page content but not table */
+/* Keep titles left-aligned like other pages */
+.companies-page .page__title {
+  text-align: left !important;
+}
+
 .companies-header {
   display: flex;
   justify-content: space-between;

@@ -2,6 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useCompaniesData } from "../../hooks/useCompaniesData";
 import { useAuth } from "../../hooks/useAuth";
+import { useTranslations } from "../../utils/translations";
+import { useLanguage } from "../../contexts/LanguageContext";
 import addIcon from "../../assets/icons/add.svg";
 import viewJobsIcon from "../../assets/icons/viewJobs.svg";
 import editIcon from "../../assets/icons/edit.svg";
@@ -14,6 +16,8 @@ const Companies = () => {
   const { user } = useAuth();
   const { companiesData, loading, error } = useCompaniesData();
   const navigate = useNavigate();
+  const { t } = useTranslations('companies');
+  const { currentLanguage } = useLanguage();
 
   const isAdmin = user?.role === "admin";
 
@@ -60,12 +64,15 @@ const Companies = () => {
 
   if (loading) {
     return (
-      <section className="main-page companies-page">
+      <section 
+        className="main-page companies-page"
+        style={{ direction: currentLanguage === 'he' ? 'rtl' : 'ltr' }}
+      >
         <div className="companies-header">
-          <h1 className="page__title">Company Management</h1>
+          <h1 className="page__title">{t('title')}</h1>
         </div>
         <div className="companies-table">
-          <div className="companies-table__loading">Loading companies...</div>
+          <div className="companies-table__loading">{t('loading')}</div>
         </div>
       </section>
     );
@@ -73,12 +80,15 @@ const Companies = () => {
 
   if (error) {
     return (
-      <section className="main-page companies-page">
+      <section 
+        className="main-page companies-page"
+        style={{ direction: currentLanguage === 'he' ? 'rtl' : 'ltr' }}
+      >
         <div className="companies-header">
-          <h1 className="page__title">Company Management</h1>
+          <h1 className="page__title">{t('title')}</h1>
         </div>
         <div className="companies-table">
-          <div className="companies-table__error">Error loading companies: {error}</div>
+          <div className="companies-table__error">{t('error')}: {error}</div>
         </div>
       </section>
     );
@@ -86,23 +96,23 @@ const Companies = () => {
   return (
     <section className="main-page companies-page">
       <div className="companies-header">
-        <h1 className="page__title">Company Management</h1>
+        <h1 className="page__title">{t('title')}</h1>
       </div>
 
-      <div className="companies-table">
+      <div className="companies-table" style={{ direction: 'ltr' }}>
         <table className="companies-table__table">
           <thead className="companies-table__header">
             <tr>
-              <th className="companies-table__cell companies-table__cell--header"></th>
-              <th className="companies-table__cell companies-table__cell--header">Company Name</th>
-              <th className="companies-table__cell companies-table__cell--header">Jobs Count</th>
-              <th className="companies-table__cell companies-table__cell--header">Actions</th>
+              <th className="companies-table__cell companies-table__cell--header">{t('table.headers.id')}</th>
+              <th className="companies-table__cell companies-table__cell--header">{t('table.headers.companyName')}</th>
+              <th className="companies-table__cell companies-table__cell--header">{t('table.headers.jobsCount')}</th>
+              <th className="companies-table__cell companies-table__cell--header">{t('table.headers.actions')}</th>
             </tr>
           </thead>
           <tbody>
             {companiesData.length === 0 ? (
               <tr>
-                <td colSpan="4" className="companies-table__empty">No companies found.</td>
+                <td colSpan="4" className="companies-table__empty">{t('noCompanies')}</td>
               </tr>
             ) : (
               companiesData.map((company) => (
@@ -112,7 +122,7 @@ const Companies = () => {
                     className="companies-table__cell companies-table__cell--name companies-table__cell--name-clickable"
                     onClick={() => handleViewCompany(company.name)}
                     style={{ cursor: "pointer", textDecoration: "underline", color: '#3498db' }}
-                    title={`View ${company.name} jobs`}
+                    title={t('actions.viewJobs', { company: company.name })}
                   >
                     {company.name}
                   </td>
@@ -122,8 +132,8 @@ const Companies = () => {
                       <button
                         className="companies-table__action-btn companies-table__action-btn--view"
                         onClick={() => handleViewCompany(company.name)}
-                        title={`View ${company.name} jobs`}
-                        aria-label={`View ${company.name} jobs`}
+                        title={t('actions.viewJobs', { company: company.name })}
+                        aria-label={t('actions.viewJobs', { company: company.name })}
                       >
                         <img
                           src={viewJobsIcon}
@@ -135,8 +145,8 @@ const Companies = () => {
                         <button
                           className="companies-table__action-btn companies-table__action-btn--delete"
                           onClick={() => handleDeleteCompany(company.name, company.jobsCount)}
-                          title={`Delete ${company.name}`}
-                          aria-label={`Delete ${company.name}`}
+                          title={t('actions.deleteCompany', { company: company.name })}
+                          aria-label={t('actions.deleteCompany', { company: company.name })}
                         >
                           <img
                             src={deleteIcon}
@@ -156,15 +166,22 @@ const Companies = () => {
       <Modal
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
-        title="Confirm Deletion"
+        title={t('modal.deleteTitle')}
       >
         {companyToDelete && (
-          <div className="delete-modal__text">
-            You&apos;re about to delete <b className="delete-modal__company">{companyToDelete.name.toUpperCase()}</b>, that have <b className="delete-modal__jobs">{companyToDelete.jobsCount}</b> active jobs.<br /><br />
-            Are you sure?
+          <div className="delete-modal__text" style={{ direction: currentLanguage === 'he' ? 'rtl' : 'ltr' }}>
+            {t('modal.deleteMessage', { 
+              company: companyToDelete.name.toUpperCase(), 
+              jobsCount: companyToDelete.jobsCount 
+            })}<br /><br />
+            {t('modal.deleteConfirm')}
             <div className="delete-modal__actions">
-              <button className="delete-modal__cancel" onClick={() => setDeleteModalOpen(false)}>Cancel</button>
-              <button className="delete-modal__delete" onClick={confirmDeleteCompany}>Delete</button>
+              <button className="delete-modal__cancel" onClick={() => setDeleteModalOpen(false)}>
+                {t('modal.cancel')}
+              </button>
+              <button className="delete-modal__delete" onClick={confirmDeleteCompany}>
+                {t('modal.delete')}
+              </button>
             </div>
           </div>
         )}
@@ -172,9 +189,9 @@ const Companies = () => {
       <Modal
         isOpen={resultModalOpen}
         onClose={closeResultModal}
-        title={resultMessage.toLowerCase().includes("fail") ? "Error" : "Success"}
+        title={resultMessage.toLowerCase().includes("fail") ? t('modal.errorTitle') : t('modal.successTitle')}
       >
-        <div className="delete-modal__result-text">
+        <div className="delete-modal__result-text" style={{ direction: currentLanguage === 'he' ? 'rtl' : 'ltr' }}>
           {resultMessage}
         </div>
         <div className="delete-modal__actions" style={{ justifyContent: "center", marginTop: "1.5rem" }}>

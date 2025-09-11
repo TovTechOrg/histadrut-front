@@ -3,8 +3,12 @@ import "./AdminUsers.css";
 import deleteIcon from "../../assets/icons/delete.svg";
 import { fetchUsers, deleteUser } from "../../api/api";
 import Modal from "../shared/Modal";
+import { useTranslations } from "../../utils/translations";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const AdminUsers = () => {
+  const { t } = useTranslations('users');
+  const { currentLanguage } = useLanguage();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tableError, setTableError] = useState(""); // Only for table
@@ -17,9 +21,9 @@ const AdminUsers = () => {
   useEffect(() => {
     fetchUsers()
       .then(setUsers)
-      .catch(() => setTableError("Failed to load users."))
+      .catch(() => setTableError(t('error')))
       .finally(() => setLoading(false));
-  }, []);
+  }, [t]);
 
   const handleDeleteClick = (user) => {
     setUserToDelete(user);
@@ -37,7 +41,7 @@ const AdminUsers = () => {
       setSuccessModalOpen(true);
       setUserToDelete(null);
     } catch (e) {
-      setDeleteError(e.message || "Failed to delete user.");
+      setDeleteError(e.message || t('error'));
     } finally {
       setDeleting(false);
     }
@@ -56,23 +60,23 @@ const AdminUsers = () => {
   return (
     <div className="main-page admin-users-page">
       <div className="admin-users-header">
-        <h1 className="page__title">All Users</h1>
+        <h1 className="page__title">{t('title')}</h1>
       </div>
       <div className="admin-users-table-container">
         {loading ? (
-          <div className="admin-users-loading">Loading users...</div>
+          <div className="admin-users-loading">{t('loading')}</div>
         ) : tableError ? (
           <div className="admin-users-error">{tableError}</div>
         ) : (
           <table className="admin-users-table">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>CV Status</th>
-                <th>Signed Up</th>
-                <th>Total Matches</th>
-                <th></th>
+                <th>{t('table.headers.name')}</th>
+                <th>{t('table.headers.email')}</th>
+                <th>{t('table.headers.cvStatus')}</th>
+                <th>{t('table.headers.signedUp')}</th>
+                <th>{t('table.headers.totalMatches')}</th>
+                <th>{t('table.headers.actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -86,7 +90,7 @@ const AdminUsers = () => {
                   <td>
                     <button
                       className="users-table__action-btn users-table__action-btn--delete"
-                      title="Delete user"
+                      title={t('actions.deleteUser')}
                       onClick={() => handleDeleteClick(user)}
                       disabled={deleting}
                     >
@@ -107,18 +111,17 @@ const AdminUsers = () => {
       <Modal
         isOpen={deleteModalOpen}
         onClose={handleDeleteCancel}
-        title="Confirm Deletion"
+        title={t('modal.deleteTitle')}
       >
         {userToDelete && (
           <div className="delete-modal__text">
-            Are you sure you want to completely delete the user{" "}
-            <b>{userToDelete.name}</b>
-            {userToDelete.cv_status === "uploaded" ? ", their CV" : ""}
+            {t('modal.deleteMessage', { userName: userToDelete.name })}
+            {userToDelete.cv_status === "uploaded" ? t('modal.deleteMessageWithCV') : ""}
             {userToDelete.total_matches > 0
-              ? ` and ${userToDelete.total_matches} matches`
+              ? t('modal.deleteMessageWithMatches', { matchCount: userToDelete.total_matches })
               : ""}
             ?<br />
-            <span style={{ color: "red" }}>This action can't be reversed!</span>
+            <span style={{ color: "red" }}>{t('modal.deleteWarning')}</span>
             {deleteError && (
               <div style={{ color: "#e74c3c", marginTop: "1rem", fontWeight: 500 }}>
                 {deleteError}
@@ -130,14 +133,14 @@ const AdminUsers = () => {
                 onClick={handleDeleteCancel}
                 disabled={deleting}
               >
-                Cancel
+                {t('modal.cancel')}
               </button>
               <button
                 className="delete-modal__delete"
                 onClick={handleDeleteConfirm}
                 disabled={deleting}
               >
-                {deleting ? "Deleting..." : "Delete"}
+                {deleting ? t('modal.deleting') : t('modal.delete')}
               </button>
             </div>
           </div>
@@ -147,16 +150,16 @@ const AdminUsers = () => {
       <Modal
         isOpen={successModalOpen}
         onClose={handleSuccessModalClose}
-        title="User Deleted"
+        title={t('modal.successTitle')}
       >
         <div className="delete-modal__text">
-          User was deleted successfully.
+          {t('modal.successMessage')}
           <div className="delete-modal__actions" style={{ marginTop: "1rem" }}>
             <button
               className="delete-modal__close"
               onClick={handleSuccessModalClose}
             >
-              OK
+              {t('modal.ok')}
             </button>
           </div>
         </div>
