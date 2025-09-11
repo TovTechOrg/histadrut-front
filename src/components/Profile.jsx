@@ -205,7 +205,7 @@ const Profile = () => {
       )}
       {user.role !== "admin" && (
         <div className="profile-cv-actions">
-          {(user.cv_link || true) && (
+          {user.cv_link && (
             <button
               className="profile-btn profile-btn-view-cv"
               onClick={handleDownloadCV}
