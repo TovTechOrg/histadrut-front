@@ -84,47 +84,48 @@ const Profile = () => {
           </>
         )}
       </div>
+      
+      {/* Language toggle buttons - visible for all users */}
+      <hr style={{ margin: '24px 0 18px 0', border: 0, borderTop: '1px solid #eee' }} />
+      <div style={{ marginBottom: '16px', textAlign: currentLanguage === 'he' ? 'right' : 'left' }}>
+        <span style={{ marginRight: currentLanguage === 'he' ? '0' : '8px', marginLeft: currentLanguage === 'he' ? '8px' : '0', fontSize: '14px', color: '#666' }}>
+          {t('language')}:
+        </span>
+        <button
+          onClick={() => setLanguage('en')}
+          style={{
+            background: currentLanguage === 'en' ? '#2196f3' : '#f5f5f5',
+            border: '1px solid #ddd',
+            borderRadius: '4px 0 0 4px',
+            padding: '8px 12px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            color: currentLanguage === 'en' ? '#fff' : '#333',
+            marginRight: '0'
+          }}
+        >
+          English
+        </button>
+        <button
+          onClick={() => setLanguage('he')}
+          style={{
+            background: currentLanguage === 'he' ? '#2196f3' : '#f5f5f5',
+            border: '1px solid #ddd',
+            borderRadius: '0 4px 4px 0',
+            borderLeft: '0',
+            padding: '8px 12px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            color: currentLanguage === 'he' ? '#fff' : '#333'
+          }}
+        >
+          עברית
+        </button>
+      </div>
+      
       {/* Subscription/Unsubscribe UI (not for admin) */}
       {user.role !== "admin" && (
         <>
-          <hr style={{ margin: '24px 0 18px 0', border: 0, borderTop: '1px solid #eee' }} />
-          
-          {/* Language toggle buttons */}
-          <div style={{ marginBottom: '16px', textAlign: currentLanguage === 'he' ? 'right' : 'left' }}>
-            <span style={{ marginRight: currentLanguage === 'he' ? '0' : '8px', marginLeft: currentLanguage === 'he' ? '8px' : '0', fontSize: '14px', color: '#666' }}>
-              {t('language')}:
-            </span>
-            <button
-              onClick={() => setLanguage('en')}
-              style={{
-                background: currentLanguage === 'en' ? '#2196f3' : '#f5f5f5',
-                border: '1px solid #ddd',
-                borderRadius: '4px 0 0 4px',
-                padding: '8px 12px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                color: currentLanguage === 'en' ? '#fff' : '#333',
-                marginRight: '0'
-              }}
-            >
-              English
-            </button>
-            <button
-              onClick={() => setLanguage('he')}
-              style={{
-                background: currentLanguage === 'he' ? '#2196f3' : '#f5f5f5',
-                border: '1px solid #ddd',
-                borderRadius: '0 4px 4px 0',
-                borderLeft: '0',
-                padding: '8px 12px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                color: currentLanguage === 'he' ? '#fff' : '#333'
-              }}
-            >
-              עברית
-            </button>
-          </div>
           
           <div className={`profile-status ${subscribed ? 'profile-status-subscribed' : 'profile-status-unsubscribed'}`}
                style={{ marginBottom: 10 }}>

@@ -2,6 +2,7 @@ import React from "react";
 import MatchesFilters from "./MatchesFilters";
 import MatchesTable from "./MatchesTable";
 import { useMatchesData } from "../../hooks/useMatchesData";
+import { useTranslations } from "../../utils/translations";
 import "./Matches.css";
 
 const Matches = () => {
@@ -17,13 +18,15 @@ const Matches = () => {
     goToNextPage,
     goToPreviousPage,
   } = useMatchesData();
+  
+  const { t, currentLanguage } = useTranslations('matches');
 
   return (
     <section className="main-page matches-page">
       <div className="matches-header">
-  <h1 className="page__title">Job Match Dashboard</h1>
+        <h1 className="page__title">{t('title')}</h1>
         <p className="matches-subtitle">
-          Aggregated view of manually sourced jobs and matched candidates.
+          {t('subtitle')}
         </p>
       </div>
 
@@ -37,17 +40,17 @@ const Matches = () => {
           disabled={currentPage === 1}
           className="pagination-button"
         >
-          ← Previous
+          {t('pagination.previous')}
         </button>
         <span className="pagination-info">
-          Page {currentPage} of {totalPages}
+          {t('pagination.pageInfo', { current: currentPage, total: totalPages })}
         </span>
         <button
           onClick={goToNextPage}
           disabled={currentPage === totalPages}
           className="pagination-button"
         >
-          Next →
+          {t('pagination.next')}
         </button>
       </div>
     </section>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { setMatchSent } from "../../api/api";
+import { useTranslations } from "../../utils/translations";
 import downloadIcon from "../../assets/icons/download.svg";
 import linkIcon from "../../assets/icons/link.svg";
 import checkIcon from "../../assets/icons/check.svg";
@@ -11,6 +12,8 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
   const [selectedJob, setSelectedJob] = useState(null);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [changingMatches, setChangingMatches] = useState(new Set());
+  const { t, currentLanguage } = useTranslations('matches');
+  const { t: tCommon } = useTranslations('common');
 
   useEffect(() => {
     setJobs(initialJobs);
@@ -106,29 +109,29 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
         <thead className="match-table__header">
           <tr>
             <th className="match-table__cell match-table__cell--header">
-              Job ID
+              {t('table.headers.jobId')}
             </th>
             <th className="match-table__cell match-table__cell--header">
-              Job Title
+              {t('table.headers.jobTitle')}
             </th>
             <th className="match-table__cell match-table__cell--header">
-              Company
+              {t('table.headers.company')}
             </th>
             <th className="match-table__cell match-table__cell--header">
-              Date Added
+              {t('table.headers.dateAdded')}
             </th>
             <th className="match-table__cell match-table__cell--header">
-              Link to Job
+              {t('table.headers.linkToJob')}
             </th>
             <th className="match-table__cell match-table__cell--header">
-              Matched Candidates
+              {t('table.headers.matchedCandidates')}
             </th>
-            <th className="match-table__cell match-table__cell--header">CV</th>
-            <th className="match-table__cell match-table__cell--header">MMR</th>
+            <th className="match-table__cell match-table__cell--header">{t('table.headers.cv')}</th>
+            <th className="match-table__cell match-table__cell--header">{t('table.headers.mmr')}</th>
             <th className="match-table__cell match-table__cell--header">
-              Applied Status
+              {t('table.headers.appliedStatus')}
             </th>
-            <th className="match-table__cell match-table__cell--header"></th>
+            <th className="match-table__cell match-table__cell--header">{t('table.headers.actions')}</th>
           </tr>
         </thead>
         <tbody>
@@ -138,8 +141,8 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                 {Array.isArray(allJobs) && allJobs.length === 0 && error
                   ? error
                   : Array.isArray(allJobs) && allJobs.length === 0
-                  ? "No matches yet! If you've recently uploaded your CV, please check back in 1-2 days. Our algorithm is working to find the perfect job matches for you."
-                  : "No jobs match the current filters."}
+                  ? t('table.noMatches')
+                  : t('table.noMatchesFiltered')}
               </td>
             </tr>
           ) : (
@@ -155,7 +158,7 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                   <span
                     className="match-table__title match-table__title--clickable"
                     onClick={() => handleJobClick(job)}
-                    title="Click to view job description"
+                    title={t('table.viewJob')}
                   >
                     {job.jobTitle}
                   </span>
@@ -169,8 +172,8 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="job-link-btn"
-                      title="View job posting"
-                      aria-label="View job posting"
+                      title={t('table.viewJob')}
+                      aria-label={t('table.viewJob')}
                     >
                       <img
                         src={linkIcon}
@@ -182,7 +185,7 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                   ) : (
                     <span
                       className="job-link-unavailable"
-                      title="Job link not available"
+                      title={t('table.jobLinkNotAvailable')}
                     >
                       —
                     </span>
@@ -194,7 +197,7 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                       <span
                         className="candidate-match__name candidate-match__name--clickable"
                         onClick={() => handleCandidateClick(candidate)}
-                        title="Click to view candidate details"
+                        title={t('table.viewCandidate')}
                       >
                         {candidate.name}
                       </span>
@@ -214,8 +217,8 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                             e.stopPropagation();
                             downloadCV(candidate.cvLink, candidate.name);
                           }}
-                          title={`Download CV for ${candidate.name}`}
-                          aria-label={`Download CV for ${candidate.name}`}
+                          title={t('table.downloadCVFor', { name: candidate.name })}
+                          aria-label={t('table.downloadCVFor', { name: candidate.name })}
                         >
                           <img
                             src={downloadIcon}
@@ -226,7 +229,7 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                       ) : (
                         <span
                           className="cv-not-available"
-                          title="CV not available"
+                          title={t('table.cvNotAvailable')}
                         >
                           —
                         </span>
@@ -285,20 +288,20 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                           disabled={isChanging}
                           title={
                             isChanging
-                              ? "Updating status..."
+                              ? tCommon('updating')
                               : candidate.status === "pending"
-                              ? "Mark as sent"
-                              : "Revert to pending"
+                              ? t('table.markAsSent')
+                              : t('table.markAsPending')
                           }
                         >
                           <img
                             src={checkIcon}
                             alt={
                               isChanging
-                                ? "Updating status..."
+                                ? tCommon('updating')
                                 : candidate.status === "pending"
-                                ? "Mark as sent"
-                                : "Revert to pending"
+                                ? t('table.markAsSent')
+                                : t('table.markAsPending')
                             }
                             className={`action-icon ${
                               candidate.status === "sent"

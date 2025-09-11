@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "../../contexts/useAuth";
-
+import { useTranslations } from "../../utils/translations";
 import { fetchCompanies } from "../../api/api";
 import CompanyAutocompleteInput from "../shared/CompanyAutocompleteInput";
 
@@ -23,6 +23,7 @@ function useDebounce(callback, delay) {
 const MatchesFilters = () => {
   const { isAdmin } = useAuth();
   const isAdminUser = typeof isAdmin === 'function' ? isAdmin() : isAdmin;
+  const { t, currentLanguage } = useTranslations('matches');
   const [searchParams, setSearchParams] = useSearchParams();
   const [localCompanyName, setLocalCompanyName] = React.useState(searchParams.get("companyName") || "");
   const [companyOptions, setCompanyOptions] = React.useState([]);
@@ -155,7 +156,7 @@ const MatchesFilters = () => {
   return (
     <section className="match-filters" aria-labelledby="filters-heading">
       <h2 id="filters-heading" className="match-filters__title">
-        Filters
+        {t('filtersTitle')}
       </h2>
 
       <form
@@ -171,8 +172,8 @@ const MatchesFilters = () => {
               value={localCompanyName}
               onChange={handleCompanyNameChange}
               options={companyOptions}
-              label="Company Name"
-              placeholder="e.g., Example Tech"
+              label={t('filters.companyName')}
+              placeholder={t('filters.companyNamePlaceholder')}
               inputId="companyName"
               className="match-filters__input"
             />
@@ -180,13 +181,13 @@ const MatchesFilters = () => {
 
           <div className="match-filters__field">
             <label className="match-filters__label" htmlFor="jobTitle">
-              Job Title
+              {t('filters.jobTitle')}
             </label>
             <input
               id="jobTitle"
               type="text"
               className="match-filters__input"
-              placeholder="e.g., Backend Developer"
+              placeholder={t('filters.jobTitlePlaceholder')}
               value={localJobTitle}
               onChange={handleJobTitleChange}
             />
@@ -197,13 +198,13 @@ const MatchesFilters = () => {
             style={!isAdminUser ? { visibility: "hidden", height: 0, margin: 0, padding: 0 } : {}}
           >
             <label className="match-filters__label" htmlFor="candidateName">
-              Candidate Name
+              {t('filters.candidateName')}
             </label>
             <input
               id="candidateName"
               type="text"
               className="match-filters__input"
-              placeholder="e.g., Shy"
+              placeholder={t('filters.candidateNamePlaceholder')}
               value={localCandidateName}
               onChange={handleCandidateNameChange}
             />
@@ -211,13 +212,13 @@ const MatchesFilters = () => {
 
           <div className="match-filters__field">
             <label className="match-filters__label" htmlFor="jobId">
-              Job ID
+              {t('filters.jobId')}
             </label>
             <input
               id="jobId"
               type="text"
               className="match-filters__input"
-              placeholder="e.g., 12345"
+              placeholder={t('filters.jobIdPlaceholder')}
               value={localJobId}
               onChange={handleJobIdChange}
             />
@@ -225,7 +226,7 @@ const MatchesFilters = () => {
 
           <div className="match-filters__field">
             <label className="match-filters__label" htmlFor="appliedStatus">
-              Applied Status
+              {t('filters.appliedStatus')}
             </label>
             <select
               id="appliedStatus"
@@ -234,21 +235,21 @@ const MatchesFilters = () => {
               onChange={handleAppliedStatusChange}
               aria-describedby="appliedStatus-help"
             >
-              <option value="">All Statuses</option>
-              <option value="pending">Pending</option>
-              <option value="sent">Sent</option>
+              <option value="">{t('filters.allStatuses')}</option>
+              <option value="pending">{t('filters.pending')}</option>
+              <option value="sent">{t('filters.sent')}</option>
             </select>
             <small id="appliedStatus-help" className="match-filters__help-text">
               {isAdminUser 
-                ? "View the matches candidates have applied for"
-                : "View the matches you have applied for"
+                ? t('filters.appliedStatusHelpAdmin')
+                : t('filters.appliedStatusHelp')
               }
             </small>
           </div>
 
           <div className="match-filters__field">
             <label className="match-filters__label" htmlFor="addedSince">
-              Posted after
+              {t('filters.postedAfter')}
             </label>
             <input
               id="addedSince"
@@ -259,13 +260,13 @@ const MatchesFilters = () => {
               aria-describedby="addedSince-help"
             />
             <small id="addedSince-help" className="match-filters__help-text">
-              Show jobs posted after this date
+              {t('filters.postedAfterHelp')}
             </small>
           </div>
 
           <div className="match-filters__field">
             <label className="match-filters__label">
-              Min. Relevance Score ({minRelevanceScore.toFixed(1)})
+              {t('filters.minRelevanceScore', { score: minRelevanceScore.toFixed(1) })}
             </label>
             <div className="match-filters__slider-container">
               <input
@@ -278,8 +279,8 @@ const MatchesFilters = () => {
                 onChange={e => handleInputChange("minRelevanceScore", e.target.value)}
               />
               <div className="match-filters__slider-track">
-                <span>0</span>
-                <span>10</span>
+                <span>{t('filters.scoreRange')[0]}</span>
+                <span>{t('filters.scoreRange')[1]}</span>
               </div>
             </div>
           </div>

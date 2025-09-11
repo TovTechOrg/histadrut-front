@@ -487,7 +487,7 @@
 .mark-as-sent-btn {
   width: 7.1rem !important;
   height: 2.2rem !important;
-  margin-left: -4rem !important;
+  margin-left: -2rem !important;
 }
 
 .action-btn:hover:not(:disabled) {
@@ -647,4 +647,10 @@
   font-family: "Consolas", "Menlo", "Monaco", monospace;
   font-size: 0.95em;
   cursor: pointer;
+}
+
+/* Keep table and layout left-to-right as requested */
+.matches-page.rtl,
+.matches-page.ltr {
+  direction: ltr; /* Always keep left-to-right for matches page */
 }

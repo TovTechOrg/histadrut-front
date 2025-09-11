@@ -175,11 +175,6 @@
   color: #444;
 }
 
-.drop-zone-help {
-  color: #888;
-  font-size: 0.97rem;
-}
-
 .file-select-btn {
   color: #3498db;
   cursor: pointer;
@@ -196,6 +191,26 @@
   color: #7f8c8d;
   font-size: 0.85rem;
   margin: 0;
+  line-height: 1.4;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* RTL Support for Hebrew */
+.cv-upload-page.rtl {
+  direction: rtl;
+}
+
+.cv-upload-page.rtl .file-selected {
+  text-align: right;
+}
+
+.cv-upload-page.rtl .cv-upload-back-btn {
+  direction: ltr; /* Keep arrow direction consistent */
+}
+
+.cv-upload-page.ltr {
+  direction: ltr;
 }
 
 .file-selected {

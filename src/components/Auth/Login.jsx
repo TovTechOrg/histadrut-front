@@ -61,22 +61,6 @@ const Login = () => {
   return (
     <div className="login-page" style={{ direction: currentLanguage === 'he' ? 'rtl' : 'ltr' }}>
       <div className="login-container">
-        {/* Language toggle button */}
-        <div style={{ position: 'absolute', top: '20px', right: currentLanguage === 'he' ? 'auto' : '20px', left: currentLanguage === 'he' ? '20px' : 'auto' }}>
-          <button
-            onClick={toggleLanguage}
-            style={{
-              background: 'none',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              padding: '8px 12px',
-              cursor: 'pointer',
-              fontSize: '14px'
-            }}
-          >
-            עב / EN
-          </button>
-        </div>
         
         <div className="login-header">
           <h1 className="login-title">{t('title')}</h1>

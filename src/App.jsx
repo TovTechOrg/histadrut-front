@@ -22,6 +22,7 @@ import Login from "./components/Auth/Login";
 // ...existing code...
 import CVUpload from "./components/Auth/CVUpload";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
+import LanguagePicker from "./components/shared/LanguagePicker";
 import "./components/shared/Page.css";
 import "./components/JobsListings/JobForm.css";
 
@@ -31,7 +32,8 @@ function App() {
       <AuthProvider>
         <Router>
           <div className="app">
-          <Routes>
+            <LanguagePicker size="small" position="top-right" />
+            <Routes>
             {/* Public routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />

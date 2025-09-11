@@ -7,7 +7,7 @@ import "./Overview.css";
 
 const Overview = () => {
   const { t } = useTranslations('overview');
-  const { currentLanguage } = useLanguage();
+  const { currentLanguage, toggleLanguage } = useLanguage();
   
   const [statsData, setStatsData] = useState(null);
   const [companiesToday, setCompaniesToday] = useState(null);
@@ -36,8 +36,8 @@ const Overview = () => {
   }, []);
 
   return (
-    <section className="main-page overview" style={{ direction: currentLanguage === 'he' ? 'rtl' : 'ltr' }}>
-    <h1 className="page__title">{t('title')}</h1>
+    <section className="main-page overview" style={{ direction: currentLanguage === 'he' ? 'rtl' : 'ltr', position: 'relative' }}>
+      <h1 className="page__title">{t('title')}</h1>
 
       <Stats data={statsData} companiesToday={companiesToday} loading={loading} error={error} />
     </section>

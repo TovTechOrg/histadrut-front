@@ -1,0 +1,23 @@
+.language-picker {
+  z-index: 1000;
+}
+
+.language-picker-button {
+  font-family: inherit;
+  outline: none;
+}
+
+.language-picker-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.language-picker-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.language-picker-button:focus {
+  outline: 2px solid #2196f3;
+  outline-offset: 2px;
+}

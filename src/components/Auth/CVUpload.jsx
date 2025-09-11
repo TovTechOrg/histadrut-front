@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { uploadCV } from "../../api/api";
+import { useTranslations } from "../../utils/translations";
 import "./CVUpload.css";
 import uploadIcon from "../../assets/icons/upload.svg";
 
@@ -10,7 +11,8 @@ const CVUpload = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
-
+  
+  const { t, currentLanguage } = useTranslations('cvUpload');
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -25,7 +27,7 @@ const CVUpload = () => {
         setFile(selectedFile);
         setError("");
       } else {
-        setError("Please upload a PDF or Word document.");
+        setError(t('errors.invalidFileType'));
       }
     }
   };
@@ -55,7 +57,7 @@ const CVUpload = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!file) {
-      setError("Please select a file to upload.");
+      setError(t('errors.noFileSelected'));
       return;
     }
 
@@ -67,21 +69,21 @@ const CVUpload = () => {
       setShowSuccess(true);
       setFile(null);
     } catch (err) {
-      setError(err.message || "An error occurred while uploading your CV.");
+      setError(err.message || t('errors.uploadError'));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="cv-upload-page">
+    <div className={`cv-upload-page ${currentLanguage === 'he' ? 'rtl' : 'ltr'}`}>
       <div className="cv-upload-container">
         {showSuccess && (
           <div className="cv-upload-modal-overlay">
             <div className="cv-upload-modal">
               <div className="cv-upload-modal-icon">✔️</div>
-              <div className="cv-upload-modal-title">CV Uploaded Successfully!</div>
-              <div className="cv-upload-modal-desc">Your resume was uploaded. We'll notify you if a match is found.</div>
+              <div className="cv-upload-modal-title">{t('successTitle')}</div>
+              <div className="cv-upload-modal-desc">{t('successMessage')}</div>
               <button
                 className="cv-upload-modal-btn"
                 onClick={() => {
@@ -93,14 +95,16 @@ const CVUpload = () => {
                   }
                 }}
               >
-                OK
+                {t('okButton')}
               </button>
             </div>
           </div>
         )}
-        <h1 className="cv-upload-title">Find Your Perfect Job Match</h1>
-        <p className="cv-upload-subtitle">Upload your resume to instantly discover jobs that match your skills</p>
-        <p className="cv-upload-desc">Once you upload your CV, our algorithm checks relevant job openings. If a suitable job is found, you'll receive a personalized email, every day, <strong>starting tomorrow</strong>.</p>
+        <h1 className="cv-upload-title">{t('title')}</h1>
+        <p className="cv-upload-subtitle">{t('subtitle')}</p>
+        <p className="cv-upload-desc" dangerouslySetInnerHTML={{
+          __html: t('description').replace(t('startingTomorrow'), `<strong>${t('startingTomorrow')}</strong>`)
+        }} />
         <form
           onSubmit={handleSubmit}
           className="cv-upload-form"
@@ -126,7 +130,7 @@ const CVUpload = () => {
                   onClick={() => setFile(null)}
                   className="remove-file-btn"
                 >
-                  Remove
+                  {t('remove')}
                 </button>
               </div>
             ) : (
@@ -134,19 +138,19 @@ const CVUpload = () => {
                 <div className="upload-icon">
                   <img
                     src={uploadIcon}
-                    alt="Upload"
+                    alt={t('uploadYourResume')}
                     width={48}
                     height={48}
                   />
                 </div>
-                <div className="drop-zone-title">Upload Your Resume</div>
+                <div className="drop-zone-title">{t('uploadYourResume')}</div>
                 <div className="drop-zone-instructions">
-                  Drag and drop your resume here or{" "}
+                  {t('dragAndDropInstructions')}{" "}
                   <label htmlFor="cv-file" className="file-select-btn">
-                    click to browse
+                    {t('clickToBrowse')}
                   </label>
                 </div>
-                <div className="drop-zone-help">Supported formats: PDF, DOC, DOCX • English or Hebrew CVs</div>
+                <div className="drop-zone-help">{t('supportedFormats')}</div>
               </div>
             )}
             <input
@@ -164,7 +168,7 @@ const CVUpload = () => {
                 onClick={() => navigate(-1)}
                 className="cv-upload-back-btn"
               >
-                ← Back
+                {t('back')}
               </button>
             ) : (
               <button
@@ -172,7 +176,7 @@ const CVUpload = () => {
                 onClick={() => navigate("/matches")}
                 className="cv-upload-back-btn"
               >
-                Upload Later
+                {t('uploadLater')}
               </button>
             )}
             <button
@@ -180,7 +184,7 @@ const CVUpload = () => {
               className="upload-button"
               disabled={!file || loading}
             >
-              {loading ? "Uploading..." : "Upload Resume"}
+              {loading ? t('uploading') : t('uploadButton')}
             </button>
           </div>
         </form>

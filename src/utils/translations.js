@@ -120,10 +120,173 @@ export const translations = {
     }
   },
 
+  // CVUpload page
+  cvUpload: {
+    en: {
+      title: "Find Your Perfect Job Match",
+      subtitle: "Upload your resume to instantly discover jobs that match your skills",
+      description: "Once you upload your CV, our algorithm checks relevant job openings. If a suitable job is found, you'll receive a personalized email, every day, starting tomorrow.",
+      startingTomorrow: "starting tomorrow",
+      uploadYourResume: "Upload Your Resume",
+      dragAndDropInstructions: "Drag and drop your resume here or",
+      clickToBrowse: "click to browse",
+      supportedFormats: "Supported formats: PDF, DOC, DOCX • English or Hebrew CVs",
+      remove: "Remove",
+      back: "← Back",
+      uploadLater: "Upload Later",
+      uploadButton: "Upload Resume",
+      uploading: "Uploading...",
+      successTitle: "CV Uploaded Successfully!",
+      successMessage: "Your resume was uploaded. We'll notify you if a match is found.",
+      okButton: "OK",
+      errors: {
+        invalidFileType: "Please upload a PDF or Word document.",
+        noFileSelected: "Please select a file to upload.",
+        uploadError: "An error occurred while uploading your CV."
+      }
+    },
+    he: {
+      title: "מצא את ההתאמה המושלמת לעבודה",
+      subtitle: "העלה את קורות החיים שלך כדי לגלות מיד עבודות שמתאימות לכישורים שלך",
+      description: "ברגע שתעלה את קורות החיים שלך, האלגוריתם שלנו בודק משרות רלוונטיות. אם נמצאת עבודה מתאימה, תקבל אימייל אישי, כל יום, החל ממחר.",
+      startingTomorrow: "החל ממחר",
+      uploadYourResume: "העלה קורות חיים",
+      dragAndDropInstructions: "גרור ושחרר את קורות החיים שלך כאן או",
+      clickToBrowse: "לחץ לעיון",
+      supportedFormats: "פורמטים נתמכים: PDF, DOC, DOCX • קורות חיים באנגלית או עברית",
+      remove: "הסר",
+      back: "חזור ←",
+      uploadLater: "העלה מאוחר יותר",
+      uploadButton: "העלה קורות חיים",
+      uploading: "מעלה...",
+      successTitle: "קורות החיים הועלו בהצלחה!",
+      successMessage: "קורות החיים שלך הועלו. נודיע לך אם נמצאה התאמה.",
+      okButton: "אישור",
+      errors: {
+        invalidFileType: "אנא העלה מסמך PDF או Word.",
+        noFileSelected: "אנא בחר קובץ להעלאה.",
+        uploadError: "אירעה שגיאה בהעלאת קורות החיים שלך."
+      }
+    }
+  },
+
+  // Matches page
+  matches: {
+    en: {
+      title: "Job Match Dashboard",
+      subtitle: "Aggregated view of manually sourced jobs and matched candidates.",
+      filtersTitle: "Filters",
+      pagination: {
+        previous: "← Previous",
+        next: "Next →",
+        pageInfo: "Page {current} of {total}"
+      },
+      filters: {
+        companyName: "Company Name",
+        companyNamePlaceholder: "e.g., Example Tech",
+        jobTitle: "Job Title",
+        jobTitlePlaceholder: "e.g., Backend Developer",
+        candidateName: "Candidate Name",
+        candidateNamePlaceholder: "e.g., Shy",
+        jobId: "Job ID",
+        jobIdPlaceholder: "e.g., 12345",
+        appliedStatus: "Applied Status",
+        allStatuses: "All Statuses",
+        pending: "Pending",
+        sent: "Sent",
+        appliedStatusHelp: "View the matches you have applied for",
+        appliedStatusHelpAdmin: "View the matches candidates have applied for",
+        postedAfter: "Posted after",
+        postedAfterHelp: "Show jobs posted after this date",
+        minRelevanceScore: "Min. Relevance Score ({score})",
+        scoreRange: ["0", "10"]
+      },
+      table: {
+        headers: {
+          jobId: "Job ID",
+          jobTitle: "Job Title",
+          company: "Company",
+          dateAdded: "Date Added",
+          linkToJob: "Link to Job",
+          matchedCandidates: "Matched Candidates",
+          cv: "CV",
+          mmr: "MMR",
+          appliedStatus: "Applied Status",
+          actions: ""
+        },
+        noMatches: "No matches yet! If you've recently uploaded your CV, please check back in 1-2 days. Our algorithm is working to find the perfect job matches for you.",
+        noMatchesFiltered: "No jobs match the current filters.",
+        viewJob: "View job description",
+        viewCandidate: "View candidate details",
+        markAsSent: "Mark as sent",
+        markAsPending: "Mark as pending",
+        downloadCV: "Download CV",
+        downloadCVFor: "Download CV for {name}",
+        cvNotAvailable: "CV not available",
+        jobLinkNotAvailable: "Job link not available"
+      }
+    },
+    he: {
+      title: "לוח התאמות משרות",
+      subtitle: "תצוגה מרוכזת של משרות שנאספו ידנית ומועמדים מתאימים.",
+      filtersTitle: "מסננים",
+      pagination: {
+        previous: "הקודם ←",
+        next: "→ הבא",
+        pageInfo: "עמוד {current} מתוך {total}"
+      },
+      filters: {
+        companyName: "שם חברה",
+        companyNamePlaceholder: "למשל, Example Tech",
+        jobTitle: "תפקיד",
+        jobTitlePlaceholder: "למשל, מפתח Backend",
+        candidateName: "שם מועמד",
+        candidateNamePlaceholder: "למשל, שי",
+        jobId: "מזהה משרה",
+        jobIdPlaceholder: "למשל, 12345",
+        appliedStatus: "סטטוס הגשה",
+        allStatuses: "כל הסטטוסים",
+        pending: "ממתין",
+        sent: "נשלח",
+        appliedStatusHelp: "הצג את ההתאמות שהגשת",
+        appliedStatusHelpAdmin: "הצג את ההתאמות שמועמדים הגישו",
+        postedAfter: "פורסם לאחר",
+        postedAfterHelp: "הצג משרות שפורסמו לאחר תאריך זה",
+        minRelevanceScore: "ציון רלוונטיות מינימלי ({score})",
+        scoreRange: ["0", "10"]
+      },
+      table: {
+        headers: {
+          jobId: "מזהה משרה",
+          jobTitle: "תפקיד",
+          company: "חברה",
+          dateAdded: "תאריך הוספה",
+          linkToJob: "קישור למשרה",
+          matchedCandidates: "מועמדים מתאימים",
+          cv: "קורות חיים",
+          mmr: "MMR",
+          appliedStatus: "סטטוס הגשה",
+          actions: ""
+        },
+        noMatches: "אין התאמות עדיין! אם העלית לאחרונה את קורות החיים שלך, אנא בדוק שוב בעוד יום-יומיים. האלגוריתם שלנו עובד כדי למצוא עבורך את ההתאמות המושלמות.",
+        noMatchesFiltered: "אין משרות התואמות למסננים הנוכחיים.",
+        viewJob: "הצג תיאור משרה",
+        viewCandidate: "הצג פרטי מועמד",
+        markAsSent: "סמן כנשלח",
+        markAsPending: "סמן כממתין",
+        downloadCV: "הורד קורות חיים",
+        downloadCVFor: "הורד קורות חיים עבור {name}",
+        cvNotAvailable: "קורות חיים לא זמינים",
+        jobLinkNotAvailable: "קישור למשרה לא זמין"
+      }
+    }
+  },
+
   // Common elements
   common: {
     en: {
       loading: "Loading...",
+      updating: "Updating...",
       error: "Error",
       cancel: "Cancel",
       save: "Save",
@@ -133,6 +296,7 @@ export const translations = {
     },
     he: {
       loading: "טוען...",
+      updating: "מעדכן...",
       error: "שגיאה",
       cancel: "בטל",
       save: "שמור",
@@ -143,8 +307,8 @@ export const translations = {
   }
 };
 
-// Helper function to get translation
-export const getTranslation = (section, key, language = 'en') => {
+// Helper function to get translation with template variable support
+export const getTranslation = (section, key, language = 'en', variables = {}) => {
   try {
     // Handle nested keys like 'errors.loginFailed'
     const keys = key.split('.');
@@ -154,7 +318,18 @@ export const getTranslation = (section, key, language = 'en') => {
       value = value[k];
     }
     
-    return value || translations[section]['en'][key] || key; // fallback to English or key itself
+    if (!value) {
+      value = translations[section]['en'][key] || key; // fallback to English or key itself
+    }
+    
+    // Replace template variables like {current} and {total}
+    if (typeof value === 'string' && Object.keys(variables).length > 0) {
+      return value.replace(/\{(\w+)\}/g, (match, varName) => {
+        return variables[varName] !== undefined ? variables[varName] : match;
+      });
+    }
+    
+    return value;
   } catch (error) {
     console.warn(`Translation not found for: ${section}.${key} in ${language}`);
     return key; // return the key as fallback
@@ -167,7 +342,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 export const useTranslations = (section) => {
   const { currentLanguage } = useLanguage();
   
-  const t = (key) => getTranslation(section, key, currentLanguage);
+  const t = (key, variables = {}) => getTranslation(section, key, currentLanguage, variables);
   
   return { t, currentLanguage };
 };
