@@ -16,7 +16,7 @@ function hexToRgb(hex) {
   return [(num >> 16) & 255, (num >> 8) & 255, num & 255].join(",");
 }
 
-const JobScoresStripPlot = ({ data = [], companyColorMap = {}, selectedCompany }) => {
+const JobScoresStripPlot = ({ data = [], companyColorMap = {}, selectedCompany, t }) => {
   // data: [{ job: string, scores: number[] }]
   // Only include jobs with at least 1 score (no filter), then take top 20 by count
   let jobs = data.filter(j => Array.isArray(j.scores) && j.scores.length > 0);
@@ -25,8 +25,8 @@ const JobScoresStripPlot = ({ data = [], companyColorMap = {}, selectedCompany }
   if (jobs.length === 0) {
     return (
       <div style={{ padding: '20px', textAlign: 'center', color: '#888', height: '340px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        Not enough data to display the plot. <br/>
-        This chart requires at least one job with three or more scores.
+        {t ? t('charts.notEnoughData') : 'Not enough data to display the plot.'} <br/>
+        {t ? t('charts.chartRequiresData') : 'This chart requires at least one job with three or more scores.'}
       </div>
     );
   }
@@ -95,7 +95,9 @@ const JobScoresStripPlot = ({ data = [], companyColorMap = {}, selectedCompany }
       zIndex: 3,
       tooltip: {
         pointFormatter: function () {
-          return `<b>${this.job}</b><br/>Score: <b>${this.y.toFixed(2)}</b><br/>Count: <b>${this.count}</b>`;
+          const scoreLabel = t ? t('charts.score') : 'Score';
+          const countLabel = t ? t('charts.count') : 'Count';
+          return `<b>${this.job}</b><br/>${scoreLabel}: <b>${this.y.toFixed(2)}</b><br/>${countLabel}: <b>${this.count}</b>`;
         }
       },
       showInLegend: false,
@@ -114,7 +116,10 @@ const JobScoresStripPlot = ({ data = [], companyColorMap = {}, selectedCompany }
       width: 1000,
       style: { fontFamily: 'inherit' },
     },
-    title: { text: 'Score Density across top jobs', align: 'left' },
+    title: { 
+      text: t && typeof t === 'function' ? t('charts.scoreDensityAcrossJobs') : 'Score density across top jobs',
+      align: 'left' 
+    },
     credits: { enabled: false },
     legend: { enabled: false },
     xAxis: {
@@ -130,19 +135,21 @@ const JobScoresStripPlot = ({ data = [], companyColorMap = {}, selectedCompany }
         rotation: -80,
         style: { fontSize: '11px', color: '#222', fontWeight: 400, maxWidth: 60, textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
       },
-      title: { text: 'Job' },
+      title: { text: t ? t('charts.job') : 'Job' },
     },
     yAxis: {
       min: 7,
       max: 10,
       tickInterval: 0.5,
-      title: { text: 'Score' },
+      title: { text: t ? t('charts.score') : 'Score' },
     },
     tooltip: {
       useHTML: true,
       formatter: function () {
         if (this.point && typeof this.point.count !== 'undefined') {
-          return `<b>${this.point.job}</b><br/>Score: <b>${this.y.toFixed(2)}</b><br/>Count: <b>${this.point.count}</b>`;
+          const scoreLabel = t ? t('charts.score') : 'Score';
+          const countLabel = t ? t('charts.count') : 'Count';
+          return `<b>${this.point.job}</b><br/>${scoreLabel}: <b>${this.y.toFixed(2)}</b><br/>${countLabel}: <b>${this.point.count}</b>`;
         }
         return false;
       }

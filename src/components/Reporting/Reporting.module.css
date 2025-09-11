@@ -4,6 +4,9 @@
   gap: 64px;
   min-height: 800px;
   padding: 0 24px;
+  /* Ensure LTR layout for charts and complex visualizations */
+  direction: ltr;
+  text-align: left;
 }
 
 .error {
@@ -15,6 +18,8 @@
   align-items: flex-end;
   gap: 32px;
   margin-bottom: -60px;
+  /* Keep filters LTR for consistency */
+  direction: ltr;
 }
 
 .minScoreFilter {
@@ -101,6 +106,8 @@
   gap: 32px;
   align-items: flex-start;
   min-height: 350px;
+  /* Ensure charts layout stays LTR */
+  direction: ltr;
 }
 .pieChartCol {
   min-width: 340px;

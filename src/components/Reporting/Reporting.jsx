@@ -5,12 +5,16 @@ import "./custom-scrollbar.css";
 import styles from "./Reporting.module.css";
 import { useEffect, useState } from "react";
 import { fetchReportMatches } from "../../api/api";
+import { useTranslations } from "../../utils/translations";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const Reporting = () => {
+  const { t } = useTranslations('reporting');
+  const { currentLanguage } = useLanguage();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [sortIndex, setSortIndex] = useState(0);
+  const [sortIndex, setSortIndex] = useState(1); // Default to "Matches (High → Low)"
   const [minScore, setMinScore] = useState(7.5);
   const [maxScore, setMaxScore] = useState(10);
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -37,7 +41,7 @@ const Reporting = () => {
         }
       })
       .catch((err) => {
-        setError("Failed to load report data");
+        setError(t('error'));
         setData(null);
       })
       .finally(() => setLoading(false));
@@ -102,7 +106,7 @@ const Reporting = () => {
   };
 
   // Dynamic chart title based on minScore
-  const chartTitle = `Jobs with high-scoring matches (above ${minScore} score)`;
+  const chartTitle = t('charts.jobsWithHighScoreMatches', { minScore });
 
   // At the top of Reporting.jsx, after you get allCompanies:
   const companyColorPalette = [
@@ -131,8 +135,8 @@ const Reporting = () => {
   });
 
   return (
-    <section className="main-page page">
-      <h1 className="page__title">Reporting</h1>
+    <section className="main-page page" style={{ direction: 'ltr' }}>
+      <h1 className="page__title">{t('title')}</h1>
       <div className="page__content">
         <div className={styles.reportingPageColumn}>
           {error && <div className={styles.error}>{error}</div>}
@@ -143,7 +147,7 @@ const Reporting = () => {
                 <div className={styles.filterBar}>
                   <div className={styles.sorter}>
                     <label htmlFor="sort-bar-chart" className={styles.sorter__label}>
-                      Sort by
+                      {t('filters.sortBy')}
                     </label>
                     <select
                       id="sort-bar-chart"
@@ -151,8 +155,8 @@ const Reporting = () => {
                       onChange={(e) => setSortIndex(Number(e.target.value))}
                       className={styles.sorter__select}
                     >
-                      <option value={0}>Company (A-Z)</option>
-                      <option value={1}>Matches (High → Low)</option>
+                      <option value={0}>{t('filters.sortOptions.companyAZ')}</option>
+                      <option value={1}>{t('filters.sortOptions.matchesHighLow')}</option>
                     </select>
                   </div>
                   <div className={styles.minScoreFilter}>
@@ -160,7 +164,7 @@ const Reporting = () => {
                       htmlFor="min-score-slider"
                       className={styles.sorter__label}
                     >
-                      Min Score: <b>{minScore}</b>
+                      {t('filters.minScore')} <b>{minScore}</b>
                     </label>
                     <input
                       id="min-score-slider"
@@ -184,6 +188,7 @@ const Reporting = () => {
               {loading ? (
                 <div className={styles.spinnerWrapper}>
                   <div className={styles.spinner} />
+                  <div style={{ marginTop: '1rem', color: '#666' }}>{t('loading')}</div>
                 </div>
               ) : (
                 <PerJobBarChart
@@ -192,6 +197,7 @@ const Reporting = () => {
                   setSortIndex={setSortIndex}
                   minScore={minScore}
                   companyColorMap={companyColorMap}
+                  t={t}
                 />
               )}
             </div>
@@ -204,15 +210,18 @@ const Reporting = () => {
               {loading ? (
                 <div className={styles.spinnerWrapper}>
                   <div className={styles.spinner} />
+                  <div style={{ marginTop: '1rem', color: '#666' }}>{t('loading')}</div>
                 </div>
               ) : (
                 <div className={styles.flexRowGraphs}>
                   <div className={styles.pieChartCol}>
                     <CompanyJobsPieChart
+                      key={currentLanguage}
                       data={pieChartData}
                       onSliceClick={handlePieClick}
                       selectedCompany={selectedCompany}
                       companyColorMap={companyColorMap}
+                      t={t}
                     />
                   </div>
                   <div className={styles.stripPlotCol}>
@@ -221,7 +230,7 @@ const Reporting = () => {
                         htmlFor="company-select"
                         className={styles.companySelectorLabel}
                       >
-                        Show Company
+                        {t('filters.showCompany')}
                       </label>
                       <select
                         id="company-select"
@@ -237,9 +246,11 @@ const Reporting = () => {
                       </select>
                     </div>
                     <JobScoresStripPlot
+                      key={currentLanguage}
                       data={companyJobs}
                       companyColorMap={companyColorMap}
                       selectedCompany={selectedCompany}
+                      t={t}
                     />
                   </div>
                 </div>

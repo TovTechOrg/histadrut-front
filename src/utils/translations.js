@@ -456,6 +456,72 @@ export const translations = {
         ok: "אישור"
       }
     }
+  },
+
+  // Reporting page
+  reporting: {
+    en: {
+      title: "Reporting",
+      loading: "Loading report data...",
+      error: "Failed to load report data",
+      filters: {
+        sortBy: "Sort by",
+        sortOptions: {
+          companyAZ: "Company (A-Z)",
+          matchesHighLow: "Matches (High → Low)"
+        },
+        minScore: "Min Score:",
+        showCompany: "Show Company"
+      },
+      charts: {
+        jobsWithHighScoreMatches: "Jobs with high-scoring matches (above {minScore} score)",
+        topCompaniesByJobs: "Top Companies by Number of Jobs",
+        scoreDensityAcrossJobs: "Score density across top jobs",
+        numberOfMatches: "Number of Matches",
+        jobs: "Jobs",
+        job: "Job",
+        score: "Score",
+        company: "Company",
+        matches: "Matches",
+        avgScore: "Avg. Score",
+        clickToViewJobMatches: "Click to view job matches",
+        notEnoughData: "Not enough data to display the plot.",
+        chartRequiresData: "This chart requires at least one job with three or more scores.",
+        count: "Count",
+        other: "Other"
+      }
+    },
+    he: {
+      title: "דוחות",
+      loading: "טוען נתוני דוח...",
+      error: "כשל בטעינת נתוני דוח",
+      filters: {
+        sortBy: "מיין לפי",
+        sortOptions: {
+          companyAZ: "חברה (א-ת)",
+          matchesHighLow: "התאמות (גבוה → נמוך)"
+        },
+        minScore: "ציון מינימלי:",
+        showCompany: "הצג חברה"
+      },
+      charts: {
+        jobsWithHighScoreMatches: "משרות עם התאמות בציון גבוה (מעל {minScore})",
+        topCompaniesByJobs: "חברות מובילות לפי מספר משרות",
+        scoreDensityAcrossJobs: "צפיפות ציונים במשרות מובילות",
+        numberOfMatches: "מספר התאמות",
+        jobs: "משרות",
+        job: "משרה",
+        score: "ציון",
+        company: "חברה",
+        matches: "התאמות",
+        avgScore: "ציון ממוצע",
+        clickToViewJobMatches: "לחץ לצפייה בהתאמות משרה",
+        notEnoughData: "אין מספיק נתונים להצגת הגרף.",
+        chartRequiresData: "גרף זה דורש לפחות משרה אחת עם שלושה ציונים או יותר.",
+        count: "כמות",
+        other: "חברות אחרות"
+      }
+    }
   }
 };
 

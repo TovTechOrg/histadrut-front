@@ -36,6 +36,7 @@ const PerJobBarChart = ({
   setSortIndex,
   minScore = 7.5,
   companyColorMap, // <-- add this prop
+  t, // <-- add translation function
 }) => {
   const navigate = useNavigate();
   // Filter jobs by minScore, recalculate matches, and remove jobs with 0 matches
@@ -104,7 +105,7 @@ const PerJobBarChart = ({
     yAxis: {
       min: 0,
       title: {
-        text: "Number of Matches",
+        text: t ? t('charts.numberOfMatches') : "Number of Matches",
         align: "high",
       },
       gridLineDashStyle: "Dash",
@@ -113,16 +114,20 @@ const PerJobBarChart = ({
       useHTML: true,
       formatter: function () {
         const pointData = sortedData[this.point.index];
+        const companyLabel = t ? t('charts.company') : 'Company';
+        const matchesLabel = t ? t('charts.matches') : 'Matches';
+        const avgScoreLabel = t ? t('charts.avgScore') : 'Avg. Score';
+        const clickToViewLabel = t ? t('charts.clickToViewJobMatches') : 'Click to view job matches';
         return `
           <b>${this.point.category}</b><br/>
-          <span style="color:${this.point.color}">●</span> Company: <b>${
+          <span style="color:${this.point.color}">●</span> ${companyLabel}: <b>${
           pointData.company
         }</b><br/>
-          Matches: <b>${this.point.y}</b><br/>
-          Avg. Score: <b>${
+          ${matchesLabel}: <b>${this.point.y}</b><br/>
+          ${avgScoreLabel}: <b>${
             pointData.score ? pointData.score.toFixed(1) : ""
           }</b><br/>
-          <span style="display:inline-block;margin-top:6px;padding:2px 8px;background:#eaf4fb;color:#2176bd;border-radius:4px;font-size:13px;font-weight:500;">Click to view job matches</span>
+          <span style="display:inline-block;margin-top:6px;padding:2px 8px;background:#eaf4fb;color:#2176bd;border-radius:4px;font-size:13px;font-weight:500;">${clickToViewLabel}</span>
         `;
       },
     },
@@ -157,7 +162,7 @@ const PerJobBarChart = ({
     },
     series: [
       {
-        name: "Matches",
+        name: t ? t('charts.matches') : "Matches",
         data: sortedData.map((item) => ({
           y: item.matches,
           color: companyColorMap[item.company],
