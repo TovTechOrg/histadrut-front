@@ -100,7 +100,7 @@ const CVUpload = () => {
         )}
         <h1 className="cv-upload-title">Find Your Perfect Job Match</h1>
         <p className="cv-upload-subtitle">Upload your resume to instantly discover jobs that match your skills</p>
-        <p className="cv-upload-desc">Once you upload your CV, our algorithm checks relevant job openings. If a suitable job is found, you'll receive a personalized email, every day, starting tomorrow.</p>
+        <p className="cv-upload-desc">Once you upload your CV, our algorithm checks relevant job openings. If a suitable job is found, you'll receive a personalized email, every day, <strong>starting tomorrow</strong>.</p>
         <form
           onSubmit={handleSubmit}
           className="cv-upload-form"
@@ -146,7 +146,7 @@ const CVUpload = () => {
                     click to browse
                   </label>
                 </div>
-                <div className="drop-zone-help">Supported formats: PDF, DOC, DOCX</div>
+                <div className="drop-zone-help">Supported formats: PDF, DOC, DOCX • English or Hebrew CVs</div>
               </div>
             )}
             <input
