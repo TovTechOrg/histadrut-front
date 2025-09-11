@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from "../shared/Modal";
 import { getTextDirection, getTextAlignment } from "../../utils/languageDetection";
+import { useTranslations } from "../../utils/translations";
 import "./JobDescriptionModal.css";
 
 /**
@@ -11,18 +12,20 @@ import "./JobDescriptionModal.css";
  * @param {function} props.onClose - Close handler
  */
 const JobDescriptionModal = ({ job, isOpen, onClose }) => {
+  const { t, currentLanguage } = useTranslations('modals');
+  
   if (!isOpen || !job) return null;
 
   // Support both jobDescription/job.job_description and jobTitle/job.title
-  const description = job.jobDescription || job.job_description || "No description available";
-  const title = job.jobTitle || job.title || "Job Details";
+  const description = job.jobDescription || job.job_description || t('jobDescriptionModal.noDescriptionAvailable');
+  const title = job.jobTitle || job.title || t('jobDescriptionModal.jobDetails');
   const company = job.company || "";
   const dateAdded = job.dateAdded || job.posted || job.discovered || "";
 
   // Handle array or string description
   const getDescription = (desc) => {
-    if (Array.isArray(desc)) return desc[0] || "No description available";
-    return desc || "No description available";
+    if (Array.isArray(desc)) return desc[0] || t('jobDescriptionModal.noDescriptionAvailable');
+    return desc || t('jobDescriptionModal.noDescriptionAvailable');
   };
   const jobDescription = getDescription(description);
   const textDirection = getTextDirection(jobDescription);
@@ -30,6 +33,7 @@ const JobDescriptionModal = ({ job, isOpen, onClose }) => {
 
   return (
     <Modal
+      key={currentLanguage}
       isOpen={isOpen}
       onClose={onClose}
       title={title}
@@ -38,17 +42,17 @@ const JobDescriptionModal = ({ job, isOpen, onClose }) => {
       <div className="job-modal__info">
         {company && (
           <div className="job-modal__company">
-            <strong>Company:</strong> {company}
+            <strong>{t('jobDescriptionModal.company')}:</strong> {company}
           </div>
         )}
         {dateAdded && (
           <div className="job-modal__date">
-            <strong>Date Added:</strong> {dateAdded}
+            <strong>{t('jobDescriptionModal.dateAdded')}:</strong> {dateAdded}
           </div>
         )}
       </div>
       <div className="job-modal__description">
-        <h3>Job Description</h3>
+        <h3>{t('jobDescriptionModal.jobDescription')}</h3>
         <div
           className="job-modal__description-content"
           dir={textDirection}

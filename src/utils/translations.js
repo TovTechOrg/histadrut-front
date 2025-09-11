@@ -368,6 +368,68 @@ export const translations = {
     }
   },
 
+  // Modal components
+  modals: {
+    en: {
+      candidateModal: {
+        matchScore: "Match Score",
+        mmr: "MMR",
+        matchedAt: "Matched at",
+        candidateOverview: "Candidate Overview",
+        strengths: "Strengths",
+        weaknesses: "Weaknesses",
+        noStrengthsListed: "No strengths listed.",
+        noWeaknessesListed: "No weaknesses listed.",
+        noOverviewAvailable: "No overview available"
+      },
+      jobModal: {
+        company: "Company",
+        dateAdded: "Date Added",
+        jobDescription: "Job Description",
+        noDescriptionAvailable: "No description available"
+      },
+      jobDescriptionModal: {
+        company: "Company",
+        dateAdded: "Date Added",
+        jobDescription: "Job Description",
+        jobDetails: "Job Details",
+        noDescriptionAvailable: "No description available"
+      },
+      jobViewModal: {
+        description: "Description"
+      }
+    },
+    he: {
+      candidateModal: {
+        matchScore: "ציון התאמה",
+        mmr: "MMR",
+        matchedAt: "הותאם ב",
+        candidateOverview: "סקירת מועמד",
+        strengths: "חוזקות",
+        weaknesses: "חולשות",
+        noStrengthsListed: "לא רשומות חוזקות.",
+        noWeaknessesListed: "לא רשומות חולשות.",
+        noOverviewAvailable: "אין סקירה זמינה"
+      },
+      jobModal: {
+        company: "חברה",
+        dateAdded: "תאריך הוספה",
+        jobDescription: "תיאור המשרה",
+        noDescriptionAvailable: "אין תיאור זמין"
+      },
+      jobDescriptionModal: {
+        company: "חברה",
+        dateAdded: "תאריך הוספה",
+        jobDescription: "תיאור המשרה",
+        jobDetails: "פרטי המשרה",
+        noDescriptionAvailable: "אין תיאור זמין"
+      },
+      jobViewModal: {
+        description: "תיאור"
+      }
+    }
+  },
+
   // Common elements
   common: {
     en: {

@@ -4,20 +4,22 @@ import {
   getTextDirection,
   getTextAlignment,
 } from "../../utils/languageDetection";
+import { useTranslations } from "../../utils/translations";
 import "./CandidateModal.css";
 
 const CandidateModal = ({ candidate, onClose }) => {
-
+  const { t, currentLanguage } = useTranslations('modals');
   
   if (!candidate) return null;
 
   // Get the overview text and detect language
-  const overviewText = candidate._metadata?.overview || "No overview available";
+  const overviewText = candidate._metadata?.overview || t('candidateModal.noOverviewAvailable');
   const textDirection = getTextDirection(overviewText);
   const textAlignment = getTextAlignment(overviewText);
 
   return (
     <Modal
+      key={currentLanguage}
       isOpen={!!candidate}
       onClose={onClose}
       title={candidate.name}
@@ -27,21 +29,21 @@ const CandidateModal = ({ candidate, onClose }) => {
       <React.Fragment>
         <div className="candidate-modal__info">
           <div className="candidate-modal__score">
-            <strong>Match Score:</strong> {candidate.score}
+            <strong>{t('candidateModal.matchScore')}:</strong> {candidate.score}
           </div>
           <div className="candidate-modal__mmr">
-            <strong>MMR:</strong> <span className={candidate.mmr === 'YES' ? 'candidate-modal__mmr-yes' : 'candidate-modal__mmr-no'}>{candidate.mmr}</span>
+            <strong>{t('candidateModal.mmr')}:</strong> <span className={candidate.mmr === 'YES' ? 'candidate-modal__mmr-yes' : 'candidate-modal__mmr-no'}>{candidate.mmr}</span>
           </div>
           {candidate._metadata?.createdAt && (
             <div className="candidate-modal__matched-at">
-              <strong>Matched at:</strong> {new Date(candidate._metadata.createdAt).toLocaleString('en-CA')}
+              <strong>{t('candidateModal.matchedAt')}:</strong> {new Date(candidate._metadata.createdAt).toLocaleString(currentLanguage === 'he' ? 'he-IL' : 'en-CA')}
             </div>
           )}
         </div>
       </React.Fragment>
 
       <div className="candidate-modal__overview">
-        <h3>Candidate Overview</h3>
+        <h3>{t('candidateModal.candidateOverview')}</h3>
         <div
           className="candidate-modal__overview-content"
           dir={textDirection}
@@ -55,7 +57,7 @@ const CandidateModal = ({ candidate, onClose }) => {
 
       <div className="candidate-modal__strweak-flex">
         <div className="candidate-modal__strweak-section">
-          <h3 className="candidate-modal__strweak-title">Strengths</h3>
+          <h3 className="candidate-modal__strweak-title">{t('candidateModal.strengths')}</h3>
           <div className="candidate-modal__strweak-content">
             {candidate._metadata?.strengths && candidate._metadata.strengths.length > 0 ? (
               <ul>
@@ -64,12 +66,12 @@ const CandidateModal = ({ candidate, onClose }) => {
                 ))}
               </ul>
             ) : (
-              <span>No strengths listed.</span>
+              <span>{t('candidateModal.noStrengthsListed')}</span>
             )}
           </div>
         </div>
         <div className="candidate-modal__strweak-section">
-          <h3 className="candidate-modal__strweak-title">Weaknesses</h3>
+          <h3 className="candidate-modal__strweak-title">{t('candidateModal.weaknesses')}</h3>
           <div className="candidate-modal__strweak-content">
             {candidate._metadata?.weaknesses && candidate._metadata.weaknesses.length > 0 ? (
               <ul>
@@ -78,7 +80,7 @@ const CandidateModal = ({ candidate, onClose }) => {
                 ))}
               </ul>
             ) : (
-              <span>No weaknesses listed.</span>
+              <span>{t('candidateModal.noWeaknessesListed')}</span>
             )}
           </div>
         </div>
