@@ -15,6 +15,16 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
   const { t, currentLanguage } = useTranslations('matches');
   const { t: tCommon } = useTranslations('common');
 
+  // Function to get score color based on value
+  const getScoreColor = (score) => {
+    const numScore = parseFloat(score);
+    if (isNaN(numScore)) return '#666'; // Default color for invalid scores
+    
+    if (numScore <= 6) return '#ff9800'; // Orange
+    if (numScore >= 8.5) return '#4caf50'; // Green
+    return '#ffc107'; // Yellow for between 6 and 8.5
+  };
+
   useEffect(() => {
     setJobs(initialJobs);
   }, [initialJobs]);
@@ -201,7 +211,13 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                       >
                         {candidate.name}
                       </span>
-                      <span className="candidate-match__score">
+                      <span 
+                        className="candidate-match__score"
+                        style={{ 
+                          color: getScoreColor(candidate.score),
+                          fontWeight: '600'
+                        }}
+                      >
                         {candidate.score}
                       </span>
                     </div>

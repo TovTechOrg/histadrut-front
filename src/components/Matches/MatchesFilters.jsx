@@ -256,6 +256,7 @@ const MatchesFilters = () => {
               type="date"
               className="match-filters__input match-filters__input--date"
               value={addedSince}
+              max={new Date().toISOString().split('T')[0]}
               onChange={e => handleInputChange("addedSince", e.target.value)}
               aria-describedby="addedSince-help"
             />
