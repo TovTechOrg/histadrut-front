@@ -141,17 +141,22 @@ export const resetPassword = async (email) => {
 export const uploadCV = async (file) => {
   const formData = new FormData();
   formData.append("cv", file);
+
   const response = await fetch(`${API_BASE_URL}/upload`, {
     method: "POST",
     body: formData,
     credentials: "include",
   });
+
+  const data = await response.json();
+
   if (!response.ok) {
-    const data = await response.json().catch(() => ({}));
-    throw new Error(data.error || "Upload failed. Please try again.");
+    throw new Error(data.message || "Upload failed. Please try again.");
   }
-  return await response.json().catch(() => ({}));
+
+  return data;
 };
+
 
 // Real login API call
 export const loginUser = async (email, password) => {

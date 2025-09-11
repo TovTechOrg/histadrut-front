@@ -138,7 +138,7 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                 {Array.isArray(allJobs) && allJobs.length === 0 && error
                   ? error
                   : Array.isArray(allJobs) && allJobs.length === 0
-                  ? "There are no current matches."
+                  ? "No matches yet! If you've recently uploaded your CV, please check back in 1-2 days. Our algorithm is working to find the perfect job matches for you."
                   : "No jobs match the current filters."}
               </td>
             </tr>
