@@ -226,7 +226,7 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                         className="candidate-match__score"
                         style={{ 
                           color: getScoreColor(candidate.score),
-                          fontWeight: '600'
+                          fontWeight: '800'
                         }}
                       >
                         {candidate.score}
