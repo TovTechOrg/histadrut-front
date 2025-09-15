@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
+import { useTranslations } from "../../utils/translations";
+import { useLanguage } from "../../contexts/LanguageContext";
 import "./Login.css";
 
 const SignUp = () => {
+  const { t } = useTranslations('signUp');
+  const { currentLanguage } = useLanguage();
   const [formData, setFormData] = useState({
     email: "",
     name: "",
@@ -30,12 +34,12 @@ const SignUp = () => {
     setError("");
     try {
       if (!formData.name.trim()) {
-        setError("Name is required.");
+        setError(t('errors.nameRequired'));
         setLoading(false);
         return;
       }
       if (formData.password !== formData.confirmPassword) {
-        setError("Passwords do not match.");
+        setError(t('errors.passwordsMismatch'));
         setLoading(false);
         return;
       }
@@ -49,27 +53,27 @@ const SignUp = () => {
         setError("");
         navigate("/cv-upload");
       } else {
-        setError(result.data?.message || "Registration failed");
+        setError(result.data?.message || t('errors.registrationFailed'));
       }
     } catch {
-      setError("An error occurred. Please try again.");
+      setError(t('errors.genericError'));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="login-page">
+    <div key={`signUp-${currentLanguage}`} className="login-page">
       <div className="login-container">
         <div className="login-header">
-          <h1 className="login-title">Sign Up</h1>
-          <p className="login-subtitle">Create your account to get started</p>
+          <h1 className="login-title">{t('title')}</h1>
+          <p className="login-subtitle">{t('subtitle')}</p>
         </div>
         <form onSubmit={handleSubmit} className="login-form">
           {error && <div className="error-message">{error}</div>}
           <div className="form-group">
             <label htmlFor="email" className="form-label">
-              Email
+              {t('form.email')}
             </label>
             <input
               type="email"
@@ -79,14 +83,14 @@ const SignUp = () => {
               onChange={handleInputChange}
               className="form-input"
               required
-              placeholder="Enter your email"
+              placeholder={t('form.emailPlaceholder')}
               autoComplete="off"
               style={{ background: "#fff", color: "#222" }}
             />
           </div>
           <div className="form-group">
             <label htmlFor="name" className="form-label">
-              Name
+              {t('form.name')}
             </label>
             <input
               type="text"
@@ -96,14 +100,14 @@ const SignUp = () => {
               onChange={handleInputChange}
               className="form-input"
               required
-              placeholder="Enter your name"
+              placeholder={t('form.namePlaceholder')}
               autoComplete="off"
             style={{ background: "#fff", color: "#222" }}
             />
           </div>
           <div className="form-group">
             <label htmlFor="password" className="form-label">
-              Password
+              {t('form.password')}
             </label>
             <div style={{ position: "relative" }}>
               <input
@@ -114,13 +118,14 @@ const SignUp = () => {
                 onChange={handleInputChange}
                 className="form-input"
                 required
-                placeholder="Enter your password"
+                placeholder={t('form.passwordPlaceholder')}
                 autoComplete="new-password"
                 style={{ background: "#fff", color: "#222", paddingRight: "40px" }}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
+                title={showPassword ? t('form.hidePassword') : t('form.showPassword')}
                 style={{
                   position: "absolute",
                   right: "10px",
@@ -139,7 +144,7 @@ const SignUp = () => {
           </div>
           <div className="form-group">
             <label htmlFor="confirmPassword" className="form-label">
-              Confirm Password
+              {t('form.confirmPassword')}
             </label>
             <input
               type="password"
@@ -149,21 +154,21 @@ const SignUp = () => {
               onChange={handleInputChange}
               className="form-input"
               required
-              placeholder="Re-enter your password"
+              placeholder={t('form.confirmPasswordPlaceholder')}
               autoComplete="new-password"
             style={{ background: "#fff", color: "#222" }}
             />
           </div>
           <button type="submit" className="login-button" disabled={loading}>
-            {loading ? "Please wait..." : "Sign Up"}
+            {loading ? t('actions.loading') : t('actions.signUp')}
           </button>
         </form>
         
         <div className="login-footer">
           <p className="login-link">
-            Already have an account?{" "}
+            {t('footer.alreadyHaveAccount')}{" "}
             <Link to="/login" className="text-button">
-              Sign In
+              {t('actions.signIn')}
             </Link>
           </p>
         </div>
@@ -177,7 +182,7 @@ const SignUp = () => {
           color: "#666",
           lineHeight: "1.4"
         }}>
-          ⚠️ This site requires third-party cookies to log in. Please enable them in your browser settings.
+          {t('footer.cookieWarning')}
         </div>
       </div>
     </div>

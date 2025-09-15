@@ -25,6 +25,17 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
     return '#ffc107'; // Yellow for between 6 and 8.5
   };
 
+  // Function to translate status values
+  const translateStatus = (status) => {
+    const statusMap = {
+      'YES': t('table.statusValues.yes'),
+      'NO': t('table.statusValues.no'),
+      'pending': t('table.statusValues.pending'),
+      'sent': t('table.statusValues.sent'),
+    };
+    return statusMap[status] || status;
+  };
+
   useEffect(() => {
     setJobs(initialJobs);
   }, [initialJobs]);
@@ -114,7 +125,7 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
   };
 
   return (
-    <div className="match-table">
+    <div className="match-table" key={currentLanguage}>
       <table className="match-table__table">
         <thead className="match-table__header">
           <tr>
@@ -190,7 +201,7 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                         alt="Link, external link"
                         className="job-link-icon"
                       />
-                      <span className="job-link-text">Link to Job</span>
+                      <span className="job-link-text">{t('table.linkToJob')}</span>
                     </a>
                   ) : (
                     <span
@@ -263,7 +274,7 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                             : "mmr-badge--no"
                         }`}
                       >
-                        {candidate.mmr}
+                        {translateStatus(candidate.mmr)}
                       </span>
                     </div>
                   ))}
@@ -279,8 +290,8 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                         }`}
                       >
                         {changingMatches.has(candidate._metadata.matchId)
-                          ? "changing..."
-                          : candidate.status}
+                          ? t('table.updating')
+                          : translateStatus(candidate.status)}
                       </span>
                     </div>
                   ))}
@@ -327,10 +338,10 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                           />
                           <span className="action-btn-text">
                             {isChanging
-                              ? "Updating..."
+                              ? t('table.updating')
                               : candidate.status === "pending"
-                              ? "Mark as Sent"
-                              : "Revert Status"}
+                              ? t('table.markAsSent')
+                              : t('table.revertStatus')}
                           </span>
                         </button>
                       </div>

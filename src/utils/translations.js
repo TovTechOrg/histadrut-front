@@ -251,7 +251,16 @@ export const translations = {
         downloadCV: "Download CV",
         downloadCVFor: "Download CV for {name}",
         cvNotAvailable: "CV not available",
-        jobLinkNotAvailable: "Job link not available"
+        jobLinkNotAvailable: "Job link not available",
+        linkToJob: "Link to Job",
+        updating: "Updating...",
+        revertStatus: "Revert Status",
+        statusValues: {
+          yes: "YES",
+          no: "NO",
+          pending: "Pending",
+          sent: "Sent"
+        }
       }
     },
     he: {
@@ -305,7 +314,16 @@ export const translations = {
         downloadCV: "הורד קורות חיים",
         downloadCVFor: "הורד קורות חיים עבור {name}",
         cvNotAvailable: "קורות חיים לא זמינים",
-        jobLinkNotAvailable: "קישור למשרה לא זמין"
+        jobLinkNotAvailable: "קישור למשרה לא זמין",
+        linkToJob: "קישור למשרה",
+        updating: "מעדכן...",
+        revertStatus: "החזר סטטוס",
+        statusValues: {
+          yes: "כן",
+          no: "לא",
+          pending: "ממתין",
+          sent: "נשלח"
+        }
       }
     }
   },
@@ -868,6 +886,156 @@ export const translations = {
         failedToAdd: "כשל בהוספת המשרה",
         failedToUpdate: "כשל בעדכון המשרה",
         pleaseCheck: "אנא בדוק את הטופס ונסה שוב."
+      }
+    }
+  },
+
+  // Sign Up page
+  signUp: {
+    en: {
+      title: "Sign Up",
+      subtitle: "Create your account to get started",
+      
+      // Form fields
+      form: {
+        email: "Email",
+        emailPlaceholder: "Enter your email",
+        
+        name: "Name", 
+        namePlaceholder: "Enter your name",
+        
+        password: "Password",
+        passwordPlaceholder: "Enter your password",
+        
+        confirmPassword: "Confirm Password",
+        confirmPasswordPlaceholder: "Re-enter your password",
+        
+        showPassword: "Show password",
+        hidePassword: "Hide password"
+      },
+      
+      // Actions
+      actions: {
+        signUp: "Sign Up",
+        loading: "Please wait...",
+        signIn: "Sign In"
+      },
+      
+      // Footer
+      footer: {
+        alreadyHaveAccount: "Already have an account?",
+        cookieWarning: "⚠️ This site requires third-party cookies to log in. Please enable them in your browser settings."
+      },
+      
+      // Error messages
+      errors: {
+        nameRequired: "Name is required.",
+        passwordsMismatch: "Passwords do not match.",
+        registrationFailed: "Registration failed",
+        genericError: "An error occurred. Please try again."
+      }
+    },
+    he: {
+      title: "הרשמה",
+      subtitle: "צור את החשבון שלך כדי להתחיל",
+      
+      // Form fields
+      form: {
+        email: "אימייל",
+        emailPlaceholder: "הכנס את האימייל שלך",
+        
+        name: "שם",
+        namePlaceholder: "הכנס את השם שלך",
+        
+        password: "סיסמה",
+        passwordPlaceholder: "הכנס את הסיסמה שלך",
+        
+        confirmPassword: "אימות סיסמה",
+        confirmPasswordPlaceholder: "הכנס שוב את הסיסמה שלך",
+        
+        showPassword: "הצג סיסמה",
+        hidePassword: "הסתר סיסמה"
+      },
+      
+      // Actions
+      actions: {
+        signUp: "הירשם",
+        loading: "אנא המתן...",
+        signIn: "התחבר"
+      },
+      
+      // Footer
+      footer: {
+        alreadyHaveAccount: "כבר יש לך חשבון?",
+        cookieWarning: "⚠️ אתר זה דורש עוגיות צד שלישי כדי להתחבר. אנא אפשר אותן בהגדרות הדפדפן שלך."
+      },
+      
+      // Error messages
+      errors: {
+        nameRequired: "שם הוא שדה חובה.",
+        passwordsMismatch: "הסיסמאות אינן תואמות.",
+        registrationFailed: "ההרשמה נכשלה",
+        genericError: "אירעה שגיאה. אנא נסה שוב."
+      }
+    }
+  },
+
+  // Password Reset Modal
+  resetPassword: {
+    en: {
+      title: "Reset Password",
+      emailLabel: "Email",
+      emailPlaceholder: "Enter your email",
+      sendResetLink: "Send Reset Link",
+      sending: "Sending...",
+      successMessage: "Check your email for a reset link.",
+      failedToSend: "Failed to send reset email"
+    },
+    he: {
+      title: "איפוס סיסמה",
+      emailLabel: "אימייל",
+      emailPlaceholder: "הכנס את האימייל שלך",
+      sendResetLink: "שלח קישור איפוס",
+      sending: "שולח...",
+      successMessage: "בדוק את האימייל שלך לקישור איפוס.",
+      failedToSend: "כשל בשליחת אימייל איפוס"
+    }
+  },
+
+  // New Password Page
+  newPassword: {
+    en: {
+      title: "Set New Password",
+      newPassword: "New Password",
+      newPasswordPlaceholder: "Enter new password",
+      confirmPassword: "Confirm Password", 
+      confirmPasswordPlaceholder: "Confirm new password",
+      setPassword: "Set Password",
+      setting: "Setting...",
+      showPassword: "Show password",
+      hidePassword: "Hide password",
+      
+      errors: {
+        fillAllFields: "Please fill in all fields.",
+        passwordsMismatch: "Passwords do not match.",
+        failedToSet: "Failed to set new password"
+      }
+    },
+    he: {
+      title: "הגדר סיסמה חדשה",
+      newPassword: "סיסמה חדשה",
+      newPasswordPlaceholder: "הכנס סיסמה חדשה",
+      confirmPassword: "אימות סיסמה",
+      confirmPasswordPlaceholder: "אמת את הסיסמה החדשה",
+      setPassword: "הגדר סיסמה",
+      setting: "מגדיר...",
+      showPassword: "הצג סיסמה",
+      hidePassword: "הסתר סיסמה",
+      
+      errors: {
+        fillAllFields: "אנא מלא את כל השדות.",
+        passwordsMismatch: "הסיסמאות אינן תואמות.",
+        failedToSet: "כשל בהגדרת סיסמה חדשה"
       }
     }
   }

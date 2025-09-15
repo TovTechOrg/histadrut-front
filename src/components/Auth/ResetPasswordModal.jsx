@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import Modal from "../shared/Modal";
 import "./Login.css";
 import { resetPassword } from "../../api/api";
+import { useTranslations } from "../../utils/translations";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const ResetPasswordModal = ({ isOpen, onClose }) => {
+  const { t } = useTranslations('resetPassword');
+  const { currentLanguage } = useLanguage();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -18,7 +22,7 @@ const ResetPasswordModal = ({ isOpen, onClose }) => {
       await resetPassword(email);
       setSuccess(true);
     } catch (err) {
-      setError(err.message || "Failed to send reset email");
+      setError(err.message || t('failedToSend'));
     } finally {
       setLoading(false);
     }
@@ -26,13 +30,13 @@ const ResetPasswordModal = ({ isOpen, onClose }) => {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="" maxWidth="500px" className="reset-modal">
-      <div className="reset-password-modal">
-        <h2 className="reset-password-title">Reset Password</h2>
+      <div key={`resetPassword-${currentLanguage}`} className="reset-password-modal">
+        <h2 className="reset-password-title">{t('title')}</h2>
         {success ? (
-          <div className="success-message reset-password-success">Check your email for a reset link.</div>
+          <div className="success-message reset-password-success">{t('successMessage')}</div>
         ) : (
           <form onSubmit={handleSubmit} className="reset-password-form">
-            <label htmlFor="reset-email" className="reset-password-label">Email</label>
+            <label htmlFor="reset-email" className="reset-password-label">{t('emailLabel')}</label>
             <input
               id="reset-email"
               type="email"
@@ -40,7 +44,7 @@ const ResetPasswordModal = ({ isOpen, onClose }) => {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="form-input reset-password-input"
-              placeholder="Enter your email"
+              placeholder={t('emailPlaceholder')}
             />
             {error && <div className="error-message" style={{ color: "#c00", marginBottom: 10 }}>{error}</div>}
             <button
@@ -48,7 +52,7 @@ const ResetPasswordModal = ({ isOpen, onClose }) => {
               className="login-button reset-password-btn"
               disabled={loading}
             >
-              {loading ? "Sending..." : "Send Reset Link"}
+              {loading ? t('sending') : t('sendResetLink')}
             </button>
           </form>
         )}
