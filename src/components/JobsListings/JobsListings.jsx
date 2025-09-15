@@ -6,6 +6,7 @@ import JobListingsTable from "./JobListingsTable";
 import { useJobsData } from "../../hooks/useJobsData";
 import { deleteJobAndMatches } from "../../api/api";
 import { useAuth } from "../../hooks/useAuth";
+import { useTranslations } from "../../utils/translations";
 import "./JobsListings.css";
 
 import addIcon from "../../assets/icons/add.svg";
@@ -13,6 +14,7 @@ import JobDescriptionModal from "../shared/JobDescriptionModal";
 
 const JobsListings = () => {
   const { user } = useAuth();
+  const { t, currentLanguage } = useTranslations('jobListings');
   const {
     filteredJobs,
     loading,
@@ -39,16 +41,16 @@ const JobsListings = () => {
   const [showDeleteSuccess, setShowDeleteSuccess] = useState(false);
 
   return (
-    <section className="main-page jobs-listings">
+    <section className="main-page jobs-listings" key={currentLanguage}>
       <div className="jobs-listings__header">
-        <h1 className="page__title">Job Listings Management</h1>
+        <h1 className="page__title">{t('title')}</h1>
         {isAdmin && (
           <button
             className="jobs-listings__add-btn"
             onClick={() => navigate("/jobs/add")}
           >
             <img src={addIcon} alt="Add" className="btn-icon" />
-            Add New Job
+            {t('addNewJob')}
           </button>
         )}
       </div>
@@ -91,21 +93,20 @@ const JobsListings = () => {
 
   {/* Delete confirmation modal */}
   <Modal
+    key={currentLanguage}
     isOpen={!!deleteJob}
     onClose={() => {
       setDeleteJob(null);
       setDeleteError("");
     }}
-    title="Delete Job and Matches"
+    title={t('deleteModal.title')}
   >
     <div style={{ padding: '2rem 2.5rem 1.5rem 2.5rem' }}>
-      <p style={{ fontWeight: 500, color: '#b71c1c', marginBottom: 18 }}>
-        Are you sure you want to delete this job and <b>all of its matches</b>? This action cannot be undone.
-      </p>
+      <p style={{ fontWeight: 500, color: '#b71c1c', marginBottom: 18 }} dangerouslySetInnerHTML={{ __html: t('deleteModal.warningText') }} />
       <div style={{ margin: '1.2rem 0 1.2rem 0', color: '#333', fontSize: '1.05rem', lineHeight: 1.7 }}>
-        <b>Job ID:</b> {deleteJob?.job_id} <br />
-        <b>Job:</b> {deleteJob?.title} <br />
-        <b>Company:</b> {deleteJob?.company}
+        <b>{t('deleteModal.jobId')}:</b> {deleteJob?.job_id} <br />
+        <b>{t('deleteModal.job')}:</b> {deleteJob?.title} <br />
+        <b>{t('deleteModal.company')}:</b> {deleteJob?.company}
       </div>
       {deleteError && <div style={{ color: '#e74c3c', marginBottom: 8 }}>{deleteError}</div>}
       <div style={{ display: 'flex', gap: 16, justifyContent: 'flex-end', marginTop: 10 }}>
@@ -117,7 +118,7 @@ const JobsListings = () => {
           style={{ padding: '8px 18px', background: '#eee', border: 'none', borderRadius: 4, cursor: 'pointer' }}
           disabled={deleteLoading}
         >
-          Cancel
+          {t('deleteModal.cancel')}
         </button>
         <button
           onClick={async () => {
@@ -128,7 +129,7 @@ const JobsListings = () => {
               setDeleteJob(null);
               setShowDeleteSuccess(true);
             } catch (err) {
-              setDeleteError(err.message || "Failed to delete job.");
+              setDeleteError(err.message || t('deleteModal.errorDeleting'));
             } finally {
               setDeleteLoading(false);
             }
@@ -136,7 +137,7 @@ const JobsListings = () => {
           style={{ padding: '8px 18px', background: '#e74c3c', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontWeight: 600 }}
           disabled={deleteLoading}
         >
-          {deleteLoading ? 'Deleting...' : 'Delete'}
+          {deleteLoading ? t('deleteModal.deleting') : t('deleteModal.delete')}
         </button>
       </div>
     </div>
@@ -144,20 +145,21 @@ const JobsListings = () => {
 
   {/* Success modal after delete */}
   <Modal
+    key={`success-${currentLanguage}`}
     isOpen={showDeleteSuccess}
     onClose={() => {
       setShowDeleteSuccess(false);
       window.location.reload();
     }}
-    title="Job Deleted"
+    title={t('successModal.title')}
   >
     <div style={{ padding: '2.5rem 2.5rem 2rem 2.5rem', textAlign: 'center' }}>
       <div style={{ fontSize: 48, color: '#27ae60', marginBottom: 16 }}>✔</div>
       <div style={{ fontWeight: 600, fontSize: '1.2rem', color: '#222', marginBottom: 8 }}>
-        Job and all its matches were deleted successfully.
+        {t('successModal.message')}
       </div>
       <div style={{ color: '#666', fontSize: '1rem' }}>
-        Close this message to refresh the list.
+        {t('successModal.instruction')}
       </div>
     </div>
   </Modal>

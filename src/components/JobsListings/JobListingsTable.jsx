@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslations } from "../../utils/translations";
 import viewIcon from "../../assets/icons/view.svg";
 import editIcon from "../../assets/icons/edit.svg";
 import deleteIcon from "../../assets/icons/delete.svg";
@@ -15,10 +16,12 @@ const JobListingsTable = ({
   showActions = true,
   onJobTitleClick,
 }) => {
+  const { t, currentLanguage } = useTranslations('jobListings');
+  
   if (loading) {
     return (
       <div className="job-table">
-        <div className="job-table__loading">Loading jobs...</div>
+        <div className="job-table__loading">{t('table.loading')}</div>
       </div>
     );
   }
@@ -26,7 +29,7 @@ const JobListingsTable = ({
   if (error) {
     return (
       <div className="job-table">
-        <div className="job-table__error">Error loading jobs: {error}</div>
+        <div className="job-table__error">{t('table.error', { error })}</div>
       </div>
     );
   }
@@ -43,6 +46,28 @@ const JobListingsTable = ({
         return "age-old";
       default:
         return "";
+    }
+  };
+
+  const getAgeLabel = (age) => {
+    // First try to get translation for the exact age string
+    const translation = t(`table.ageLabels.${age}`);
+    if (translation !== `table.ageLabels.${age}`) {
+      return translation;
+    }
+    
+    // Fallback for categorical age labels
+    switch (age) {
+      case "New":
+        return t('table.ageLabels.new');
+      case "Fresh":
+        return t('table.ageLabels.fresh');
+      case "Stale":
+        return t('table.ageLabels.stale');
+      case "Old":
+        return t('table.ageLabels.old');
+      default:
+        return age;
     }
   };
 
@@ -78,24 +103,24 @@ const JobListingsTable = ({
   };
 
   return (
-    <div className="job-table">
+    <div className="job-table" key={currentLanguage}>
       <div className="job-table__container">
         <table className="job-table__table">
           <thead className="job-table__header">
             <tr>
               <SortableHeader field="job_id" sortable={false}>
-                ID
+                {t('table.headers.jobId')}
               </SortableHeader>
-              <SortableHeader field="title">Title</SortableHeader>
-              <SortableHeader field="company">Company</SortableHeader>
-              <SortableHeader field="posted">Posted</SortableHeader>
-              <SortableHeader field="age">Age</SortableHeader>
+              <SortableHeader field="title">{t('table.headers.title')}</SortableHeader>
+              <SortableHeader field="company">{t('table.headers.company')}</SortableHeader>
+              <SortableHeader field="posted">{t('table.headers.datePosted')}</SortableHeader>
+              <SortableHeader field="age">{t('table.headers.age')}</SortableHeader>
               <SortableHeader field="link" sortable={false}>
-                Link to Job
+                {t('table.headers.linkToJob')}
               </SortableHeader>
               {showActions && (
                 <SortableHeader field="actions" sortable={false}>
-                  Actions
+                  {t('table.headers.actions')}
                 </SortableHeader>
               )}
             </tr>
@@ -107,7 +132,7 @@ const JobListingsTable = ({
                   colSpan={showActions ? "7" : "6"}
                   className="job-table__empty"
                 >
-                  No jobs found matching your criteria.
+                  {t('table.noJobs')}
                 </td>
               </tr>
             ) : (
@@ -127,7 +152,7 @@ const JobListingsTable = ({
                   <td className="job-table__cell">{job.company}</td>
                   <td className="job-table__cell">{job.posted}</td>
                   <td className="job-table__cell">
-                    <span className={`age-badge ${getAgeClass(job.ageCategory)}`}>{job.age}</span>
+                    <span className={`age-badge ${getAgeClass(job.ageCategory)}`}>{getAgeLabel(job.ageCategory)}</span>
                   </td>
                   <td className="job-table__cell job-table__cell--link">
                     {job.position_link ? (
@@ -136,19 +161,19 @@ const JobListingsTable = ({
                         target="_blank"
                         rel="noopener noreferrer"
                         className="job-link-btn"
-                        title="View job posting"
-                        aria-label="View job posting"
+                        title={t('table.actions.openLink')}
+                        aria-label={t('table.actions.openLink')}
                         style={{ margin: 0 }}
                       >
                         <img
                           src={linkIcon}
-                          alt="Link, external link"
+                          alt={t('table.actions.openLink')}
                           className="job-link-icon"
                         />
-                        <span className="job-link-text">Link to Job</span>
+                        <span className="job-link-text">{t('table.headers.linkToJob')}</span>
                       </a>
                     ) : (
-                      <span className="job-link-unavailable" title="Job link not available">
+                      <span className="job-link-unavailable" title={t('table.linkNotAvailable')}>
                         —
                       </span>
                     )}
@@ -159,7 +184,7 @@ const JobListingsTable = ({
                         <button
                           className="action-btn view-btn"
                           onClick={() => onAction("view", job)}
-                          title="View Job"
+                          title={t('table.actions.view')}
                         >
                           <img src={viewIcon} alt="View" />
                         </button>
@@ -167,7 +192,7 @@ const JobListingsTable = ({
                         <button
                           className="action-btn edit-btn"
                           onClick={() => onAction("edit", job)}
-                          title="Edit Job"
+                          title={t('table.actions.edit')}
                         >
                           <img src={editIcon} alt="Edit" />
                         </button>
@@ -175,7 +200,7 @@ const JobListingsTable = ({
                         <button
                           className="action-btn delete-btn"
                           onClick={() => onAction("delete", job)}
-                          title="Delete Job"
+                          title={t('table.actions.delete')}
                         >
                           <img src={deleteIcon} alt="Delete" />
                         </button>

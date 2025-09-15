@@ -584,6 +584,292 @@ export const translations = {
         other: "חברות אחרות"
       }
     }
+  },
+
+  // Job Listings page
+  jobListings: {
+    en: {
+      title: "Job Listings Management",
+      addNewJob: "Add New Job",
+      loading: "Loading jobs...",
+      errorLoading: "Error loading jobs",
+      
+      // Filters section
+      filters: {
+        title: "Filters",
+        searchJobs: "Search Jobs",
+        searchPlaceholder: "Search by job title, company, or description...",
+        companyFilter: "Company",
+        companyPlaceholder: "All Companies",
+        statusFilter: "Status",
+        statusPlaceholder: "All Statuses",
+        clearFilters: "Clear Filters"
+      },
+      
+      // Table headers and content
+      table: {
+        headers: {
+          jobId: "Job ID",
+          title: "Job Title", 
+          company: "Company",
+          status: "Status",
+          age: "Age",
+          matchCount: "Matches",
+          datePosted: "Date Posted",
+          linkToJob: "Link to Job",
+          actions: "Actions"
+        },
+        loading: "Loading jobs...",
+        error: "Error loading jobs: {error}",
+        noJobs: "No jobs found",
+        noJobsFiltered: "No jobs match the current filters",
+        
+        // Age indicators  
+        ageLabels: {
+          new: "New",
+          fresh: "Fresh", 
+          stale: "Stale",
+          old: "Old",
+          // Day-specific labels from API
+          "1 day": "1 day",
+          "2-5 days": "2-5 days", 
+          "6-14 days": "6-14 days",
+          "15+ days": "15+ days"
+        },
+        
+        // Action tooltips
+        actions: {
+          view: "View job details",
+          edit: "Edit job",
+          delete: "Delete job",
+          openLink: "Open job link"
+        },
+        
+        // Link status
+        linkNotAvailable: "Job link not available"
+      },
+      
+      // Delete confirmation modal
+      deleteModal: {
+        title: "Delete Job and Matches",
+        warningText: "Are you sure you want to delete this job and <b>all of its matches</b>? This action cannot be undone.",
+        jobId: "Job ID",
+        job: "Job",
+        company: "Company",
+        cancel: "Cancel",
+        delete: "Delete",
+        deleting: "Deleting...",
+        errorDeleting: "Failed to delete job."
+      },
+      
+      // Success modal after deletion
+      successModal: {
+        title: "Job Deleted",
+        message: "Job and all its matches were deleted successfully.",
+        instruction: "Close this message to refresh the list."
+      }
+    },
+    he: {
+      title: "ניהול רשימת משרות",
+      addNewJob: "הוסף משרה חדשה",
+      loading: "טוען משרות...",
+      errorLoading: "שגיאה בטעינת משרות",
+      
+      // Filters section  
+      filters: {
+        title: "מסננים",
+        searchJobs: "חפש משרות",
+        searchPlaceholder: "חפש לפי כותרת משרה, חברה או תיאור...",
+        companyFilter: "חברה",
+        companyPlaceholder: "כל החברות",
+        statusFilter: "סטטוס",
+        statusPlaceholder: "כל הסטטוסים",
+        clearFilters: "נקה מסננים"
+      },
+      
+      // Table headers and content
+      table: {
+        headers: {
+          jobId: "מזהה משרה",
+          title: "כותרת המשרה",
+          company: "חברה", 
+          status: "סטטוס",
+          age: "נוסף לפני",
+          matchCount: "התאמות",
+          datePosted: "תאריך פרסום",
+          linkToJob: "קישור למשרה",
+          actions: "פעולות"
+        },
+        loading: "טוען משרות...",
+        error: "שגיאה בטעינת משרות: {error}",
+        noJobs: "לא נמצאו משרות",
+        noJobsFiltered: "לא נמצאו משרות התואמות למסננים הנוכחיים",
+        
+        // Age indicators
+        ageLabels: {
+          new: "חדש",
+          fresh: "טרי",
+          stale: "ישן",
+          old: "מיושן",
+          // Day-specific labels from API
+          "1 day": "יום 1",
+          "2-5 days": "ימים 2-5", 
+          "6-14 days": "ימים 6-14",
+          "15+ days": "ימים 15+"
+        },
+        
+        // Action tooltips
+        actions: {
+          view: "הצג פרטי משרה",
+          edit: "ערוך משרה", 
+          delete: "מחק משרה",
+          openLink: "פתח קישור למשרה"
+        },
+        
+        // Link status
+        linkNotAvailable: "קישור למשרה לא זמין"
+      },
+      
+      // Delete confirmation modal
+      deleteModal: {
+        title: "מחק משרה והתאמות",
+        warningText: "האם אתה בטוח שברצונך למחוק את המשרה הזו ו<b>את כל ההתאמות שלה</b>? פעולה זו אינה ניתנת לביטול.",
+        jobId: "מזהה משרה",
+        job: "משרה",
+        company: "חברה",
+        cancel: "בטל",
+        delete: "מחק",
+        deleting: "מוחק...",
+        errorDeleting: "כשל במחיקת המשרה."
+      },
+      
+      // Success modal after deletion
+      successModal: {
+        title: "המשרה נמחקה",
+        message: "המשרה וכל ההתאמות שלה נמחקו בהצלחה.",
+        instruction: "סגור הודעה זו כדי לרענן את הרשימה."
+      }
+    }
+  },
+
+  // Add Job page
+  addJob: {
+    en: {
+      title: "Add a New Job",
+      
+      // Form fields
+      form: {
+        jobTitle: "Job Title",
+        jobTitlePlaceholder: "e.g. Software Developer, Marketing Manager",
+        
+        positionLink: "Position Link",
+        positionLinkPlaceholder: "https://example.com/careers/position",
+        
+        company: "Company",
+        companyPlaceholder: "Select a company",
+        companyOther: "Other",
+        newCompanyName: "New Company Name",
+        newCompanyPlaceholder: "Enter new company name",
+        
+        field: "Field",
+        fieldPlaceholder: "Select a field",
+        
+        jobId: "Job ID",
+        jobIdPlaceholder: "e.g. JOB-2024-001",
+        
+        location: "Location",
+        locationPlaceholder: "e.g. Tel Aviv, Remote, Hybrid",
+        
+        scope: "Scope",
+        scopePlaceholder: "Select scope...",
+        scopeFullTime: "Full-time",
+        scopePartTime: "Part-time",
+        
+        jobDescription: "Job Description",
+        jobDescriptionPlaceholder: "Describe the responsibilities, requirements, and expectations for this role.",
+        
+        required: "Required field"
+      },
+      
+      // Actions
+      actions: {
+        cancel: "Cancel",
+        submit: "Add Job",
+        update: "Update Job"
+      },
+      
+      // Success modal
+      successModal: {
+        title: "Success",
+        message: "Job added successfully!",
+        messageUpdate: "Job updated successfully!"
+      },
+      
+      // Error handling
+      errors: {
+        failedToAdd: "Failed to add job",
+        failedToUpdate: "Failed to update job",
+        pleaseCheck: "Please check the form and try again."
+      }
+    },
+    he: {
+      title: "הוסף משרה חדשה",
+      
+      // Form fields
+      form: {
+        jobTitle: "כותרת המשרה",
+        jobTitlePlaceholder: "לדוגמה: מפתח תוכנה, מנהל שיווק",
+        
+        positionLink: "קישור למשרה",
+        positionLinkPlaceholder: "https://example.com/careers/position",
+        
+        company: "חברה",
+        companyPlaceholder: "בחר חברה",
+        companyOther: "אחר",
+        newCompanyName: "שם חברה חדש",
+        newCompanyPlaceholder: "הכנס שם חברה חדש",
+        
+        field: "תחום",
+        fieldPlaceholder: "בחר תחום",
+        
+        jobId: "מזהה משרה",
+        jobIdPlaceholder: "לדוגמה: JOB-2024-001",
+        
+        location: "מיקום",
+        locationPlaceholder: "לדוגמה: תל אביב, מרחוק, היברידי",
+        
+        scope: "היקף משרה",
+        scopePlaceholder: "בחר היקף משרה...",
+        scopeFullTime: "משרה מלאה",
+        scopePartTime: "משרה חלקית",
+        
+        jobDescription: "תיאור המשרה",
+        jobDescriptionPlaceholder: "תאר את האחריות, הדרישות והציפיות לתפקיד זה.",
+        
+        required: "שדה חובה"
+      },
+      
+      // Actions
+      actions: {
+        cancel: "בטל",
+        submit: "הוסף משרה",
+        update: "עדכן משרה"
+      },
+      
+      // Success modal
+      successModal: {
+        title: "הצלחה",
+        message: "המשרה נוספה בהצלחה!",
+        messageUpdate: "המשרה עודכנה בהצלחה!"
+      },
+      
+      // Error handling
+      errors: {
+        failedToAdd: "כשל בהוספת המשרה",
+        failedToUpdate: "כשל בעדכון המשרה",
+        pleaseCheck: "אנא בדוק את הטופס ונסה שוב."
+      }
+    }
   }
 };
 

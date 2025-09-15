@@ -4,8 +4,12 @@ import JobForm from "./JobForm";
 import ConfirmationModal from "../shared/ConfirmationModal";
 import "../shared/ConfirmationModal.css";
 import { uploadJobDetails } from "../../api/api";
+import { useTranslations } from '../../utils/translations';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 export default function AddJob() {
+  const { t } = useTranslations('addJob');
+  const { currentLanguage } = useLanguage();
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = React.useState(false);
   const [modalMessage, setModalMessage] = React.useState("");
@@ -17,10 +21,10 @@ export default function AddJob() {
   const handleSubmit = async (formData) => {
     try {
       const response = await uploadJobDetails(formData);
-      setModalMessage(response.message || "Job added successfully!");
+      setModalMessage(response.message || t('successModal.message'));
       setModalOpen(true);
     } catch (error) {
-      alert(error.message || "Failed to add job.");
+      alert(error.message || t('errors.failedToAdd'));
     }
   };
 
@@ -30,13 +34,13 @@ export default function AddJob() {
   };
 
   return (
-    <div className="add-job-page">
-      <h1 className="page__title">Add a New Job</h1>
-      <JobForm onSubmit={handleSubmit} onCancel={handleCancel} submitLabel="OK" pageTitle={null} />
+    <div key={`addJob-${currentLanguage}`} className="add-job-page">
+      <h1 className="page__title">{t('title')}</h1>
+      <JobForm onSubmit={handleSubmit} onCancel={handleCancel} submitLabel={t('actions.submit')} pageTitle={null} />
       <ConfirmationModal
         isOpen={modalOpen}
         onClose={handleModalClose}
-        title="Success"
+        title={t('successModal.title')}
         message={modalMessage}
         buttonText="OK"
       />

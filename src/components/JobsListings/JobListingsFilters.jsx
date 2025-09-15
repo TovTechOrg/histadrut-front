@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-
 import { fetchCompanies } from "../../api/api";
+import { useTranslations } from "../../utils/translations";
 import CompanyAutocompleteInput from "../shared/CompanyAutocompleteInput";
 
 const JobListingsFilters = ({
@@ -13,6 +13,7 @@ const JobListingsFilters = ({
   companies,
   statuses,
 }) => {
+  const { t, currentLanguage } = useTranslations('jobListings');
   const [companyOptions, setCompanyOptions] = useState([]);
   const [localCompany, setLocalCompany] = useState(selectedCompany || "");
 
@@ -33,9 +34,9 @@ const JobListingsFilters = ({
     onCompanyChange(company);
   };
   return (
-    <section className="job-filters" aria-labelledby="filters-heading">
+    <section className="job-filters" aria-labelledby="filters-heading" key={currentLanguage}>
       <h2 id="filters-heading" className="job-filters__title">
-        Filters
+        {t('filters.title')}
       </h2>
 
       <form
@@ -47,13 +48,13 @@ const JobListingsFilters = ({
         <div className="job-filters__grid">
           <div className="job-filters__field">
             <label className="job-filters__label" htmlFor="search">
-              Search Jobs
+              {t('filters.searchJobs')}
             </label>
             <input
               id="search"
               type="text"
               className="job-filters__input"
-              placeholder="Title, Company, ID..."
+              placeholder={t('filters.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
             />
@@ -64,8 +65,8 @@ const JobListingsFilters = ({
               value={localCompany}
               onChange={handleCompanyChange}
               options={companyOptions}
-              label="Company"
-              placeholder="e.g., Example Tech"
+              label={t('filters.companyFilter')}
+              placeholder={t('filters.companyPlaceholder')}
               inputId="company"
               className="job-filters__input"
             />
@@ -73,7 +74,7 @@ const JobListingsFilters = ({
 
           <div className="job-filters__field">
             <label className="job-filters__label" htmlFor="status">
-              Status
+              {t('filters.statusFilter')}
             </label>
             <select
               id="status"
