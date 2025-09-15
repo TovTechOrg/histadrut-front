@@ -20,9 +20,9 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
     const numScore = parseFloat(score);
     if (isNaN(numScore)) return '#666'; // Default color for invalid scores
     
-    if (numScore <= 6) return '#ff9800'; // Orange
-    if (numScore >= 8.5) return '#4caf50'; // Green
-    return '#ffc107'; // Yellow for between 6 and 8.5
+    if (numScore <= 6) return '#ff6b35'; // Reddish orange for low scores
+    if (numScore >= 8.5) return '#4caf50'; // Green for high scores
+    return '#ffc107'; // Yellow for medium scores (6-8.5)
   };
 
   // Function to translate status values

@@ -280,7 +280,7 @@
 .candidate-match__score {
   color: #7f8c8d;
   font-size: 0.75rem;
-  font-weight: 600; /* Made bolder for better visibility */
+  font-weight:800; /* Made bolder for better visibility */
   line-height: 1.4;
   display: inline-block;
   padding: 0.2rem 0.4rem;
