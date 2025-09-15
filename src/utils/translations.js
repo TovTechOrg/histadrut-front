@@ -227,7 +227,10 @@ export const translations = {
         postedAfter: "Posted after",
         postedAfterHelp: "Show jobs posted after this date",
         minRelevanceScore: "Min. Relevance Score ({score})",
-        scoreRange: ["0", "10"]
+        scoreRange: ["0", "10"],
+        locations: "Locations",
+        locationsPlaceholder: "e.g., Tel Aviv, Jerusalem, Haifa",
+        locationsHelp: "Separate multiple locations with commas"
       },
       table: {
         headers: {
@@ -290,7 +293,10 @@ export const translations = {
         postedAfter: "פורסם לאחר",
         postedAfterHelp: "הצג משרות שפורסמו לאחר תאריך זה",
         minRelevanceScore: "ציון רלוונטיות מינימלי ({score})",
-        scoreRange: ["0", "10"]
+        scoreRange: ["0", "10"],
+        locations: "מיקומים",
+        locationsPlaceholder: "למשל, תל אביב, ירושלים, חיפה",
+        locationsHelp: "הפרד מיקומים מרובים עם פסיקים"
       },
       table: {
         headers: {

@@ -2,12 +2,14 @@ import React, { useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "../../contexts/useAuth";
 import { useTranslations } from "../../utils/translations";
-import { fetchCompanies } from "../../api/api";
+import { fetchCompanies, fetchLocations } from "../../api/api";
 import CompanyAutocompleteInput from "../shared/CompanyAutocompleteInput";
+import LocationsMultiSelect from "../shared/LocationsMultiSelect";
 
 
 
 const DEBOUNCE_TIMEOUT = 500;
+const LOCATIONS_DEBOUNCE_TIMEOUT = 1000; // Longer debounce for multi-select
 
 // General debounce hook
 function useDebounce(callback, delay) {
@@ -27,11 +29,13 @@ const MatchesFilters = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [localCompanyName, setLocalCompanyName] = React.useState(searchParams.get("companyName") || "");
   const [companyOptions, setCompanyOptions] = React.useState([]);
+  const [locationOptions, setLocationOptions] = React.useState([]);
   // No longer need showCompanyDropdown, handled by shared component
   const [localJobTitle, setLocalJobTitle] = React.useState(searchParams.get("job_title") || "");
   const [localCandidateName, setLocalCandidateName] = React.useState(searchParams.get("candidateName") || "");
   const [localJobId, setLocalJobId] = React.useState(searchParams.get("job_id") || "");
   const [localAppliedStatus, setLocalAppliedStatus] = React.useState(searchParams.get("match_status") || "");
+  const [localLocations, setLocalLocations] = React.useState(searchParams.get("locations") || "");
   const addedSince = searchParams.get("addedSince") || "";
   const minRelevanceScore = searchParams.get("minRelevanceScore") ? parseFloat(searchParams.get("minRelevanceScore")) : 7.0;
   const [localMinScore, setLocalMinScore] = React.useState(minRelevanceScore);
@@ -49,6 +53,15 @@ const MatchesFilters = () => {
       }
     });
   }, []);
+
+  // Fetch location options on mount
+  React.useEffect(() => {
+    fetchLocations().then((data) => {
+      if (data && Array.isArray(data)) {
+        setLocationOptions(data);
+      }
+    });
+  }, []);
   React.useEffect(() => {
     setLocalJobTitle(searchParams.get("job_title") || "");
   }, [searchParams.get("job_title")]);
@@ -61,6 +74,9 @@ const MatchesFilters = () => {
   React.useEffect(() => {
     setLocalAppliedStatus(searchParams.get("match_status") || "");
   }, [searchParams.get("match_status")]);
+  React.useEffect(() => {
+    setLocalLocations(searchParams.get("locations") || "");
+  }, [searchParams.get("locations")]);
 
   // Debounced update for each input
   const debouncedSetParam = useDebounce((field, value) => {
@@ -83,6 +99,27 @@ const MatchesFilters = () => {
     });
   }, DEBOUNCE_TIMEOUT);
 
+  // Longer debounce for locations multi-select
+  const debouncedSetLocationsParam = useDebounce((field, value) => {
+    setSearchParams(prev => {
+      const params = new URLSearchParams(prev);
+      if (value && value !== "") {
+        params.set(field, value);
+      } else {
+        params.delete(field);
+      }
+      // Remove all empty params
+      for (const key of Array.from(params.keys())) {
+        if (!params.get(key)) {
+          params.delete(key);
+        }
+      }
+      // Always reset page to 1 on filter change
+      params.set("page", "1");
+      return params;
+    });
+  }, LOCATIONS_DEBOUNCE_TIMEOUT);
+
   const handleCompanyNameChange = (company) => {
     setLocalCompanyName(company);
     debouncedSetParam("companyName", company);
@@ -102,6 +139,10 @@ const MatchesFilters = () => {
   const handleAppliedStatusChange = (e) => {
     setLocalAppliedStatus(e.target.value);
     debouncedSetParam("match_status", e.target.value);
+  };
+  const handleLocationsChange = (value) => {
+    setLocalLocations(value);
+    debouncedSetLocationsParam("locations", value);
   };
   // Handle date and slider changes for addedSince and minRelevanceScore
   const handleInputChange = (field, value) => {
@@ -284,6 +325,18 @@ const MatchesFilters = () => {
                 <span>{t('filters.scoreRange')[1]}</span>
               </div>
             </div>
+          </div>
+
+          <div className="match-filters__field">
+            <LocationsMultiSelect
+              value={localLocations}
+              onChange={handleLocationsChange}
+              options={locationOptions}
+              label={t('filters.locations')}
+              placeholder={t('filters.locationsPlaceholder')}
+              inputId="locations"
+              className="match-filters__input"
+            />
           </div>
         </div>
       </form>

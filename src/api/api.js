@@ -208,7 +208,7 @@ export const fetchStats = async () => apiRequest("/stats");
 
 export const fetchCompaniesToday = async () => apiRequest("/get_companies_today");
 
-export const fetchJobs = async (page = 1, minScore, createdAt, companyName, candidateName, job_title, job_id, match_status) => {
+export const fetchJobs = async (page = 1, minScore, createdAt, companyName, candidateName, job_title, job_id, match_status, locations) => {
   let url = `/matches2?page=${page}`;
   if (typeof minScore === "number") {
     url += `&min_score=${minScore}`;
@@ -231,10 +231,16 @@ export const fetchJobs = async (page = 1, minScore, createdAt, companyName, cand
   if (match_status && match_status.trim()) {
     url += `&match_status=${encodeURIComponent(match_status.trim())}`;
   }
+  if (locations && locations.trim()) {
+    // Format locations: replace "comma space" with just "comma" but preserve other spaces
+    const formattedLocations = locations.trim().replace(/,\s+/g, ',');
+    url += `&locations=${encodeURIComponent(formattedLocations)}`;
+  }
   return apiRequest(url);
 };
 export const fetchJobListings = async () => apiRequest("/jobs");
 export const fetchCompanies = async () => apiRequest("/companies");
+export const fetchLocations = async () => apiRequest("/locations");
 
 export const transformJobsData = (apiResponse) => {
   // Check if apiResponse has the expected structure
