@@ -208,7 +208,12 @@ export const translations = {
         previous: "← Previous",
         next: "Next →",
         pageInfo: "Page {current} of {total}",
-        totalJobs: "Total: {total} jobs"
+        totalJobs: "Total: {total} jobs",
+        showLabel: "Show",
+        jobsPerPage: "jobs per page",
+        pageSize20: "20",
+        pageSize50: "50",
+        pageSize100: "100"
       },
       filters: {
         companyName: "Company Name",
@@ -275,7 +280,12 @@ export const translations = {
         previous: "הקודם ←",
         next: "→ הבא",
         pageInfo: "עמוד {current} מתוך {total}",
-        totalJobs: "סה״כ: {total} משרות"
+        totalJobs: "סה״כ: {total} משרות",
+        showLabel: "משרות בעמוד",
+        jobsPerPage: "הצג",
+        pageSize20: "20",
+        pageSize50: "50",
+        pageSize100: "100"
       },
       filters: {
         companyName: "שם חברה",
@@ -628,11 +638,9 @@ export const translations = {
         totalJobs: "Total: {total} jobs",
         showLabel: "Show",
         jobsPerPage: "jobs per page",
-        pageSizeOptions: {
-          "20": "20",
-          "50": "50", 
-          "100": "100"
-        }
+        pageSize20: "20",
+        pageSize50: "50",
+        pageSize100: "100"
       },
       
       // Filters section
@@ -726,11 +734,9 @@ export const translations = {
         totalJobs: "סה״כ: {total} משרות",
         showLabel: "משרות בעמוד",
         jobsPerPage: "הצג",
-        pageSizeOptions: {
-          "20": "20",
-          "50": "50", 
-          "100": "100"
-        }
+        pageSize20: "20",
+        pageSize50: "50",
+        pageSize100: "100"
       },
       
       // Filters section  

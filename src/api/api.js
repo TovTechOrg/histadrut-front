@@ -208,8 +208,8 @@ export const fetchStats = async () => apiRequest("/stats");
 
 export const fetchCompaniesToday = async () => apiRequest("/get_companies_today");
 
-export const fetchJobs = async (page = 1, minScore, createdAt, companyName, candidateName, job_title, job_id, match_status, locations) => {
-  let url = `/matches2?page=${page}`;
+export const fetchJobs = async (page = 1, limit = 20, minScore, createdAt, companyName, candidateName, job_title, job_id, match_status, locations) => {
+  let url = `/matches2?page=${page}&limit=${limit}`;
   if (typeof minScore === "number") {
     url += `&min_score=${minScore}`;
   }

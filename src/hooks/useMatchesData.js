@@ -10,6 +10,7 @@ export const useMatchesData = () => {
   const [error, setError] = useState(null);
   const [lastFetch, setLastFetch] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalJobs, setTotalJobs] = useState(0);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -25,17 +26,18 @@ export const useMatchesData = () => {
       job_id: params.job_id || "",
       match_status: params.match_status || "",
       locations: params.locations || "",
+      limit: parseInt(params.limit) || 20,
     };
   }, [searchParams]);
 
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
 
-  const loadJobs = async (page, minScore, createdAt, companyName, candidateName, job_title, job_id, match_status, locations) => {
+  const loadJobs = async (page, limit, minScore, createdAt, companyName, candidateName, job_title, job_id, match_status, locations) => {
     try {
       setLoading(true);
       setError(null);
 
-      const apiResponse = await fetchJobs(page, minScore, createdAt, companyName, candidateName, job_title, job_id, match_status, locations); 
+      const apiResponse = await fetchJobs(page, limit, minScore, createdAt, companyName, candidateName, job_title, job_id, match_status, locations); 
 
       // If response is empty or missing jobs key, prompt user to upload CV
       if (!apiResponse || !apiResponse.jobs) {
@@ -49,6 +51,7 @@ export const useMatchesData = () => {
       const { jobs, pagination } = transformJobsData(apiResponse);
       setJobsData(jobs);
       setTotalPages(pagination.totalPages);
+      setTotalJobs(pagination.totalJobs || 0);
       setLastFetch(new Date());
     } catch {
       setError("Failed to load jobs. Please try again later.");
@@ -74,6 +77,7 @@ export const useMatchesData = () => {
     const formattedDate = formatDateForAPI(filters.addedSince);
     loadJobs(
       currentPage,
+      filters.limit,
       filters.minRelevanceScore,
       formattedDate,
       filters.companyName,
@@ -85,6 +89,7 @@ export const useMatchesData = () => {
     );
   }, [
     currentPage,
+    filters.limit,
     filters.minRelevanceScore,
     filters.addedSince,
     filters.companyName,
@@ -113,6 +118,10 @@ export const useMatchesData = () => {
     setSearchParams({ ...Object.fromEntries([...searchParams]), ...newFilters, page: "1" });
   };
 
+  const handleLimitChange = (limit) => {
+    updateFilters({ limit: limit });
+  };
+
   // No frontend filtering needed - all filtering is handled by the backend
   const filteredJobs = jobsData;
 
@@ -123,9 +132,11 @@ export const useMatchesData = () => {
     error,
     filters,
     updateFilters,
+    handleLimitChange,
     lastFetch,
     currentPage,
     totalPages,
+    totalJobs,
     goToNextPage,
     goToPreviousPage,
   };

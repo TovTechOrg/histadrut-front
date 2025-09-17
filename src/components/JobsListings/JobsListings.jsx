@@ -114,7 +114,7 @@ const JobsListings = () => {
                   className={`page-size-btn ${filters?.limit === size ? 'active' : ''}`}
                   onClick={() => handleLimitChange(size)}
                 >
-                  {t(`pagination.pageSizeOptions.${size}`)}
+                  {t(`pagination.pageSize${size}`)}
                 </button>
               ))}
             </div>
