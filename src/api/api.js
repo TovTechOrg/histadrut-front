@@ -337,11 +337,16 @@ export const transformJobsData = (apiResponse) => {
 
   let totalPages = apiResponse.pagination?.total_pages ?? 1;
   if (typeof totalPages !== 'number' || isNaN(totalPages) || totalPages < 1) totalPages = 1;
+  
+  let totalJobs = apiResponse.pagination?.total_items ?? 0;
+  if (typeof totalJobs !== 'number' || isNaN(totalJobs) || totalJobs < 0) totalJobs = 0;
+  
   return {
     jobs,
     pagination: {
       currentPage: apiResponse.pagination?.current_page ?? 1,
       totalPages,
+      totalJobs,
     },
   };
 };
@@ -371,7 +376,7 @@ export const transformJobListingsData = (apiResponse) => {
   if (apiResponse.jobs && apiResponse.pagination) {
     const jobs = transformJobListingsArray(apiResponse.jobs);
     const pagination = {
-      totalJobs: apiResponse.pagination.total_jobs,
+      totalJobs: apiResponse.pagination.total_jobs || apiResponse.pagination.total_items || 0,
       totalPages: apiResponse.pagination.total_pages,
       currentPage: apiResponse.pagination.current_page,
       pageSize: apiResponse.pagination.page_size,
