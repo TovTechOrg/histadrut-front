@@ -238,7 +238,27 @@ export const fetchJobs = async (page = 1, minScore, createdAt, companyName, cand
   }
   return apiRequest(url);
 };
-export const fetchJobListings = async () => apiRequest("/jobs");
+export const fetchJobListings = async (page = 1, limit = 20, companyName, jobTitle, searchString, minDaysOld, maxDaysOld) => {
+  let url = `/jobs2?page=${page}&limit=${limit}`;
+  
+  if (companyName && companyName.trim()) {
+    url += `&company_name=${encodeURIComponent(companyName.trim())}`;
+  }
+  if (jobTitle && jobTitle.trim()) {
+    url += `&job_title=${encodeURIComponent(jobTitle.trim())}`;
+  }
+  if (searchString && searchString.trim()) {
+    url += `&search=${encodeURIComponent(searchString.trim())}`;
+  }
+  if (typeof minDaysOld === "number") {
+    url += `&min_days_old=${minDaysOld}`;
+  }
+  if (typeof maxDaysOld === "number") {
+    url += `&max_days_old=${maxDaysOld}`;
+  }
+  
+  return apiRequest(url);
+};
 export const fetchCompanies = async () => apiRequest("/companies");
 export const fetchLocations = async () => apiRequest("/locations");
 
@@ -342,6 +362,29 @@ const getAgeCategory = (daysOld) => {
 };
 
 export const transformJobListingsData = (apiResponse) => {
+  // Check if apiResponse has the expected structure for paginated response
+  if (!apiResponse) {
+    throw new Error("No response received from server");
+  }
+
+  // Handle new paginated structure
+  if (apiResponse.jobs && apiResponse.pagination) {
+    const jobs = transformJobListingsArray(apiResponse.jobs);
+    const pagination = {
+      totalJobs: apiResponse.pagination.total_jobs,
+      totalPages: apiResponse.pagination.total_pages,
+      currentPage: apiResponse.pagination.current_page,
+      pageSize: apiResponse.pagination.page_size,
+    };
+    return { jobs, pagination };
+  }
+
+  // Fallback for old structure (direct array)
+  const jobs = transformJobListingsArray(apiResponse);
+  return { jobs, pagination: { totalJobs: jobs.length, totalPages: 1, currentPage: 1, pageSize: jobs.length } };
+};
+
+const transformJobListingsArray = (jobsArray) => {
   // Helper to format date as DD/MM/YYYY
   function formatDateDDMMYYYY(dateStr) {
     if (!dateStr) return '';
@@ -359,7 +402,12 @@ export const transformJobListingsData = (apiResponse) => {
     const year = d.getFullYear();
     return `${day}/${month}/${year}`;
   }
-  return apiResponse.map((job, index) => {
+
+  if (!Array.isArray(jobsArray)) {
+    return [];
+  }
+
+  return jobsArray.map((job, index) => {
     const daysAgo = job.days_old || 0;
     const ageCategory = getAgeCategory(daysAgo);
 

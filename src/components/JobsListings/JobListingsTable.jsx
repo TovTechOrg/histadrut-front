@@ -4,6 +4,7 @@ import viewIcon from "../../assets/icons/view.svg";
 import editIcon from "../../assets/icons/edit.svg";
 import deleteIcon from "../../assets/icons/delete.svg";
 import linkIcon from "../../assets/icons/link.svg";
+import TruncatedText from "../shared/TruncatedText";
 
 const JobListingsTable = ({
   jobs,
@@ -138,7 +139,13 @@ const JobListingsTable = ({
             ) : (
               jobs.map((job, index) => (
                 <tr key={`${index}_${job.job_id || job.id || 'NA'}_${job.company || 'unknown'}`} className="job-table__row">
-                  <td className="job-table__cell">{job.job_id || ""}</td>
+                  <td className="job-table__cell">
+                    <TruncatedText 
+                      text={job.job_id || ""} 
+                      maxWidth="100px"
+                      className="job-id-truncated"
+                    />
+                  </td>
                   <td className="job-table__cell job-table__cell--title">
                     <span
                       className="job-table__link-title"

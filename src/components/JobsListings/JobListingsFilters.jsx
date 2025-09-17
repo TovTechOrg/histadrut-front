@@ -4,8 +4,10 @@ import { useTranslations } from "../../utils/translations";
 import CompanyAutocompleteInput from "../shared/CompanyAutocompleteInput";
 
 const JobListingsFilters = ({
-  searchTerm,
-  onSearchChange,
+  jobTitleTerm,
+  onJobTitleChange,
+  jobDescriptionTerm,
+  onJobDescriptionChange,
   selectedCompany,
   onCompanyChange,
   selectedStatus,
@@ -47,16 +49,30 @@ const JobListingsFilters = ({
       >
         <div className="job-filters__grid">
           <div className="job-filters__field">
-            <label className="job-filters__label" htmlFor="search">
-              {t('filters.searchJobs')}
+            <label className="job-filters__label" htmlFor="job-title-search">
+              {t('filters.searchJobTitle')}
             </label>
             <input
-              id="search"
+              id="job-title-search"
               type="text"
               className="job-filters__input"
-              placeholder={t('filters.searchPlaceholder')}
-              value={searchTerm}
-              onChange={(e) => onSearchChange(e.target.value)}
+              placeholder={t('filters.jobTitlePlaceholder')}
+              value={jobTitleTerm}
+              onChange={(e) => onJobTitleChange(e.target.value)}
+            />
+          </div>
+
+          <div className="job-filters__field">
+            <label className="job-filters__label" htmlFor="job-description-search">
+              {t('filters.searchJobDescription')}
+            </label>
+            <input
+              id="job-description-search"
+              type="text"
+              className="job-filters__input"
+              placeholder={t('filters.jobDescriptionPlaceholder')}
+              value={jobDescriptionTerm}
+              onChange={(e) => onJobDescriptionChange(e.target.value)}
             />
           </div>
 

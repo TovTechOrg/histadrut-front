@@ -21,15 +21,25 @@ const JobsListings = () => {
     error,
     companies,
     statuses,
-    searchTerm,
+    jobTitleTerm,
+    jobDescriptionTerm,
     selectedCompany,
     selectedStatus,
     sortField,
     sortDirection,
-    handleSearchChange,
+    handleJobTitleChange,
+    handleJobDescriptionChange,
     handleCompanyChange,
     handleStatusChange,
+    handleLimitChange,
     handleSort,
+    currentPage,
+    totalPages,
+    totalJobs,
+    goToNextPage,
+    goToPreviousPage,
+    updateFilters,
+    filters,
   } = useJobsData();
 
   const isAdmin = user?.role === "admin";
@@ -56,8 +66,10 @@ const JobsListings = () => {
       </div>
 
       <JobListingsFilters
-        searchTerm={searchTerm}
-        onSearchChange={handleSearchChange}
+        jobTitleTerm={jobTitleTerm}
+        onJobTitleChange={handleJobTitleChange}
+        jobDescriptionTerm={jobDescriptionTerm}
+        onJobDescriptionChange={handleJobDescriptionChange}
         selectedCompany={selectedCompany}
         onCompanyChange={handleCompanyChange}
         selectedStatus={selectedStatus}
@@ -89,6 +101,49 @@ const JobsListings = () => {
           if (action === "delete") setDeleteJob(job);
         }}
       />
+
+      {/* Pagination Controls */}
+      <div className="pagination-controls">
+        <div className="pagination-left">
+          <div className="page-size-control">
+            <span className="page-size-label">{t('pagination.showLabel')}</span>
+            <div className="page-size-buttons">
+              {[20, 50, 100].map((size) => (
+                <button
+                  key={size}
+                  className={`page-size-btn ${filters?.limit === size ? 'active' : ''}`}
+                  onClick={() => handleLimitChange(size)}
+                >
+                  {t(`pagination.pageSizeOptions.${size}`)}
+                </button>
+              ))}
+            </div>
+            <span className="page-size-label">{t('pagination.jobsPerPage')}</span>
+          </div>
+        </div>
+        <div className="pagination-right">
+          <button
+            onClick={goToPreviousPage}
+            disabled={currentPage === 1}
+            className="pagination-button"
+          >
+            {t('pagination.previous')}
+          </button>
+          <span className="pagination-info">
+            {t('pagination.pageInfo', { current: currentPage, total: totalPages })}
+          </span>
+          <span className="pagination-total">
+            {t('pagination.totalJobs', { total: totalJobs })}
+          </span>
+          <button
+            onClick={goToNextPage}
+            disabled={currentPage === totalPages}
+            className="pagination-button"
+          >
+            {t('pagination.next')}
+          </button>
+        </div>
+      </div>
   <JobDescriptionModal isOpen={!!viewJob} job={viewJob} onClose={() => setViewJob(null)} />
 
   {/* Delete confirmation modal */}

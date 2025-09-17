@@ -5,22 +5,12 @@ import { useTranslations } from "../../utils/translations";
 import { fetchCompanies, fetchLocations } from "../../api/api";
 import CompanyAutocompleteInput from "../shared/CompanyAutocompleteInput";
 import LocationsMultiSelect from "../shared/LocationsMultiSelect";
+import { useDebounce } from "../../hooks/useDebounce";
 
 
 
 const DEBOUNCE_TIMEOUT = 500;
 const LOCATIONS_DEBOUNCE_TIMEOUT = 1000; // Longer debounce for multi-select
-
-// General debounce hook
-function useDebounce(callback, delay) {
-  const timeoutRef = useRef();
-  return (...args) => {
-    clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      callback(...args);
-    }, delay);
-  };
-}
 
 const MatchesFilters = () => {
   const { isAdmin } = useAuth();

@@ -6,6 +6,7 @@ import linkIcon from "../../assets/icons/link.svg";
 import checkIcon from "../../assets/icons/check.svg";
 import JobDescriptionModal from "../shared/JobDescriptionModal";
 import CandidateModal from "./CandidateModal";
+import TruncatedText from "../shared/TruncatedText";
 
 const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
   const [jobs, setJobs] = useState(initialJobs);
@@ -169,11 +170,12 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
           ) : (
             jobs.map((job, index) => (
               <tr key={`${index}_${job.id || 'NA'}_${job.company || 'unknown'}`} className="match-table__row">
-                <td
-                  className="match-table__cell match-table__cell--job-id"
-                  title={job.job_id || ""}
-                >
-                  {job.job_id || ""}
+                <td className="match-table__cell match-table__cell--job-id">
+                  <TruncatedText 
+                    text={job.job_id || ""} 
+                    maxWidth="100px"
+                    className="job-id-truncated"
+                  />
                 </td>
                 <td className="match-table__cell match-table__cell--match-title">
                   <span

@@ -207,7 +207,8 @@ export const translations = {
       pagination: {
         previous: "← Previous",
         next: "Next →",
-        pageInfo: "Page {current} of {total}"
+        pageInfo: "Page {current} of {total}",
+        totalJobs: "Total: {total} jobs"
       },
       filters: {
         companyName: "Company Name",
@@ -273,7 +274,8 @@ export const translations = {
       pagination: {
         previous: "הקודם ←",
         next: "→ הבא",
-        pageInfo: "עמוד {current} מתוך {total}"
+        pageInfo: "עמוד {current} מתוך {total}",
+        totalJobs: "סה״כ: {total} משרות"
       },
       filters: {
         companyName: "שם חברה",
@@ -618,11 +620,28 @@ export const translations = {
       loading: "Loading jobs...",
       errorLoading: "Error loading jobs",
       
+      // Pagination section
+      pagination: {
+        previous: "← Previous",
+        next: "Next →",
+        pageInfo: "Page {current} of {total}",
+        totalJobs: "Total: {total} jobs",
+        showLabel: "Show",
+        jobsPerPage: "jobs per page",
+        pageSizeOptions: {
+          "20": "20",
+          "50": "50", 
+          "100": "100"
+        }
+      },
+      
       // Filters section
       filters: {
         title: "Filters",
-        searchJobs: "Search Jobs",
-        searchPlaceholder: "Search by job title, company, or description...",
+        searchJobTitle: "Job Title",
+        jobTitlePlaceholder: "Search by job title...",
+        searchJobDescription: "Job Description", 
+        jobDescriptionPlaceholder: "Search by job description...",
         companyFilter: "Company",
         companyPlaceholder: "All Companies",
         statusFilter: "Status",
@@ -699,11 +718,28 @@ export const translations = {
       loading: "טוען משרות...",
       errorLoading: "שגיאה בטעינת משרות",
       
+      // Pagination section
+      pagination: {
+        previous: "הקודם ←",
+        next: "→ הבא",
+        pageInfo: "עמוד {current} מתוך {total}",
+        totalJobs: "סה״כ: {total} משרות",
+        showLabel: "משרות בעמוד",
+        jobsPerPage: "הצג",
+        pageSizeOptions: {
+          "20": "20",
+          "50": "50", 
+          "100": "100"
+        }
+      },
+      
       // Filters section  
       filters: {
         title: "מסננים",
-        searchJobs: "חפש משרות",
-        searchPlaceholder: "חפש לפי כותרת משרה, חברה או תיאור...",
+        searchJobTitle: "כותרת משרה",
+        jobTitlePlaceholder: "חפש לפי כותרת משרה...",
+        searchJobDescription: "תיאור משרה",
+        jobDescriptionPlaceholder: "חפש לפי תיאור משרה...",
         companyFilter: "חברה",
         companyPlaceholder: "כל החברות",
         statusFilter: "סטטוס",

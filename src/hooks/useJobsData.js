@@ -1,59 +1,176 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { fetchJobListings, transformJobListingsData } from "../api/api";
+import { useDebounce } from "./useDebounce";
 
-// Custom hook for managing job listings data and filtering
+// Debounce timeout for search filters
+const DEBOUNCE_TIMEOUT = 500;
+
+// Custom hook for managing job listings data with server-side filtering and pagination
 export const useJobsData = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchParams] = useSearchParams();
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalJobs, setTotalJobs] = useState(0);
 
-  // Get company filter from URL parameter
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Local state for input values (for immediate UI updates)
+  const [localJobTitle, setLocalJobTitle] = useState(searchParams.get("jobTitleTerm") || "");
+  const [localJobDescription, setLocalJobDescription] = useState(searchParams.get("jobDescriptionTerm") || "");
+  const [localLimit, setLocalLimit] = useState(parseInt(searchParams.get("limit")) || 20);
+
+  // Get company filter from URL parameter for backwards compatibility
   const companyFromUrl = searchParams.get("company");
 
-  // Filter state
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCompany, setSelectedCompany] = useState(
-    companyFromUrl || ""
-  );
-  const [selectedStatus, setSelectedStatus] = useState("All Ages");
-
-  // Sorting state
-  const [sortField, setSortField] = useState(null);
-  const [sortDirection, setSortDirection] = useState("asc");
-
-  // Fetch jobs from API
-  useEffect(() => {
-    const loadJobs = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const apiResponse = await fetchJobListings();
-        const transformedJobs = transformJobListingsData(apiResponse);
-
-        setJobs(transformedJobs);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+  // Always derive filters from searchParams
+  const filters = useMemo(() => {
+    const params = Object.fromEntries([...searchParams]);
+    return {
+      jobTitleTerm: params.jobTitleTerm || "",
+      jobDescriptionTerm: params.jobDescriptionTerm || "",
+      selectedCompany: params.selectedCompany || companyFromUrl || "",
+      selectedStatus: params.selectedStatus || "All Ages",
+      limit: parseInt(params.limit) || 20,
     };
+  }, [searchParams, companyFromUrl]);
 
-    loadJobs();
-  }, []);
+  // Ensure filters is always defined before using it
+  const safeFilters = filters || {
+    jobTitleTerm: "",
+    jobDescriptionTerm: "",
+    selectedCompany: "",
+    selectedStatus: "All Ages",
+    limit: 20,
+  };
 
-  // Update selected company when URL parameter changes
-  useEffect(() => {
-    if (companyFromUrl) {
-      setSelectedCompany(companyFromUrl);
+  const currentPage = parseInt(searchParams.get("page") || "1", 10);
+
+  // Debounced function to update URL parameters
+  const debouncedSetParam = useDebounce((field, value) => {
+    setSearchParams(prev => {
+      const params = new URLSearchParams(prev);
+      if (value && value !== "") {
+        params.set(field, value);
+      } else {
+        params.delete(field);
+      }
+      // Remove all empty params
+      for (const key of Array.from(params.keys())) {
+        if (!params.get(key)) {
+          params.delete(key);
+        }
+      }
+      // Always reset page to 1 on filter change
+      params.set("page", "1");
+      return params;
+    });
+  }, DEBOUNCE_TIMEOUT);
+
+  // Helper function to parse age category into min/max days
+  const parseAgeCategory = (ageCategory) => {
+    if (!ageCategory || ageCategory === "All Ages") {
+      return { minDaysOld: null, maxDaysOld: null };
     }
-  }, [companyFromUrl]);
+    
+    // Parse different age formats
+    if (ageCategory === "1 day") {
+      return { minDaysOld: 0, maxDaysOld: 1 };
+    } else if (ageCategory === "2-5 days") {
+      return { minDaysOld: 2, maxDaysOld: 5 };
+    } else if (ageCategory === "6-14 days") {
+      return { minDaysOld: 6, maxDaysOld: 14 };
+    } else if (ageCategory === "15+ days") {
+      return { minDaysOld: 15, maxDaysOld: null };
+    }
+    
+    return { minDaysOld: null, maxDaysOld: null };
+  };
 
-  // (Removed effect that cleared selectedCompany if not in jobs list)
+  const loadJobs = async (page, limit, companyName, jobTitle, searchString, selectedStatus) => {
+    try {
+      setLoading(true);
+      setError(null);
 
-  // Get unique companies for filter dropdown - memoized to prevent unnecessary re-renders
+      const { minDaysOld, maxDaysOld } = parseAgeCategory(selectedStatus);
+      
+      const apiResponse = await fetchJobListings(
+        page, 
+        limit, 
+        companyName, 
+        jobTitle, 
+        searchString, 
+        minDaysOld, 
+        maxDaysOld
+      );
+
+      if (!apiResponse) {
+        setError("No response received from server");
+        setJobs([]);
+        setTotalPages(1);
+        setTotalJobs(0);
+        return;
+      }
+
+      const { jobs: jobsData, pagination } = transformJobListingsData(apiResponse);
+      setJobs(jobsData);
+      setTotalPages(pagination.totalPages);
+      setTotalJobs(pagination.totalJobs);
+    } catch (err) {
+      setError(err.message || "Failed to load jobs. Please try again later.");
+      setJobs([]);
+      setTotalPages(1);
+      setTotalJobs(0);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadJobs(
+      currentPage,
+      safeFilters.limit,
+      safeFilters.selectedCompany,
+      safeFilters.jobTitleTerm,
+      safeFilters.jobDescriptionTerm,
+      safeFilters.selectedStatus
+    );
+  }, [
+    currentPage,
+    safeFilters.limit,
+    safeFilters.selectedCompany,
+    safeFilters.jobTitleTerm,
+    safeFilters.jobDescriptionTerm,
+    safeFilters.selectedStatus,
+  ]);
+
+  const goToPage = (page) => {
+    const clamped = Math.max(1, Math.min(page, totalPages));
+    setSearchParams({ ...Object.fromEntries([...searchParams]), page: clamped.toString() });
+  };
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) goToPage(currentPage + 1);
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) goToPage(currentPage - 1);
+  };
+
+  // Update filters by updating the URL search params
+  const updateFilters = (newFilters) => {
+    setSearchParams({ ...Object.fromEntries([...searchParams]), ...newFilters, page: "1" });
+  };
+
+  // Sync local state with URL params if they change externally
+  useEffect(() => {
+    setLocalJobTitle(searchParams.get("jobTitleTerm") || "");
+    setLocalJobDescription(searchParams.get("jobDescriptionTerm") || "");
+    setLocalLimit(parseInt(searchParams.get("limit")) || 20);
+  }, [searchParams]);
+
+  // Get unique companies and statuses for filter dropdowns from current data
   const companies = useMemo(() => {
     if (!Array.isArray(jobs) || jobs.length === 0) {
       return [];
@@ -67,138 +184,47 @@ export const useJobsData = () => {
     return uniqueCompanies;
   }, [jobs]);
 
-  // Get unique age categories for filter dropdown - memoized and based on server data
   const statuses = useMemo(() => {
-    if (!Array.isArray(jobs) || jobs.length === 0) {
-      return ["All Ages"];
-    }
-
-    const uniqueAgeCategories = jobs
-      .map((job) => job.ageCategory)
-      .filter((category) => category && category.trim())
-      .filter((category, index, arr) => arr.indexOf(category) === index)
-      .sort((a, b) => {
-        // Sort age categories in logical order: 1 day, 2-5 days, 6-14 days, 15+ days
-        const order = ["1 day", "2-5 days", "6-14 days", "15+ days"];
-        return order.indexOf(a) - order.indexOf(b);
-      });
-
-    const result = ["All Ages", ...uniqueAgeCategories];
-    return result;
-  }, [jobs]);
-
-  // Filter and sort jobs
-  const filteredJobs = useMemo(() => {
-    if (!Array.isArray(jobs) || jobs.length === 0) {
-      return [];
-    }
-
-    let filtered = jobs.slice();
-
-    // Apply search filter
-    if (searchTerm && searchTerm.trim().length > 0) {
-      const searchLower = searchTerm.toLowerCase().trim();
-      filtered = filtered.filter(
-        (job) =>
-          (job.title && job.title.toLowerCase().includes(searchLower)) ||
-          (job.company && job.company.toLowerCase().includes(searchLower)) ||
-          (job.id && job.id.toString().includes(searchLower))
-      );
-    }
-
-    // Apply company filter
-    if (selectedCompany && selectedCompany !== "All Companies") {
-      filtered = filtered.filter((job) => {
-        const matches = job.company && job.company === selectedCompany;
-        return matches;
-      });
-    }
-
-    // Apply status filter
-    if (selectedStatus && selectedStatus !== "All Ages") {
-      filtered = filtered.filter(
-        (job) => job.ageCategory && job.ageCategory === selectedStatus
-      );
-    }
-
-    // Apply sorting
-    if (sortField) {
-      filtered = filtered.sort((a, b) => {
-        let aValue = a[sortField];
-        let bValue = b[sortField];
-
-        if (sortField === "posted") {
-          const parseEuropeanDate = (dateStr) => {
-            const [day, month, year] = dateStr.split("/");
-            return new Date(year, month - 1, day);
-          };
-          aValue = parseEuropeanDate(aValue);
-          bValue = parseEuropeanDate(bValue);
-        } else if (typeof aValue === "string") {
-          aValue = aValue.toLowerCase();
-          bValue = bValue.toLowerCase();
-        }
-
-        if (sortDirection === "asc") {
-          return aValue > bValue ? 1 : -1;
-        } else {
-          return aValue < bValue ? 1 : -1;
-        }
-      });
-    }
-
-    return filtered;
-  }, [
-    jobs,
-    searchTerm,
-    selectedCompany,
-    selectedStatus,
-    sortField,
-    sortDirection,
-  ]);
-
-  // Event handlers
-  const handleSearchChange = useCallback((term) => {
-    setSearchTerm(typeof term === "string" ? term : "");
+    const ageCategories = ["All Ages", "1 day", "2-5 days", "6-14 days", "15+ days"];
+    return ageCategories;
   }, []);
 
-  const handleCompanyChange = useCallback((company) => {
-    if (typeof company === "string" && company.trim()) {
-      setSelectedCompany(company);
-    } else {
-      setSelectedCompany("");
-    }
-  }, []);
+  // Event handlers for backwards compatibility
+  const handleJobTitleChange = (term) => {
+    setLocalJobTitle(term);
+    debouncedSetParam("jobTitleTerm", term);
+  };
 
-  const handleStatusChange = useCallback((status) => {
-    if (typeof status === "string" && status.trim()) {
-      setSelectedStatus(status);
-    } else {
-      setSelectedStatus("All Ages");
-    }
-  }, []);
+  const handleJobDescriptionChange = (term) => {
+    setLocalJobDescription(term);
+    debouncedSetParam("jobDescriptionTerm", term);
+  };
 
-  const resetFilters = useCallback(() => {
-    setSearchTerm("");
-    setSelectedCompany("All Companies");
-    setSelectedStatus("All Ages");
-    setSortField(null);
-    setSortDirection("asc");
-  }, []);
+  const handleCompanyChange = (company) => {
+    updateFilters({ selectedCompany: company });
+  };
 
-  const handleSort = useCallback(
-    (field) => {
-      if (sortField === field) {
-        // Toggle direction if same field
-        setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-      } else {
-        // New field, default to ascending
-        setSortField(field);
-        setSortDirection("asc");
-      }
-    },
-    [sortField, sortDirection]
-  );
+  const handleStatusChange = (status) => {
+    updateFilters({ selectedStatus: status });
+  };
+
+  const handleLimitChange = (limit) => {
+    setLocalLimit(limit);
+    updateFilters({ limit: limit });
+  };
+
+  const handleSort = (field) => {
+    // For now, sorting will be handled by the backend in future updates
+    // This is kept for backwards compatibility
+    console.log("Sorting by", field);
+  };
+
+  const resetFilters = () => {
+    setSearchParams({ page: "1" });
+  };
+
+  // All filtering is now handled by the backend
+  const filteredJobs = jobs;
 
   return {
     // Data
@@ -209,20 +235,38 @@ export const useJobsData = () => {
     companies,
     statuses,
 
-    // Filter state
-    searchTerm,
-    selectedCompany,
-    selectedStatus,
+    // Pagination
+    currentPage,
+    totalPages,
+    totalJobs,
+    goToPage,
+    goToNextPage,
+    goToPreviousPage,
 
-    // Sorting state
-    sortField,
-    sortDirection,
+    // Filter state (for backwards compatibility)
+    jobTitleTerm: localJobTitle,
+    jobDescriptionTerm: localJobDescription,
+    selectedCompany: safeFilters.selectedCompany,
+    selectedStatus: safeFilters.selectedStatus,
+
+    // Sorting state (kept for backwards compatibility)
+    sortField: null,
+    sortDirection: "asc",
 
     // Event handlers
-    handleSearchChange,
+    handleJobTitleChange,
+    handleJobDescriptionChange,
     handleCompanyChange,
     handleStatusChange,
+    handleLimitChange,
     handleSort,
     resetFilters,
+    updateFilters,
+    
+    // Filters object for direct access
+    filters: {
+      ...safeFilters,
+      limit: localLimit
+    },
   };
 };
