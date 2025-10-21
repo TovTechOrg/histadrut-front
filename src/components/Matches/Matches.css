@@ -462,6 +462,7 @@
 .match-table__cell--cv,
 .match-table__cell--mmr,
 .match-table__cell--status,
+.match-table__cell--relevance,
 .match-table__cell--actions {
   white-space: nowrap;
   padding: 0 1rem;
@@ -714,6 +715,80 @@
   font-family: "Consolas", "Menlo", "Monaco", monospace;
   font-size: 0.95em;
   cursor: pointer;
+}
+
+/* Relevance Controls Styles */
+.match-table__cell--relevance {
+  display: table-cell;
+  vertical-align: top;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.relevance-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.relevance-btn {
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.relevance-btn:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.relevance-btn:disabled {
+  background: transparent;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.thumbs-up-btn.relevance-btn--active {
+  border: 1.5px solid #6b7c32;
+}
+
+.thumbs-up-btn.relevance-btn--active:hover:not(:disabled) {
+  background: rgba(40, 167, 69, 0.1);
+}
+
+.thumbs-down-btn.relevance-btn--active {
+  border: 1.5px solid #dc3545;
+}
+
+.thumbs-down-btn.relevance-btn--active:hover:not(:disabled) {
+  background: rgba(220, 53, 69, 0.1);
+}
+
+.relevance-icon {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) saturate(100%) invert(60%);
+  transition: filter 0.2s ease;
+}
+
+.thumbs-up-btn.relevance-btn--active .relevance-icon {
+  filter: brightness(0) saturate(100%) invert(38%) sepia(25%) saturate(800%) hue-rotate(65deg) brightness(85%) contrast(95%);
+}
+
+.thumbs-down-btn.relevance-btn--active .relevance-icon {
+  filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+}
+
+.relevance-btn:hover:not(:disabled) .relevance-icon {
+  filter: brightness(0) saturate(100%) invert(40%);
 }
 
 /* Keep table and layout left-to-right as requested */

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { setMatchSent } from "../../api/api";
+import { setMatchSent, setMatchRelevant } from "../../api/api";
 import { useTranslations } from "../../utils/translations";
 import downloadIcon from "../../assets/icons/download.svg";
 import linkIcon from "../../assets/icons/link.svg";
 import checkIcon from "../../assets/icons/check.svg";
+import thumbsUpIcon from "../../assets/icons/thumbs-up.svg";
+import thumbsDownIcon from "../../assets/icons/thumbs-down.svg";
 import JobDescriptionModal from "../shared/JobDescriptionModal";
 import CandidateModal from "./CandidateModal";
 import TruncatedText from "../shared/TruncatedText";
@@ -13,6 +15,7 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
   const [selectedJob, setSelectedJob] = useState(null);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [changingMatches, setChangingMatches] = useState(new Set());
+  const [changingRelevance, setChangingRelevance] = useState(new Set());
   const { t, currentLanguage } = useTranslations('matches');
   const { t: tCommon } = useTranslations('common');
 
@@ -70,6 +73,51 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
     } finally {
       // Remove this match from the changing set
       setChangingMatches(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(matchId);
+        return newSet;
+      });
+    }
+  };
+
+  const handleToggleRelevance = async (jobId, matchId, currentRelevance, isThumbsUp) => {
+    // Add this match to the changing relevance set
+    setChangingRelevance(prev => new Set([...prev, matchId]));
+    
+    try {
+      let newRelevance;
+      
+      if (isThumbsUp) {
+        // Thumbs up logic: neutral -> relevant -> neutral
+        newRelevance = currentRelevance === "relevant" ? "neutral" : "relevant";
+      } else {
+        // Thumbs down logic: neutral -> irrelevant -> neutral
+        newRelevance = currentRelevance === "irrelevant" ? "neutral" : "irrelevant";
+      }
+      
+      await setMatchRelevant(matchId, newRelevance);
+      
+      // Only update the local state after successful API response
+      setJobs(prevJobs => 
+        prevJobs.map((job) => {
+          if (job.id === jobId) {
+            const updatedCandidates = job.matchedCandidates.map((candidate) => {
+              if (candidate._metadata.matchId === matchId) {
+                return { ...candidate, relevance: newRelevance };
+              }
+              return candidate;
+            });
+            return { ...job, matchedCandidates: updatedCandidates };
+          }
+          return job;
+        })
+      );
+    } catch (error) {
+      console.error("Failed to update match relevance:", error);
+      alert("Failed to update match relevance. Please try again.");
+    } finally {
+      // Remove this match from the changing relevance set
+      setChangingRelevance(prev => {
         const newSet = new Set(prev);
         newSet.delete(matchId);
         return newSet;
@@ -151,6 +199,9 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
             <th className="match-table__cell match-table__cell--header">{t('table.headers.cv')}</th>
             <th className="match-table__cell match-table__cell--header">{t('table.headers.mmr')}</th>
             <th className="match-table__cell match-table__cell--header">
+              {t('table.headers.relevant')}
+            </th>
+            <th className="match-table__cell match-table__cell--header">
               {t('table.headers.appliedStatus')}
             </th>
             <th className="match-table__cell match-table__cell--header">{t('table.headers.actions')}</th>
@@ -159,7 +210,7 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
         <tbody>
           {jobs.length === 0 ? (
             <tr>
-              <td colSpan="10" className="match-table__empty">
+              <td colSpan="11" className="match-table__empty">
                 {Array.isArray(allJobs) && allJobs.length === 0 && error
                   ? error
                   : Array.isArray(allJobs) && allJobs.length === 0
@@ -280,6 +331,71 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                       </span>
                     </div>
                   ))}
+                </td>
+                <td className="match-table__cell match-table__cell--relevance">
+                  {job.matchedCandidates.map((candidate, index) => {
+                    const isChangingRelevance = changingRelevance.has(candidate._metadata.matchId);
+                    const relevance = candidate.relevance || 'neutral';
+                    
+                    return (
+                      <div className="candidate-info-item relevance-controls" key={index}>
+                        <button
+                          className={`relevance-btn thumbs-up-btn ${
+                            relevance === "relevant" ? "relevance-btn--active" : ""
+                          }`}
+                          onClick={() =>
+                            handleToggleRelevance(
+                              job.id,
+                              candidate._metadata.matchId,
+                              relevance,
+                              true
+                            )
+                          }
+                          disabled={isChangingRelevance}
+                          title={
+                            isChangingRelevance
+                              ? tCommon('updating')
+                              : relevance === "relevant"
+                              ? t('table.relevanceActions.markNeutral')
+                              : t('table.relevanceActions.markRelevant')
+                          }
+                        >
+                          <img
+                            src={thumbsUpIcon}
+                            alt="Thumbs up"
+                            className="relevance-icon"
+                          />
+                        </button>
+                        <button
+                          className={`relevance-btn thumbs-down-btn ${
+                            relevance === "irrelevant" ? "relevance-btn--active" : ""
+                          }`}
+                          onClick={() =>
+                            handleToggleRelevance(
+                              job.id,
+                              candidate._metadata.matchId,
+                              relevance,
+                              false
+                            )
+                          }
+                          disabled={isChangingRelevance}
+                          title={
+                            isChangingRelevance
+                              ? tCommon('updating')
+                              : relevance === "irrelevant"
+                              ? t('table.relevanceActions.markNeutral')
+                              : t('table.relevanceActions.markIrrelevant')
+                          }
+                        >
+                          <img
+                            src={thumbsDownIcon}
+                            alt="Thumbs down"
+                            className="relevance-icon"
+                          />
+                        </button>
+                      </div>
+                    );
+                  })}
                 </td>
                 <td className="match-table__cell match-table__cell--status">
                   {job.matchedCandidates.map((candidate, index) => (

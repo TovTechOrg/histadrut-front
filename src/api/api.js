@@ -60,6 +60,23 @@ export const setMatchSent = async (match_id, action = "sent") => {
   return await response.json();
 };
 
+// Mark a match as relevant, irrelevant, or neutral
+export const setMatchRelevant = async (match_id, action = "neutral") => {
+  const formData = new FormData();
+  formData.append("match_id", match_id);
+  formData.append("action", action);
+  const response = await fetch(`${API_BASE_URL}/set_match_relevant`, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || "Failed to set match relevance");
+  }
+  return await response.json();
+};
+
 // Unsubscribe from job offer emails
 export const unsubscribeFromEmails = async (email) => {
   const url = `${API_BASE_URL}/unsubscribe`;
@@ -316,6 +333,7 @@ export const transformJobsData = (apiResponse) => {
         name: match.name || `Candidate ${matchIndex + 1}`,
         score: match.score || 0,
         status: match.job_status || 'pending',
+        relevance: match.job_relevant || 'neutral',
         cv: !!match.cv_link,
         cvLink: match.cv_link ? getAbsoluteUrl(match.cv_link) : null,
         mmr: match.mandatory_req ? "YES" : "NO",

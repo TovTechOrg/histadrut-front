@@ -249,6 +249,7 @@ export const translations = {
           cv: "CV",
           mmr: "MMR",
           appliedStatus: "Applied Status",
+          relevant: "Relevant?",
           actions: ""
         },
         noMatches: "No matches yet! If you've recently uploaded your CV, please check back in 1-2 days. Our algorithm is working to find the perfect job matches for you.",
@@ -269,6 +270,16 @@ export const translations = {
           no: "NO",
           pending: "Pending",
           sent: "Sent"
+        },
+        relevanceValues: {
+          neutral: "Neutral",
+          relevant: "Relevant",
+          irrelevant: "Irrelevant"
+        },
+        relevanceActions: {
+          markRelevant: "Mark as relevant",
+          markIrrelevant: "Mark as irrelevant",
+          markNeutral: "Mark as neutral"
         }
       }
     },
@@ -321,6 +332,7 @@ export const translations = {
           cv: "קורות חיים",
           mmr: "MMR",
           appliedStatus: "סטטוס הגשה",
+          relevant: "רלוונטי?",
           actions: ""
         },
         noMatches: "אין התאמות עדיין! אם העלית לאחרונה את קורות החיים שלך, אנא בדוק שוב בעוד יום-יומיים. האלגוריתם שלנו עובד כדי למצוא עבורך את ההתאמות המושלמות.",
@@ -341,6 +353,16 @@ export const translations = {
           no: "לא",
           pending: "ממתין",
           sent: "נשלח"
+        },
+        relevanceValues: {
+          neutral: "ניטרלי",
+          relevant: "רלוונטי",
+          irrelevant: "לא רלוונטי"
+        },
+        relevanceActions: {
+          markRelevant: "סמן כרלוונטי",
+          markIrrelevant: "סמן כלא רלוונטי",
+          markNeutral: "סמן כניטרלי"
         }
       }
     }
