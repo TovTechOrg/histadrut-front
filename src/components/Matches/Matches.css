@@ -775,12 +775,12 @@
 .relevance-icon {
   width: 20px;
   height: 20px;
-  filter: brightness(0) saturate(100%) invert(60%);
+  filter: brightness(0) saturate(100%) invert(64%) sepia(11%) saturate(324%) hue-rotate(192deg) brightness(95%) contrast(86%);
   transition: filter 0.2s ease;
 }
 
 .thumbs-up-btn.relevance-btn--active .relevance-icon {
-  filter: brightness(0) saturate(100%) invert(38%) sepia(25%) saturate(800%) hue-rotate(65deg) brightness(85%) contrast(95%);
+  filter: brightness(0) saturate(100%) invert(43%) sepia(16%) saturate(1158%) hue-rotate(65deg) brightness(91%) contrast(89%);
 }
 
 .thumbs-down-btn.relevance-btn--active .relevance-icon {
@@ -788,7 +788,7 @@
 }
 
 .relevance-btn:hover:not(:disabled) .relevance-icon {
-  filter: brightness(0) saturate(100%) invert(40%);
+  filter: brightness(0) saturate(100%) invert(45%) sepia(8%) saturate(665%) hue-rotate(192deg) brightness(93%) contrast(80%);
 }
 
 /* Keep table and layout left-to-right as requested */
