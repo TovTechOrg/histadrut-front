@@ -238,7 +238,7 @@
   display: table-cell;
   vertical-align: top;
   justify-content: flex-start;
-  padding: 0 1rem;
+  padding: 0.5rem 1rem; /* Reduced top/bottom padding */
 }
 
 .candidate-match__container,
@@ -247,11 +247,11 @@
   display: flex;
   align-items: center;
   justify-content: flex-start; /* Center content horizontally */
-  padding: 0.5rem 0; /* Add vertical padding */
+  padding: 0.25rem 0; /* Reduced vertical padding for better alignment */
   margin-bottom: 0;
   direction: ltr;
   text-align: center;
-  min-height: 40px;
+  min-height: 32px; /* Reduced min-height */
 }
 
 /* .candidate-info-item:not(:last-child) {
@@ -289,6 +289,13 @@
   margin-left: 0.3rem;
   min-width: 2rem;
   text-align: center;
+}
+
+.match-table__cell--scores {
+  display: table-cell;
+  vertical-align: top;
+  text-align: center;
+  padding: 0.5rem 1rem; /* Reduced top/bottom padding */
 }
 
 .match-table__cell--cv {
@@ -400,7 +407,7 @@
 .match-table__cell--mmr {
   display: table-cell;
   vertical-align: top;
-  padding: 0 1rem;
+  padding: 0.5rem 1rem; /* Reduced top/bottom padding for better alignment */
 }
 
 .mmr-badge {
@@ -465,8 +472,9 @@
 .match-table__cell--relevance,
 .match-table__cell--actions {
   white-space: nowrap;
-  padding: 0 1rem;
+  padding: 0.5rem 1rem; /* Reduced top/bottom padding for better alignment */
   justify-content: flex-start;
+  vertical-align: top;
 }
 
 .action-btn {
@@ -620,8 +628,8 @@
   /* Hide Date Added and CV columns completely */
   .match-table__table th:nth-child(4), /* Date Added header */
   .match-table__table td:nth-child(4), /* Date Added cells */
-  .match-table__table th:nth-child(7), /* CV header */  
-  .match-table__table td:nth-child(7) { /* CV cells */
+  .match-table__table th:nth-child(8), /* CV header */  
+  .match-table__table td:nth-child(8) { /* CV cells */
     display: none !important;
   }
 
@@ -667,34 +675,92 @@
 
   .match-table__table th:nth-child(6), /* Matched Candidates */
   .match-table__table td:nth-child(6) {
-    width: 120px !important;
-    max-width: 120px !important;
+    width: 80px !important;
+    max-width: 80px !important;
     font-size: 0.8rem;
+    padding: 0.25rem 0.3rem !important; /* Reduced padding for better alignment */
   }
 
-  .match-table__table th:nth-child(8), /* MMR */
+  .match-table__table th:nth-child(7), /* Scores */
+  .match-table__table td:nth-child(7) {
+    width: 30px !important;
+    max-width: 30px !important;
+    text-align: center;
+    font-size: 0.8rem;
+    padding: 0.25rem 0.2rem !important; /* Reduced padding for better alignment */
+  }
+
+  .match-table__table th:nth-child(8), /* CV */
   .match-table__table td:nth-child(8) {
+    display: none !important; /* Hidden in responsive view */
+  }
+
+  .match-table__table th:nth-child(9), /* MMR */
+  .match-table__table td:nth-child(9) {
     width: 50px !important;
     max-width: 50px !important;
     text-align: center;
   }
 
-  .match-table__table th:nth-child(9), /* Relevant */
-  .match-table__table td:nth-child(9) {
+  .match-table__table th:nth-child(10), /* Relevant */
+  .match-table__table td:nth-child(10) {
     width: 90px !important;
     max-width: 90px !important;
   }
 
-  .match-table__table th:nth-child(10), /* Applied Status */
-  .match-table__table td:nth-child(10) {
+  .match-table__table th:nth-child(11), /* Applied Status */
+  .match-table__table td:nth-child(11) {
     width: 70px !important;
     max-width: 70px !important;
   }
 
-  .match-table__table th:nth-child(11), /* Actions */
-  .match-table__table td:nth-child(11) {
+  .match-table__table th:nth-child(12), /* Actions */
+  .match-table__table td:nth-child(12) {
     width: 50px !important;
     max-width: 50px !important;
+  }
+
+
+  .match-table__cell.match-table__cell--scores {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+
+  /* Ensure candidate names and scores align properly */
+  .match-table__cell--candidates .candidate-info-item,
+  .match-table__cell--scores .candidate-info-item {
+    height: 28px; /* Adjusted height for better alignment */
+    display: flex;
+    align-items: center;
+    padding: 0.05rem 0; /* Minimal padding for precise alignment */
+    margin: 0;
+  }
+
+  .match-table__cell--candidates .candidate-match__name {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.3; /* Slightly increased for better readability */
+  }
+
+  .match-table__cell--scores .candidate-match__score {
+    display: block;
+    line-height: 1.3; /* Consistent line height */
+    text-align: center;
+    width: 100%;
+  }
+
+  /* Ensure all candidate info items align properly on responsive screens */
+  .match-table__cell--cv .candidate-info-item,
+  .match-table__cell--mmr .candidate-info-item,
+  .match-table__cell--relevance .candidate-info-item,
+  .match-table__cell--status .candidate-info-item,
+  .match-table__cell--actions .candidate-info-item {
+    height: 28px;
+    padding: 0.05rem 0;
+    margin: 0;
+    align-items: center;
   }
 }
 

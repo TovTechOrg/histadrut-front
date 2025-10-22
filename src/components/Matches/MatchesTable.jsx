@@ -196,6 +196,9 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
             <th className="match-table__cell match-table__cell--header">
               {t('table.headers.matchedCandidates')}
             </th>
+            <th className="match-table__cell match-table__cell--header match-table__cell--scores">
+              {/* No header for scores column */}
+            </th>
             <th className="match-table__cell match-table__cell--header">{t('table.headers.cv')}</th>
             <th className="match-table__cell match-table__cell--header">{t('table.headers.mmr')}</th>
             <th className="match-table__cell match-table__cell--header">
@@ -210,7 +213,7 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
         <tbody>
           {jobs.length === 0 ? (
             <tr>
-              <td colSpan="11" className="match-table__empty">
+              <td colSpan="12" className="match-table__empty">
                 {Array.isArray(allJobs) && allJobs.length === 0 && error
                   ? error
                   : Array.isArray(allJobs) && allJobs.length === 0
@@ -275,6 +278,12 @@ const MatchesTable = ({ jobs: initialJobs, allJobs = [], loading, error }) => {
                       >
                         {candidate.name}
                       </span>
+                    </div>
+                  ))}
+                </td>
+                <td className="match-table__cell match-table__cell--scores">
+                  {job.matchedCandidates.map((candidate, index) => (
+                    <div className="candidate-info-item" key={index}>
                       <span 
                         className="candidate-match__score"
                         style={{ 
