@@ -562,14 +562,139 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
-  .match-table__header,
-  .match-table__row {
-    grid-template-columns: 2fr 1.5fr 1fr 1.5fr 60px 60px;
-  }
-
+@media (max-width: 1400px) {
   .match-filters__grid {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  /* Add horizontal scroll for table on smaller screens */
+  .match-table {
+    overflow-x: auto;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+  }
+
+  .match-table__table {
+    width: 100%;
+    table-layout: fixed !important;
+    min-width: 900px; /* Smaller minimum width */
+  }
+
+  /* Reduce padding to save space */
+  .match-table__cell {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  /* Make specific columns narrower */
+  .match-table__cell--job-id {
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
+  }
+
+  .match-table__cell--mmr {
+    width: 60px;
+    min-width: 60px;
+    max-width: 60px;
+  }
+
+  .match-table__cell--cv {
+    width: 50px;
+    min-width: 50px;
+    max-width: 50px;
+  }
+
+  .relevance-controls {
+    width: 100px;
+    min-width: 100px;
+  }
+
+  .match-table__cell--actions {
+    width: 120px;
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 2000px) {
+  /* Hide Date Added and CV columns completely */
+  .match-table__table th:nth-child(4), /* Date Added header */
+  .match-table__table td:nth-child(4), /* Date Added cells */
+  .match-table__table th:nth-child(7), /* CV header */  
+  .match-table__table td:nth-child(7) { /* CV cells */
+    display: none !important;
+  }
+
+  .match-table__table {
+    table-layout: fixed !important;
+    width: 100% !important;
+  }
+
+  /* Very specific column widths - much smaller */
+  .match-table__table th:nth-child(1), /* Job ID */
+  .match-table__table td:nth-child(1) {
+    width: 70px !important;
+    max-width: 70px !important;
+    min-width: 70px !important;
+  }
+
+  .match-table__table th:nth-child(2), /* Job Title */
+  .match-table__table td:nth-child(2) {
+    width: 150px !important;
+    max-width: 150px !important;
+    min-width: 150px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .match-table__table th:nth-child(3), /* Company */
+  .match-table__table td:nth-child(3) {
+    width: 100px !important;
+    max-width: 100px !important;
+    min-width: 100px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .match-table__table th:nth-child(5), /* Link to Job */
+  .match-table__table td:nth-child(5) {
+    width: 70px !important;
+    max-width: 70px !important;
+    text-align: center;
+  }
+
+  .match-table__table th:nth-child(6), /* Matched Candidates */
+  .match-table__table td:nth-child(6) {
+    width: 120px !important;
+    max-width: 120px !important;
+    font-size: 0.8rem;
+  }
+
+  .match-table__table th:nth-child(8), /* MMR */
+  .match-table__table td:nth-child(8) {
+    width: 50px !important;
+    max-width: 50px !important;
+    text-align: center;
+  }
+
+  .match-table__table th:nth-child(9), /* Relevant */
+  .match-table__table td:nth-child(9) {
+    width: 90px !important;
+    max-width: 90px !important;
+  }
+
+  .match-table__table th:nth-child(10), /* Applied Status */
+  .match-table__table td:nth-child(10) {
+    width: 70px !important;
+    max-width: 70px !important;
+  }
+
+  .match-table__table th:nth-child(11), /* Actions */
+  .match-table__table td:nth-child(11) {
+    width: 50px !important;
+    max-width: 50px !important;
   }
 }
 
@@ -582,19 +707,33 @@
     grid-template-columns: 1fr;
   }
 
-  .match-table__header,
+  /* Full mobile layout - stack everything vertically */
+  .match-table {
+    border: none;
+  }
+
+  .match-table__table {
+    min-width: unset;
+  }
+
+  .match-table__header {
+    display: none;
+  }
+
   .match-table__row {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+    display: block;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: white;
   }
 
   .match-table__cell {
-    padding: 0.75rem;
-    border-bottom: 1px solid #f1f1f1;
-  }
-
-  .match-table__cell--header {
-    display: none;
+    display: block;
+    padding: 0.5rem 0;
+    border-bottom: none;
+    text-align: left;
   }
 
   .match-table__cell::before {
@@ -605,6 +744,23 @@
     margin-bottom: 0.25rem;
     font-size: 0.75rem;
     text-transform: uppercase;
+  }
+
+  /* Show all cells on mobile */
+  .match-table__cell--date-added,
+  .match-table__cell--cv {
+    display: block;
+  }
+
+  /* Adjust relevance controls for mobile */
+  .relevance-controls {
+    justify-content: flex-start;
+    margin-top: 0.5rem;
+  }
+
+  .relevance-btn {
+    padding: 0.5rem;
+    min-width: 44px; /* Touch-friendly size */
   }
 }
 
