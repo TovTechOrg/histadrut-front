@@ -114,6 +114,36 @@
 
 .profile-checkbox {
   margin-right: 8px;
+  accent-color: #2196f3; /* Light blue accent for modern browsers */
+  background-color: #fff; /* Light background for checkbox */
+}
+
+/* For older browsers - custom checkbox styling */
+.profile-checkbox[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background-color: #fff;
+  border: 2px solid #ddd;
+  border-radius: 3px;
+  position: relative;
+  cursor: pointer;
+}
+
+.profile-checkbox[type="checkbox"]:checked {
+  background-color: #2196f3;
+  border-color: #2196f3;
+}
+
+.profile-checkbox[type="checkbox"]:checked::after {
+  content: '✓';
+  color: white;
+  font-size: 12px;
+  position: absolute;
+  top: -2px;
+  left: 2px;
+  font-weight: bold;
 }
 
 .profile-btn {
@@ -190,7 +220,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Prevent wrapping */
 }
 
 .profile-max-alerts-text {
@@ -200,7 +230,7 @@
 }
 
 .profile-max-alerts-input {
-  width: 60px;
+  width: 35px;
   padding: 6px 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -208,6 +238,19 @@
   text-align: center;
   color: #222;
   background: #fff;
+  flex-shrink: 0; /* Prevent input from shrinking */
+}
+
+/* Hide the spinner arrows for a clean look */
+.profile-max-alerts-input::-webkit-outer-spin-button,
+.profile-max-alerts-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.profile-max-alerts-input[type="number"] {
+  appearance: textfield; /* Standard property */
+  -moz-appearance: textfield; /* Firefox */
 }
 
 .profile-max-alerts-input:focus {
@@ -226,12 +269,12 @@
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
-  margin-left: 8px;
   width: auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 32px;
+  margin-top: 8px; /* Add top margin for spacing */
 }
 
 .profile-btn-save-alerts:hover:not(:disabled) {

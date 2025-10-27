@@ -47,14 +47,26 @@ const Profile = () => {
   };
 
   const handleMaxAlertsChange = (e) => {
-    const value = parseInt(e.target.value) || 1;
-    setMaxAlerts(Math.max(1, Math.min(50, value))); // Limit between 1 and 50
+    const value = e.target.value;
+    // Allow empty string while typing
+    if (value === '') {
+      setMaxAlerts('');
+      return;
+    }
+    // Parse as number and validate range
+    const numValue = parseInt(value, 10);
+    if (!isNaN(numValue)) {
+      setMaxAlerts(Math.max(0, Math.min(100, numValue)));
+    }
   };
 
   const handleSaveMaxAlerts = async () => {
+    // Don't save if empty string
+    if (maxAlerts === '') return;
+    
     setMaxAlertsLoading(true);
     try {
-      await updateMaxAlerts(maxAlerts);
+      await updateMaxAlerts(maxAlerts, user.id);
       setOriginalMaxAlerts(maxAlerts);
       setModalMessage(t('maxAlertsUpdated'));
       setShowModal(true);
@@ -237,23 +249,23 @@ const Profile = () => {
               <span className="profile-max-alerts-text" dangerouslySetInnerHTML={{ __html: t('maxAlerts') }}></span>
               <input
                 type="number"
-                min="1"
-                max="50"
+                min="0"
+                max="100"
                 value={maxAlerts}
                 onChange={handleMaxAlertsChange}
                 className="profile-max-alerts-input"
               />
               <span className="profile-max-alerts-text">{t('maxAlertsEachDay')}</span>
-              {maxAlerts !== originalMaxAlerts && (
-                <button
-                  className="profile-btn profile-btn-save-alerts"
-                  onClick={handleSaveMaxAlerts}
-                  disabled={maxAlertsLoading}
-                >
-                  {maxAlertsLoading ? <span className="profile-btn-spinner"></span> : t('saveChanges')}
-                </button>
-              )}
             </div>
+            {maxAlerts !== originalMaxAlerts && maxAlerts !== '' && (
+              <button
+                className="profile-btn profile-btn-save-alerts"
+                onClick={handleSaveMaxAlerts}
+                disabled={maxAlertsLoading}
+              >
+                {maxAlertsLoading ? <span className="profile-btn-spinner"></span> : t('saveChanges')}
+              </button>
+            )}
           </div>
         </>
       )}

@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://pythia-match.com";
+const API_BASE_URL = "https://cv.pythia-match.com";
 
 // Fetch report matches for reporting page
 export const fetchReportMatches = async () => {
@@ -503,6 +503,7 @@ export const fetchUserFromSession = async () => {
         cv_status: data.user.cv_status,
         cv_link: (data.user.cv_link && data.user.cv_link !== "NA") ? getAbsoluteUrl(data.user.cv_link) : null,
         subscribed: typeof data.user.subscribed === 'boolean' ? data.user.subscribed : true,
+        max_alerts: typeof data.user.max_num_alerts === 'number' ? data.user.max_num_alerts : 5,
       };
       return userObject;
     }
@@ -527,4 +528,21 @@ export const backendLogout = async () => {
     console.error("Backend logout error:", error);
     throw error;
   }
+};
+
+// Update max alerts setting
+export const updateMaxAlerts = async (maxAlerts, userId) => {
+  const formData = new FormData();
+  formData.append("max_num_alerts", maxAlerts);
+  formData.append("user_id", userId);
+  const response = await fetch(`${API_BASE_URL}/set_max_num_alerts`, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || "Failed to update max alerts");
+  }
+  return await response.json();
 };
