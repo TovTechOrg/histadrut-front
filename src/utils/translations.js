@@ -93,7 +93,12 @@ export const translations = {
       role: "Role",
       cvStatus: "CV Status",
       welcome: "Welcome",
-      language: "Language"
+      language: "Language",
+      maxAlerts: "I want to get <b>up to</b>",
+      maxAlertsEachDay: "alerts each day",
+      saveChanges: "Save Changes",
+      maxAlertsUpdated: "Max alerts updated successfully!",
+      maxAlertsUpdateFailed: "Failed to update max alerts. Please try again."
     },
     he: {
       title: "פרופיל",
@@ -118,7 +123,12 @@ export const translations = {
       role: "תפקיד",
       cvStatus: "סטטוס קורות חיים",
       welcome: "ברוך הבא",
-      language: "שפה"
+      language: "שפה",
+      maxAlerts: "אני רוצה לקבל <b>עד</b>",
+      maxAlertsEachDay: "התראות בכל יום",
+      saveChanges: "שמור שינויים",
+      maxAlertsUpdated: "מספר ההתראות המקסימלי עודכן בהצלחה!",
+      maxAlertsUpdateFailed: "עדכון מספר ההתראות המקסימלי נכשל. אנא נסה שוב."
     }
   },
 

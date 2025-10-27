@@ -503,6 +503,7 @@ export const fetchUserFromSession = async () => {
         cv_status: data.user.cv_status,
         cv_link: (data.user.cv_link && data.user.cv_link !== "NA") ? getAbsoluteUrl(data.user.cv_link) : null,
         subscribed: typeof data.user.subscribed === 'boolean' ? data.user.subscribed : true,
+        max_alerts: typeof data.user.max_alerts === 'number' ? data.user.max_alerts : 5,
       };
       return userObject;
     }
@@ -510,6 +511,22 @@ export const fetchUserFromSession = async () => {
   } catch {
     return null;
   }
+};
+
+// Update max alerts setting
+export const updateMaxAlerts = async (maxAlerts) => {
+  const formData = new FormData();
+  formData.append("max_alerts", maxAlerts);
+  const response = await fetch(`${API_BASE_URL}/set_max_alerts`, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.error || "Failed to update max alerts");
+  }
+  return await response.json();
 };
 
 // Backend logout

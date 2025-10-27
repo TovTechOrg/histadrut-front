@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchUserFromSession, unsubscribeFromEmails, resubscribeToEmails } from "../api/api";
+import { fetchUserFromSession, unsubscribeFromEmails, resubscribeToEmails, updateMaxAlerts } from "../api/api";
 import { capitalizeName } from "../utils/textHelpers";
 import { useTranslations } from "../utils/translations";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -19,6 +19,10 @@ const Profile = () => {
   const [subChecked, setSubChecked] = useState(false);
   const [unsubChecked, setUnsubChecked] = useState(false);
   const [subLoading, setSubLoading] = useState(false);
+
+  const [maxAlerts, setMaxAlerts] = useState(5);
+  const [originalMaxAlerts, setOriginalMaxAlerts] = useState(5);
+  const [maxAlertsLoading, setMaxAlertsLoading] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -42,6 +46,27 @@ const Profile = () => {
     document.body.removeChild(link);
   };
 
+  const handleMaxAlertsChange = (e) => {
+    const value = parseInt(e.target.value) || 1;
+    setMaxAlerts(Math.max(1, Math.min(50, value))); // Limit between 1 and 50
+  };
+
+  const handleSaveMaxAlerts = async () => {
+    setMaxAlertsLoading(true);
+    try {
+      await updateMaxAlerts(maxAlerts);
+      setOriginalMaxAlerts(maxAlerts);
+      setModalMessage(t('maxAlertsUpdated'));
+      setShowModal(true);
+    } catch (err) {
+      console.error("Failed to update max alerts:", err);
+      setModalMessage(t('maxAlertsUpdateFailed'));
+      setShowModal(true);
+    } finally {
+      setMaxAlertsLoading(false);
+    }
+  };
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -50,6 +75,9 @@ const Profile = () => {
         setSubscribed(
           userData && typeof userData.subscribed === 'boolean' ? userData.subscribed : true
         );
+        const userMaxAlerts = userData && typeof userData.max_alerts === 'number' ? userData.max_alerts : 5;
+        setMaxAlerts(userMaxAlerts);
+        setOriginalMaxAlerts(userMaxAlerts);
         setLoading(false);
       } catch (err) {
         setModalMessage('Failed to load user profile.');
@@ -201,6 +229,31 @@ const Profile = () => {
                 </button>
               </>
             )}
+          </div>
+
+          {/* Max Alerts Setting */}
+          <div className="profile-max-alerts-section">
+            <div className="profile-max-alerts-line">
+              <span className="profile-max-alerts-text" dangerouslySetInnerHTML={{ __html: t('maxAlerts') }}></span>
+              <input
+                type="number"
+                min="1"
+                max="50"
+                value={maxAlerts}
+                onChange={handleMaxAlertsChange}
+                className="profile-max-alerts-input"
+              />
+              <span className="profile-max-alerts-text">{t('maxAlertsEachDay')}</span>
+              {maxAlerts !== originalMaxAlerts && (
+                <button
+                  className="profile-btn profile-btn-save-alerts"
+                  onClick={handleSaveMaxAlerts}
+                  disabled={maxAlertsLoading}
+                >
+                  {maxAlertsLoading ? <span className="profile-btn-spinner"></span> : t('saveChanges')}
+                </button>
+              )}
+            </div>
           </div>
         </>
       )}
