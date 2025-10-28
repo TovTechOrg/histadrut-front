@@ -24,28 +24,90 @@
 /* Job Filters Styles */
 .match-filters {
   background: white;
-  padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   margin-bottom: 1.5rem;
   position: relative;
+  overflow: visible;
 }
 
-.match-filters__form {
-  position: relative;
+.match-filters__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .match-filters__title {
   font-size: 1.1rem;
   font-weight: 600;
   color: #2c3e50;
-  margin: 0 0 1.5rem 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.match-filters__toggle {
+  background: none;
+  border: none;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0.25rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.match-filters__toggle:hover {
+  background: #f8f9fa;
+  color: #495057;
+}
+
+.match-filters__toggle-icon {
+  transition: transform 0.2s ease;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.match-filters__toggle-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.match-filters__form {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.match-filters__form.visible {
+  max-height: 1000px;
+  padding: 1.5rem;
+  opacity: 1;
+}
+
+.match-filters__form.hidden {
+  max-height: 0;
+  padding: 0 1.5rem;
+  opacity: 0;
+}
+
+.match-filters__form {
+  position: relative;
+  overflow: visible;
 }
 
 .match-filters__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
+  overflow: visible;
 }
 
 .match-filters__field {

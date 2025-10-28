@@ -12,7 +12,9 @@ const LocationsMultiSelect = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedLocations, setSelectedLocations] = useState([]);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 });
   const dropdownRef = useRef(null);
+  const inputRef = useRef(null);
 
   // Parse the value string into an array of selected locations
   useEffect(() => {
@@ -35,6 +37,19 @@ const LocationsMultiSelect = ({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Calculate dropdown position when opening
+  const handleToggleDropdown = () => {
+    if (!isOpen && inputRef.current) {
+      const rect = inputRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX,
+        width: rect.width
+      });
+    }
+    setIsOpen(!isOpen);
+  };
 
   const handleLocationToggle = (location) => {
     let newSelected;
@@ -74,8 +89,9 @@ const LocationsMultiSelect = ({
       </label>
       
       <div 
+        ref={inputRef}
         className={`locations-multiselect__input-container ${className} ${isOpen ? 'locations-multiselect__input-container--open' : ''}`}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggleDropdown}
       >
         <div className="locations-multiselect__display">
           {selectedLocations.length > 0 ? (
@@ -107,7 +123,15 @@ const LocationsMultiSelect = ({
       </div>
 
       {isOpen && (
-        <div className="locations-multiselect__dropdown">
+        <div 
+          className="locations-multiselect__dropdown locations-multiselect__dropdown--fixed"
+          style={{
+            position: 'fixed',
+            top: `${dropdownPosition.top}px`,
+            left: `${dropdownPosition.left}px`,
+            width: `${dropdownPosition.width}px`
+          }}
+        >
           {options.length > 0 ? (
             options.map((location) => (
               <div

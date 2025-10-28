@@ -214,6 +214,8 @@ export const translations = {
       title: "Job Match Dashboard",
       subtitle: "Aggregated view of manually sourced jobs and matched candidates.",
       filtersTitle: "Filters",
+      showFilters: "Show Filters",
+      hideFilters: "Hide Filters",
       pagination: {
         previous: "← Previous",
         next: "Next →",
@@ -297,6 +299,8 @@ export const translations = {
       title: "לוח התאמות משרות",
       subtitle: "תצוגה מרוכזת של משרות שנאספו ידנית ומועמדים מתאימים.",
       filtersTitle: "מסננים",
+      showFilters: "הצג מסננים",
+      hideFilters: "הסתר מסננים",
       pagination: {
         previous: "הקודם ←",
         next: "→ הבא",
@@ -678,6 +682,8 @@ export const translations = {
       // Filters section
       filters: {
         title: "Filters",
+        showFilters: "Show Filters",
+        hideFilters: "Hide Filters",
         searchJobTitle: "Job Title",
         jobTitlePlaceholder: "Search by job title...",
         searchJobDescription: "Job Description", 
@@ -774,6 +780,8 @@ export const translations = {
       // Filters section  
       filters: {
         title: "מסננים",
+        showFilters: "הצג מסננים",
+        hideFilters: "הסתר מסננים",
         searchJobTitle: "כותרת משרה",
         jobTitlePlaceholder: "חפש לפי כותרת משרה...",
         searchJobDescription: "תיאור משרה",

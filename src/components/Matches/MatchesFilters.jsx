@@ -17,6 +17,7 @@ const MatchesFilters = () => {
   const isAdminUser = typeof isAdmin === 'function' ? isAdmin() : isAdmin;
   const { t, currentLanguage } = useTranslations('matches');
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isFiltersVisible, setIsFiltersVisible] = React.useState(false);
   const [localCompanyName, setLocalCompanyName] = React.useState(searchParams.get("companyName") || "");
   const [companyOptions, setCompanyOptions] = React.useState([]);
   const [locationOptions, setLocationOptions] = React.useState([]);
@@ -186,12 +187,28 @@ const MatchesFilters = () => {
   }, [minRelevanceScore]);
   return (
     <section className="match-filters" aria-labelledby="filters-heading">
-      <h2 id="filters-heading" className="match-filters__title">
-        {t('filtersTitle')}
-      </h2>
+      <div className="match-filters__header">
+        <h2 id="filters-heading" className="match-filters__title">
+          {t('filtersTitle')}
+          <button
+            className="match-filters__toggle"
+            onClick={() => setIsFiltersVisible(!isFiltersVisible)}
+            aria-expanded={isFiltersVisible}
+            aria-controls="filters-form"
+            title={isFiltersVisible ? t('hideFilters') : t('showFilters')}
+          >
+            <span className={`match-filters__toggle-icon ${isFiltersVisible ? 'expanded' : ''}`}>
+              <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                <path d="M1 1L6 6L11 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </span>
+          </button>
+        </h2>
+      </div>
 
       <form
-        className="match-filters__form"
+        id="filters-form"
+        className={`match-filters__form ${isFiltersVisible ? 'visible' : 'hidden'}`}
         role="search"
         aria-label="Filter jobs"
         onSubmit={(e) => e.preventDefault()}

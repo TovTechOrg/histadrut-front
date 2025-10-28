@@ -18,6 +18,7 @@ const JobListingsFilters = ({
   const { t, currentLanguage } = useTranslations('jobListings');
   const [companyOptions, setCompanyOptions] = useState([]);
   const [localCompany, setLocalCompany] = useState(selectedCompany || "");
+  const [isFiltersVisible, setIsFiltersVisible] = useState(false);
 
   useEffect(() => {
     fetchCompanies().then((data) => {
@@ -37,12 +38,28 @@ const JobListingsFilters = ({
   };
   return (
     <section className="job-filters" aria-labelledby="filters-heading" key={currentLanguage}>
-      <h2 id="filters-heading" className="job-filters__title">
-        {t('filters.title')}
-      </h2>
+      <div className="job-filters__header">
+        <h2 id="filters-heading" className="job-filters__title">
+          {t('filters.title')}
+          <button
+            className="job-filters__toggle"
+            onClick={() => setIsFiltersVisible(!isFiltersVisible)}
+            aria-expanded={isFiltersVisible}
+            aria-controls="filters-form"
+            title={isFiltersVisible ? t('filters.hideFilters') : t('filters.showFilters')}
+          >
+            <span className={`job-filters__toggle-icon ${isFiltersVisible ? 'expanded' : ''}`}>
+              <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                <path d="M1 1L6 6L11 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </span>
+          </button>
+        </h2>
+      </div>
 
       <form
-        className="job-filters__form"
+        id="filters-form"
+        className={`job-filters__form ${isFiltersVisible ? 'visible' : 'hidden'}`}
         role="search"
         aria-label="Filter jobs"
         onSubmit={(e) => e.preventDefault()}

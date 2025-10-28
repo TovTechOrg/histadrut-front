@@ -93,9 +93,18 @@
   border-top: none;
   border-radius: 0 0 4px 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+  z-index: 9999;
   max-height: 200px;
   overflow-y: auto;
+}
+
+.locations-multiselect__dropdown--fixed {
+  position: fixed !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 /* Light theme scrollbar */
