@@ -309,11 +309,13 @@
   display: flex;
   align-items: center;
   justify-content: flex-start; /* Center content horizontally */
-  padding: 0.25rem 0; /* Reduced vertical padding for better alignment */
+  padding: 0.4rem 0; /* Consistent padding for all candidate items */
   margin-bottom: 0;
   direction: ltr;
   text-align: center;
-  min-height: 32px; /* Reduced min-height */
+  min-height: 32px; /* Fixed height for all candidate items */
+  height: 32px; /* Fixed height to ensure perfect alignment */
+  box-sizing: border-box;
 }
 
 /* .candidate-info-item:not(:last-child) {
@@ -791,10 +793,10 @@
   /* Ensure candidate names and scores align properly */
   .match-table__cell--candidates .candidate-info-item,
   .match-table__cell--scores .candidate-info-item {
-    height: 28px; /* Adjusted height for better alignment */
+    height: 32px; /* Consistent height for perfect alignment */
     display: flex;
     align-items: center;
-    padding: 0.05rem 0; /* Minimal padding for precise alignment */
+    padding: 0.4rem 0; /* Consistent padding */
     margin: 0;
   }
 
@@ -819,8 +821,8 @@
   .match-table__cell--relevance .candidate-info-item,
   .match-table__cell--status .candidate-info-item,
   .match-table__cell--actions .candidate-info-item {
-    height: 28px;
-    padding: 0.05rem 0;
+    height: 32px; /* Consistent height for perfect alignment */
+    padding: 0.4rem 0; /* Consistent padding */
     margin: 0;
     align-items: center;
   }
