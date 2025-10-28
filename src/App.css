@@ -14,12 +14,31 @@
   margin-bottom: 2rem;
   text-align: left;
 }
+/* Global overflow prevention */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  margin: 0;
+  padding: 0;
+}
+
 #root {
   margin: 0;
   padding: 0;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-y: auto; /* Allow vertical scrolling */
+  max-width: 100vw;
 }
 
 .app {
@@ -27,6 +46,8 @@
   width: 100%;
   height: 100vh;
   position: relative;
+  overflow-x: hidden; /* Prevent horizontal overflow */
+  max-width: 100vw;
 }
 
 /* Global language picker positioning */
@@ -36,15 +57,45 @@
 
 .main-content {
   flex: 1;
-  margin-left: 250px;
+  margin-left: 80px; /* Updated for new collapsed nav width */
   overflow-y: auto;
+  overflow-x: hidden; /* Prevent horizontal overflow */
   background-color: #f8f9fa;
+  width: calc(100% - 80px); /* Ensure proper width calculation */
+  max-width: calc(100vw - 80px); /* Prevent viewport overflow */
+  min-width: 0; /* Allow flex shrinking */
+}
+
+/* Apply overflow hidden to all child elements */
+.main-content * {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+/* Specific table handling */
+.main-content table {
+  width: 100%;
+  table-layout: fixed;
+  overflow-x: auto;
+}
+
+/* Container for tables to add horizontal scroll if needed */
+.main-content .table-container {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .main-content {
     margin-left: 0;
+    width: 100%;
+    max-width: 100vw;
+  }
+  
+  .main-content * {
+    max-width: 100vw;
   }
 }
 
