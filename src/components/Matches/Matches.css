@@ -221,7 +221,75 @@
   background: white;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  position: relative;
+}
+
+/* Top scrollbar container */
+.match-table::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 0;
+  right: 0;
+  height: 16px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px 4px 0 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  z-index: 10;
+}
+
+/* Top scrollbar track content */
+.match-table::after {
+  content: '';
+  position: absolute;
+  top: -19px;
+  left: 1px;
+  width: 100%;
+  height: 14px;
+  background: transparent;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Main table container with hidden bottom scrollbar */
+.match-table {
+  overflow-x: auto;
+  overflow-y: visible;
+  margin-top: 25px; /* Space for top scrollbar */
+  /* Hide the bottom scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.match-table::-webkit-scrollbar {
+  display: none; /* Hide scrollbar in webkit browsers */
+}
+
+/* Style the top scrollbar */
+.match-table::before {
+  /* Custom scrollbar for the top element */
+  scrollbar-width: thin;
+  scrollbar-color: #6c757d #f8f9fa;
+}
+
+.match-table::before::-webkit-scrollbar {
+  height: 14px;
+}
+
+.match-table::before::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 3px;
+}
+
+.match-table::before::-webkit-scrollbar-thumb {
+  background: #6c757d;
+  border-radius: 3px;
+}
+
+.match-table::before::-webkit-scrollbar-thumb:hover {
+  background: #495057;
 }
 
 .match-table__table {
@@ -261,12 +329,49 @@
   text-align: left;
 }
 
+/* Fixed column widths for headers - cleaner approach */
+.match-table__cell--header:nth-child(1) {
+  width: 100px;
+}
+
+.match-table__cell--header:nth-child(4) {
+  width: 110px;
+}
+
+.match-table__cell--header:nth-child(5) {
+  width: 130px;
+}
+
+.match-table__cell--header:nth-child(6) {
+  width: 180px;
+}
+
+.match-table__cell--header:nth-child(7) {
+  width: 50px;
+}
+
+.match-table__cell--header:nth-child(8) {
+  width: 60px;
+}
+
+.match-table__cell--header:nth-child(9) {
+  width: 77px;
+}
+
+.match-table__cell--header:nth-child(10) {
+  width: 100px;
+}
+
+.match-table__cell--header:nth-child(11) {
+  width: 130px;
+}
+
 .match-table__cell--match-title {
   color: #2c3e50;
-  max-width: 250px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow: visible; /* Allow content to overflow and be visible */
+  white-space: normal; /* Allow text wrapping */
+  word-break: break-word; /* Break long words if needed */
+  line-height: 1.4; /* Better line height for readability */
 }
 
 .match-table__link {
@@ -309,12 +414,12 @@
   display: flex;
   align-items: center;
   justify-content: flex-start; /* Center content horizontally */
-  padding: 0.4rem 0; /* Consistent padding for all candidate items */
-  margin-bottom: 0;
+  padding: 0.6rem 0; /* Increased padding for more space between rows */
+  margin-bottom: 0.3rem; /* Added margin for additional spacing */
   direction: ltr;
   text-align: center;
-  min-height: 32px; /* Fixed height for all candidate items */
-  height: 32px; /* Fixed height to ensure perfect alignment */
+  min-height: 36px; /* Increased height for better spacing */
+  height: 36px; /* Fixed height to ensure perfect alignment */
   box-sizing: border-box;
 }
 
@@ -689,115 +794,109 @@
 }
 
 @media (max-width: 2000px) {
-  /* Hide Date Added and CV columns completely */
-  .match-table__table th:nth-child(4), /* Date Added header */
-  .match-table__table td:nth-child(4), /* Date Added cells */
-  .match-table__table th:nth-child(8), /* CV header */  
-  .match-table__table td:nth-child(8) { /* CV cells */
-    display: none !important;
-  }
-
   .match-table__table {
-    table-layout: fixed !important;
-    width: 100% !important;
+    table-layout: fixed;
+    width: 100%;
   }
 
-  /* Very specific column widths - much smaller */
+  /* Fixed column widths - cleaner approach */
   .match-table__table th:nth-child(1), /* Job ID */
   .match-table__table td:nth-child(1) {
-    width: 70px !important;
-    max-width: 70px !important;
-    min-width: 70px !important;
+    width: 100px;
   }
 
-  .match-table__table th:nth-child(2), /* Job Title */
+  .match-table__table th:nth-child(2), /* Job Title - flexible, gets majority of remaining space */
   .match-table__table td:nth-child(2) {
-    width: 150px !important;
-    max-width: 150px !important;
-    min-width: 150px !important;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    width: auto;
+    min-width: 300px;
+    overflow: visible;
+    white-space: normal;
+    word-break: break-word;
   }
 
-  .match-table__table th:nth-child(3), /* Company */
+  .match-table__table th:nth-child(3), /* Company - flexible, smaller than job title */
   .match-table__table td:nth-child(3) {
-    width: 100px !important;
-    max-width: 100px !important;
-    min-width: 100px !important;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    width: auto;
+    min-width: 100px;
+    max-width: 150px;
+    overflow: visible;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .match-table__table th:nth-child(4), /* Date Added */
+  .match-table__table td:nth-child(4) {
+    width: 110px;
   }
 
   .match-table__table th:nth-child(5), /* Link to Job */
   .match-table__table td:nth-child(5) {
-    width: 70px !important;
-    max-width: 70px !important;
+    width: 130px;
     text-align: center;
   }
 
   .match-table__table th:nth-child(6), /* Matched Candidates */
   .match-table__table td:nth-child(6) {
-    width: 80px !important;
-    max-width: 80px !important;
+    width: 180px;
     font-size: 0.8rem;
-    padding: 0.25rem 0.3rem !important; /* Reduced padding for better alignment */
+    padding: 0.4rem 0.5rem;
   }
 
-  .match-table__table th:nth-child(7), /* Scores */
+  .match-table__table th:nth-child(7), /* Scores (no th title) */
   .match-table__table td:nth-child(7) {
-    width: 30px !important;
-    max-width: 30px !important;
+    width: 50px;
     text-align: center;
     font-size: 0.8rem;
-    padding: 0.25rem 0.2rem !important; /* Reduced padding for better alignment */
+    padding: 0.4rem 0.2rem;
   }
 
   .match-table__table th:nth-child(8), /* CV */
   .match-table__table td:nth-child(8) {
-    display: none !important; /* Hidden in responsive view */
+    width: 60px;
+    text-align: center;
   }
 
   .match-table__table th:nth-child(9), /* MMR */
   .match-table__table td:nth-child(9) {
-    width: 50px !important;
-    max-width: 50px !important;
+    width: 77px;
     text-align: center;
   }
 
   .match-table__table th:nth-child(10), /* Relevant */
   .match-table__table td:nth-child(10) {
-    width: 90px !important;
-    max-width: 90px !important;
+    width: 100px;
   }
 
   .match-table__table th:nth-child(11), /* Applied Status */
   .match-table__table td:nth-child(11) {
-    width: 70px !important;
-    max-width: 70px !important;
+    width: 130px;
   }
 
   .match-table__table th:nth-child(12), /* Actions */
   .match-table__table td:nth-child(12) {
-    width: 50px !important;
-    max-width: 50px !important;
+    width: auto;
+    min-width: 140px; /* Increased minimum width for better button visibility */
   }
 
 
   .match-table__cell.match-table__cell--scores {
-    padding-top: 0.25rem !important;
-    padding-bottom: 0.25rem !important;
+    padding-top: 0.4rem !important;
+    padding-bottom: 0.4rem !important;
+  }
+
+  /* Apply margin-left specifically to scores column td elements */
+  .match-table__table td:nth-child(7) {
+    margin-left: -1rem !important;
   }
 
   /* Ensure candidate names and scores align properly */
   .match-table__cell--candidates .candidate-info-item,
   .match-table__cell--scores .candidate-info-item {
-    height: 32px; /* Consistent height for perfect alignment */
+    height: 36px; /* Increased height for better spacing */
     display: flex;
     align-items: center;
-    padding: 0.4rem 0; /* Consistent padding */
-    margin: 0;
+    padding: 0.6rem 0; /* Increased padding */
+    margin: 0.3rem 0; /* Added margin for spacing */
   }
 
   .match-table__cell--candidates .candidate-match__name {
@@ -821,10 +920,60 @@
   .match-table__cell--relevance .candidate-info-item,
   .match-table__cell--status .candidate-info-item,
   .match-table__cell--actions .candidate-info-item {
-    height: 32px; /* Consistent height for perfect alignment */
-    padding: 0.4rem 0; /* Consistent padding */
-    margin: 0;
+    height: 36px; /* Increased height for better spacing */
+    padding: 0.6rem 0; /* Increased padding */
+    margin: 0.3rem 0; /* Added margin for spacing */
     align-items: center;
+  }
+}
+
+/* Specific rules for 1920px screens and smaller - overrides the 2000px rules above */
+@media (max-width: 1950px) {
+  .match-table__table th:nth-child(2), /* Job Title - constrained for smaller screens */
+  .match-table__table td:nth-child(2) {
+    width: 200px; /* Fixed at 200px as requested */
+    min-width: 200px;
+    max-width: 200px;
+  }
+
+  .match-table__table th:nth-child(3), /* Company - constrained for smaller screens */
+  .match-table__table td:nth-child(3) {
+    width: 130px; /* Fixed at 130px as requested */
+    min-width: 130px;
+    max-width: 130px;
+  }
+
+  .match-table__table th:nth-child(6), /* Matched Candidates */
+  .match-table__table td:nth-child(6) {
+    width: 120px; /* Fixed at 120px as requested */
+    min-width: 120px;
+    max-width: 120px;
+  }
+
+  /* Improve Actions column for smaller screens */
+  .match-table__table th:nth-child(12), /* Actions */
+  .match-table__table td:nth-child(12) {
+    width: 150px; /* Fixed width for better button visibility */
+    min-width: 150px;
+    max-width: 150px;
+  }
+
+  /* Make action buttons more compact but still readable */
+  .action-btn {
+    padding: 0.4rem 0.6rem; /* Slightly smaller padding */
+    font-size: 0.8rem; /* Slightly smaller font */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Specific styling for mark as sent button */
+  .mark-as-sent-btn {
+    width: auto !important; /* Remove fixed width constraints */
+    height: auto !important;
+    margin-left: 0 !important; /* Remove negative margin */
+    min-width: 110px; /* Ensure minimum readable width */
+    max-width: 140px; /* Prevent overflow */
   }
 }
 
@@ -1061,6 +1210,7 @@
 .relevance-icon {
   width: 20px;
   height: 20px;
+  margin-top: 10px; /* Center icons in taller candidate rows */
   filter: brightness(0) saturate(100%) invert(64%) sepia(11%) saturate(324%) hue-rotate(192deg) brightness(95%) contrast(86%);
   transition: filter 0.2s ease;
 }

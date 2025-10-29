@@ -221,48 +221,69 @@
   table-layout: fixed; /* This ensures fixed column widths */
 }
 
-/* Fixed column widths based on the image proportions */
+/* Fixed column widths - all in pixels for consistency */
 .job-table__table th:nth-child(1), /* ID column */
 .job-table__table td:nth-child(1) {
-  width: 5%;
+  width: 80px !important;
+  min-width: 70px !important;
+  max-width: 90px !important;
 }
 
 
 .job-table__table th:nth-child(2), /* Title column */
 .job-table__table td:nth-child(2) {
-  width: 32%; /* Give extra space to job title */
+  width: 300px !important; /* Flexible for job titles */
+  min-width: 250px !important;
 }
 
 .job-table__table th:nth-child(3), /* Company column */
 .job-table__table td:nth-child(3) {
-  width: 14%; /* Narrower company column */
+  width: 150px !important;
+  min-width: 120px !important;
+  max-width: 180px !important;
 }
-
 
 .job-table__table th:nth-child(4), /* Posted column */
 .job-table__table td:nth-child(4) {
-  width: 110px; /* Fixed width for date column */
-  min-width: 90px;
-  max-width: 120px;
+  width: 110px !important; /* Fixed width for date column */
+  min-width: 90px !important;
+  max-width: 110px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
+
+/* Additional specificity for date posted column */
+.job-table__container .job-table__table th:nth-child(4),
+.job-table__container .job-table__table td:nth-child(4) {
+  width: 110px !important;
+  min-width: 90px !important;
+  max-width: 110px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
 
 .job-table__table th:nth-child(5), /* Status column */
 .job-table__table td:nth-child(5) {
-  width: 15%;
+  width: 100px !important;
+  min-width: 80px !important;
+  max-width: 120px !important;
 }
 
 
 .job-table__table th:nth-child(6), /* Link column */
 .job-table__table td:nth-child(6) {
-  width: 8% !important;
-  min-width: 70px !important;
-  max-width: 150px !important;
+  width: 120px !important;
+  min-width: 100px !important;
+  max-width: 140px !important;
 }
 
 .job-table__table th:nth-child(7), /* Actions column */
 .job-table__table td:nth-child(7) {
-  width: 8% !important;
-  min-width: 70px !important;
+  width: 100px !important;
+  min-width: 90px !important;
   max-width: 120px !important;
 }
 
@@ -574,7 +595,12 @@
 
   .job-table__table th:nth-child(4), /* Posted column */
   .job-table__table td:nth-child(4) {
-    width: 15%;
+    width: 110px !important;
+    min-width: 90px !important;
+    max-width: 110px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 
   .job-table__table th:nth-child(5), /* Status column */

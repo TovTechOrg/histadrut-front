@@ -145,6 +145,11 @@
   text-align: left;
 }
 
+/* Specific alignment for jobs count header */
+.companies-table__cell--header.companies-table__cell--jobs-count {
+  text-align: left;
+}
+
 .companies-table__cell--id {
   font-weight: 500;
   color: #7f8c8d;
@@ -157,7 +162,7 @@
 }
 
 .companies-table__cell--jobs-count {
-  text-align: center;
+  text-align: left;
   font-weight: 500;
   width: 120px;
 }

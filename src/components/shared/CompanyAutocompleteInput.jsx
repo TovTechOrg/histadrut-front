@@ -23,15 +23,29 @@ const CompanyAutocompleteInput = ({
 }) => {
   const [showDropdown, setShowDropdown] = React.useState(false);
   const [localValue, setLocalValue] = React.useState(value || "");
+  const [dropdownPosition, setDropdownPosition] = React.useState({});
+  const inputRef = React.useRef(null);
 
   React.useEffect(() => {
     setLocalValue(value || "");
   }, [value]);
 
+  const updateDropdownPosition = () => {
+    if (inputRef.current) {
+      const rect = inputRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX,
+        width: rect.width,
+      });
+    }
+  };
+
   const handleInputChange = (e) => {
     setLocalValue(e.target.value);
     onChange(e.target.value);
     setShowDropdown(true);
+    updateDropdownPosition();
   };
 
   const handleSelect = (company) => {
@@ -46,10 +60,16 @@ const CompanyAutocompleteInput = ({
     setShowDropdown(false);
   };
 
+  const handleFocus = () => {
+    setShowDropdown(true);
+    updateDropdownPosition();
+  };
+
   return (
     <div className="job-filters__field" style={{ position: "relative" }}>
       <label htmlFor={inputId} className="job-filters__label">{label}</label>
       <input
+        ref={inputRef}
         id={inputId}
         type="text"
         className={`job-filters__input${className ? ` ${className}` : ''}`}
@@ -57,7 +77,7 @@ const CompanyAutocompleteInput = ({
         value={localValue}
         onChange={handleInputChange}
         autoComplete="off"
-        onFocus={() => setShowDropdown(true)}
+        onFocus={handleFocus}
         onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
       />
       {localValue && (
@@ -71,7 +91,14 @@ const CompanyAutocompleteInput = ({
         </button>
       )}
       {showDropdown && options.length > 0 && (
-        <ul className={styles["company-autocomplete-dropdown"]}>
+        <ul 
+          className={styles["company-autocomplete-dropdown"]}
+          style={{
+            top: `${dropdownPosition.top}px`,
+            left: `${dropdownPosition.left}px`,
+            width: `${dropdownPosition.width}px`,
+          }}
+        >
           {options
             .filter((c) =>
               localValue ? c.toLowerCase().includes(localValue.toLowerCase()) : true
