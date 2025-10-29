@@ -108,7 +108,8 @@ const Profile = () => {
   }
 
   return (
-    <div className="profile-container" style={{ direction: currentLanguage === 'he' ? 'rtl' : 'ltr' }}>
+    <div className="profile-page-wrapper">
+      <div className="profile-container" style={{ direction: currentLanguage === 'he' ? 'rtl' : 'ltr' }}>
       <h2 className="profile-title">
         {t('welcome')}, {capitalizeName(user.name) || "User"}
       </h2>
@@ -293,6 +294,7 @@ const Profile = () => {
           <button className="profile-modal-confirm-btn" onClick={() => setShowModal(false)}>OK</button>
         </div>
       </Modal>
+      </div>
     </div>
   );
 };

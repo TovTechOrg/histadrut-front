@@ -49,13 +49,24 @@
   margin-top: 40px;
 }
 
+/* Profile page wrapper for proper centering */
+.profile-page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: calc(100vh - 80px); /* Account for any header/padding */
+  padding: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .profile-container {
-  max-width: 420px;
-  margin: 2.5rem auto;
+  width: 40rem;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.07);
   padding: 2.5rem 2rem;
+  margin: 0; /* Remove auto margins since we're using flexbox */
 }
 
 .profile-title {
@@ -288,6 +299,15 @@
 
 /* Responsive design for max alerts */
 @media (max-width: 480px) {
+  .profile-page-wrapper {
+    padding: 1rem;
+    min-height: calc(100vh - 60px);
+  }
+  
+  .profile-container {
+    padding: 2rem 1.5rem;
+  }
+  
   .profile-max-alerts-line {
     flex-direction: column;
     align-items: flex-start;
