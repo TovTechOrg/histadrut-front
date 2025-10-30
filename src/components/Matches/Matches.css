@@ -1165,6 +1165,7 @@
   align-items: center;
   justify-content: flex-start;
   gap: 0.5rem;
+  margin-top: 10px; /* Push entire button container down to center in taller candidate rows */
 }
 
 .relevance-btn {
@@ -1210,7 +1211,6 @@
 .relevance-icon {
   width: 20px;
   height: 20px;
-  margin-top: 10px; /* Center icons in taller candidate rows */
   filter: brightness(0) saturate(100%) invert(64%) sepia(11%) saturate(324%) hue-rotate(192deg) brightness(95%) contrast(86%);
   transition: filter 0.2s ease;
 }
@@ -1231,5 +1231,23 @@
 .matches-page.rtl,
 .matches-page.ltr {
   direction: ltr; /* Always keep left-to-right for matches page */
+}
+
+/* Slight button positioning adjustment for large screens (>2000px) */
+@media (min-width: 2001px) {
+  .job-link-btn {
+    margin-top: 0.25rem;
+  }
+}
+
+/* Button positioning adjustments for screens 2000px and smaller */
+@media (max-width: 2000px) {
+  .relevance-btn {
+    margin-top: 1rem;
+  }
+  
+  .job-link-btn {
+    margin-top: 0.5rem;
+  }
 }
  
